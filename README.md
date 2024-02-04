@@ -16,11 +16,10 @@ __Python 3.6 及更高版本__, 推荐 3.10 及更高版本以保障其正常运
 开发前需要先执行...
 
 ~~~Bash
-pip install flet
-pip install tinytag
+pip install -r requirements.txt
 ~~~
 
-___注：后面会弄成 `requirement.txt` 的~___
+___注：`Windows-Toasts` 只能在 Windows 下生效!___
 
 ## TODO
 

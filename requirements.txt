@@ -1,0 +1,4 @@
+flet>=0.19.0
+tinytag>=1.10.1
+Windows-Toasts>=1.0.2
+
