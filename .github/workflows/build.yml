@@ -41,7 +41,6 @@ jobs:
         with:
           nuitka-version: main
           script-name: main.py
-          enable-plugins: flet
           onefile: true
           standalone: true
           disable-console: true
