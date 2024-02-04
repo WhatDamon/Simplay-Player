@@ -1,3 +1,5 @@
+<img width="150" height="150" align="left" style="float: left; margin: 0 10px 0 0;" alt="Simplay Player Logo" src="https://github.com/WhatDamon/Simplay-Player/blob/main/asset/simplay.png">  
+
 # Simplay Player
 
 > [!IMPORTANT]  
@@ -30,10 +32,11 @@ ___注：`Windows-Toasts` 库只能在 Windows 下生效!___
 - [ ] 歌单 (目前已有占位按钮 `audioList_btn`)
 - [ ] 日志输出
 - [ ] 系统托盘
-- [ ] 检查更新 (基于 Github API)
+- [ ] 检查更新 (基于 __Github API__)
 - [ ] 界面自动取色
 - [ ] 混音器
-- [ ] 在线获取歌曲 (网易云) (目前已有占位菜单按钮)
+- [ ] 在线获取歌曲 (__网易云__) (目前已有占位菜单按钮)
+- [ ] GitHub Actions 自动编译工作流 (使用 __Nuitka__ 实现)
 
 ## BUG 列表
 
