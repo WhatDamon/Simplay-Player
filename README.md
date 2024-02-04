@@ -25,10 +25,12 @@ ___注：后面会弄成 `requirement.txt` 的~___
 ## TODO
 
 - [x] 基本逻辑
+- [x] 吐司通知 (Windows 独占性功能)
 - [ ] 设置 (目前已有占位按钮 `settings_btn`)
 - [ ] 歌词显示与滚动 (已预留了歌词路径变量 `lyricFile` 和读取函数 `lyricExistAndRead`)
 - [ ] 歌单
 - [ ] 日志输出
+- [ ] 系统托盘
 - [ ] 检查更新 (基于 Github API)
 - [ ] 界面自动取色
 - [ ] 混音器

@@ -1,5 +1,5 @@
 import flet as ft
-import tinytag, time, base64, os
+import tinytag, time, base64, os, platform
 
 audioFile = None
 lyricFile = None
@@ -11,6 +11,28 @@ audioCoverBase64 = None
 audioInfo = "无"
 audioTitleText = "未知歌曲"
 audioArtistText = "未知作曲家"
+currentOS = None
+
+def detectOS():
+    syst = platform.system().lower()
+    os = 'unknown'
+    if 'cygwin' in syst:
+        os = 'cygwin'
+    elif 'darwin' in syst:
+        os = 'darwin'
+    elif 'linux' in syst:
+        os = 'linux'
+        try:
+            with open('/proc/version', 'r') as f:
+                if 'microsoft' in f.read().lower():
+                    os = 'wsl'
+        except: pass
+    elif 'windows' in syst:
+        os = 'windows'
+    elif 'bsd' in syst:
+        os = 'bsd'
+    global currentOS
+    currentOS = os
 
 def main(page: ft.Page):
     page.window_left = 200
@@ -94,6 +116,13 @@ def main(page: ft.Page):
         audioArtist.value = audioArtistText
         page.update()
 
+    def windowsToastNotify():
+        toaster = WindowsToaster('Simplay Player')
+        sysToast = Toast()
+        sysToast.AddImage(ToastDisplayImage.fromPath('./asset/simplay.png'))
+        sysToast.text_fields = ["已加载歌曲: ", audioArtistText + " - " + audioTitleText]
+        toaster.show_toast(sysToast)
+
     def pickFileResult(e: ft.FilePickerResultEvent):
         audioPathTemp = (
             ", ".join(map(lambda f: f.path, e.files)) if e.files else "Cancelled!"
@@ -107,6 +136,9 @@ def main(page: ft.Page):
         audioPathTemp = None
         playAudio.src = audioFile
         audioInfoUpdate()
+        global currentOS
+        if currentOS == 'windows':
+            windowsToastNotify()
         page.update()
         
     pickFilesDialog = ft.FilePicker(on_result=pickFileResult)
@@ -188,7 +220,7 @@ def main(page: ft.Page):
     def openAboutDlg(e):
         about_dlg = ft.AlertDialog(
             title = ft.Text("关于"),
-            content = ft.Text("Simplay Player by What_Damon\n\nVersion: 1.0.0_experimentalTest\nPowered by: Flet, Tinytag")
+            content = ft.Text("Simplay Player by What_Damon\n\nVersion: 1.0.0_experimentalTest\nPowered by: Flet, Tinytag\n\nRuning under Python " + platform.python_version())
         )
         page.dialog = about_dlg
         about_dlg.open = True
@@ -352,4 +384,9 @@ def main(page: ft.Page):
     page.add(ft.Column(controls = [ft.Row(controls = [menuBar]), audioBasicInfo, audioProgressBar, btns_row, lyric_text]))
 
 if __name__ == '__main__':
+    detectOS()
+    if currentOS == 'wsl':
+        print("发现您正在使用 WSL, 实际上, 我们更推荐您直接使用 Windows 版本以避免潜在的 BUG")
+    if currentOS == "windows":
+        from windows_toasts import Toast, ToastDisplayImage, WindowsToaster
     ft.app(target = main)
