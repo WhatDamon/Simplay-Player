@@ -220,7 +220,7 @@ def main(page: ft.Page):
     def openAboutDlg(e):
         about_dlg = ft.AlertDialog(
             title = ft.Text("关于"),
-            content = ft.Text("Simplay Player by What_Damon\n\nVersion: 1.0.0_experimentalTest\nPowered by: Flet, Tinytag\n\nRuning under Python " + platform.python_version())
+            content = ft.Text("Simplay Player by What_Damon\n\nVersion: 1.0.0_experimentalTest\nPowered by: Flet, Tinytag\n\nRuning under Python " + platform.python_version() + "\nOS: " + platform.platform())
         )
         page.dialog = about_dlg
         about_dlg.open = True
