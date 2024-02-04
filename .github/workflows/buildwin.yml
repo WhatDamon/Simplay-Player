@@ -1,6 +1,6 @@
 # This is a workflow for building the kasa_cli executable on all three major platforms.
 
-name: Build for *nix
+name: Build for Windows
 
 # Controls when the workflow will run
 on:
@@ -15,7 +15,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os: [windows-latest]
 
     runs-on: ${{ matrix.os }}
 
@@ -30,11 +30,11 @@ jobs:
           architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
           cache: 'pip'
           cache-dependency-path: |
-            **/requirements.txt
+            **/requirements_win.txt
 
       - name: Install Dependencies
         run: |
-          pip install -r requirements.txt
+          pip install -r requirements_win.txt
 
       - name: Build Executable
         uses: Nuitka/Nuitka-Action@main
@@ -45,11 +45,11 @@ jobs:
           onefile: true
           standalone: true
           disable-console: true
+          windows-icon-from-ico: ./asset/spicon.ico
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ${{ runner.os }} Build
           path: |
-            build/*.bin
-            build/*.app/**/*
+            build/*.exe

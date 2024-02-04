@@ -21,7 +21,13 @@ __Python 3.8 及更高版本__, 推荐 3.10 及更高版本以保障其正常运
 pip install -r requirements.txt
 ~~~
 
-___注：`Windows-Toasts` 库只能在 Windows 下生效!___
+Windows 需要执行...
+
+~~~Bash
+pip install -r requirements_win.txt
+~~~
+
+___注：区分的原因是 `Windows-Toasts` 库只能在 Windows 下生效!___
 
 ## TODO
 
