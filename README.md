@@ -11,7 +11,7 @@
 
 ## 要求
 
-__Python 3.6 及更高版本__, 推荐 3.10 及更高版本以保障其正常运行
+__Python 3.8 及更高版本__, 推荐 3.10 及更高版本以保障其正常运行
 
 开发前需要先执行...
 
@@ -19,7 +19,7 @@ __Python 3.6 及更高版本__, 推荐 3.10 及更高版本以保障其正常运
 pip install -r requirements.txt
 ~~~
 
-___注：`Windows-Toasts` 只能在 Windows 下生效!___
+___注：`Windows-Toasts` 库只能在 Windows 下生效!___
 
 ## TODO
 
@@ -27,17 +27,17 @@ ___注：`Windows-Toasts` 只能在 Windows 下生效!___
 - [x] 吐司通知 (Windows 独占性功能)
 - [ ] 设置 (目前已有占位按钮 `settings_btn`)
 - [ ] 歌词显示与滚动 (已预留了歌词路径变量 `lyricFile` 和读取函数 `lyricExistAndRead`)
-- [ ] 歌单
+- [ ] 歌单 (目前已有占位按钮 `audioList_btn`)
 - [ ] 日志输出
 - [ ] 系统托盘
 - [ ] 检查更新 (基于 Github API)
 - [ ] 界面自动取色
 - [ ] 混音器
-- [ ] 在线获取歌曲 (网易云)
+- [ ] 在线获取歌曲 (网易云) (目前已有占位菜单按钮)
 
 ## BUG 列表
 
-一下内容不一定完全, 可能存在更多不在这个列表的 BUG!
+以下内容不一定完全, 可能存在更多不在这个列表的 BUG!
 
 - [ ] 读取存在封面的歌曲后再打开无封面歌曲不会替换成占位的 `track.png`
 - [ ] `Ctrl` + `H` 快捷键后歌曲进度条无法工作
@@ -52,3 +52,4 @@ ___注：`Windows-Toasts` 只能在 Windows 下生效!___
 
 - [flet](https://github.com/flet-dev/flet) (Apache-2.0 license)
 - [TinyTag](https://github.com/devsnd/tinytag) (MIT license)
+- [Windows-Toasts](https://github.com/DatGuy1/Windows-Toasts) (Apache-2.0 license)

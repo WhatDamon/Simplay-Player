@@ -139,6 +139,9 @@ def main(page: ft.Page):
         global currentOS
         if currentOS == 'windows':
             windowsToastNotify()
+        else:
+            page.snack_bar = ft.SnackBar(ft.Text("已加载歌曲：\n" + audioArtistText+ " - " + audioTitleText))
+            page.snack_bar.open = True
         page.update()
         
     pickFilesDialog = ft.FilePicker(on_result=pickFileResult)
@@ -268,6 +271,10 @@ def main(page: ft.Page):
                             on_click = lambda _: pickFilesDialog.pick_files(allowed_extensions=["mp3", "ogg", "flac", "m4a", "wav"]),
                         ),
                         ft.MenuItemButton(
+                            content = ft.Text("从网易云中获取"),
+                            leading = ft.Icon(ft.icons.MUSIC_NOTE_OUTLINED)
+                        ),
+                        ft.MenuItemButton(
                             content = ft.Text("退出"),
                             leading = ft.Icon(ft.icons.EXIT_TO_APP_OUTLINED),
                             on_click = closeWindow
@@ -363,6 +370,11 @@ def main(page: ft.Page):
             height = 46,
             width = 200
         )
+
+    audioList_btn = ft.IconButton(
+            icon = ft.icons.LIBRARY_MUSIC_OUTLINED,
+            tooltip = "歌单",
+        )
     
     audioInfo_btn = ft.IconButton(
             icon = ft.icons.INFO_OUTLINE,
@@ -378,7 +390,7 @@ def main(page: ft.Page):
     lyric_text = ft.Text(size = 20)
 
     playbackCtrl_row = ft.Row(controls = [playPause_btn, volume_btn, volume_panel])
-    moreBtns_row = ft.Row(controls = [audioInfo_btn, settings_btn])
+    moreBtns_row = ft.Row(controls = [audioList_btn, audioInfo_btn, settings_btn])
     btns_row = ft.Row(controls = [playbackCtrl_row, moreBtns_row], alignment = ft.MainAxisAlignment.SPACE_BETWEEN)
 
     page.add(ft.Column(controls = [ft.Row(controls = [menuBar]), audioBasicInfo, audioProgressBar, btns_row, lyric_text]))
@@ -389,4 +401,6 @@ if __name__ == '__main__':
         print("发现您正在使用 WSL, 实际上, 我们更推荐您直接使用 Windows 版本以避免潜在的 BUG")
     if currentOS == "windows":
         from windows_toasts import Toast, ToastDisplayImage, WindowsToaster
+    else:
+        print("除 Windows 外, 该软件没有做过稳定性测试, 可能会存在一些开发者也不清楚的 BUG 需要修复")
     ft.app(target = main)
