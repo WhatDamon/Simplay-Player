@@ -27,6 +27,7 @@ ___注：`Windows-Toasts` 库只能在 Windows 下生效!___
 
 - [x] 基本逻辑
 - [x] 吐司通知 (Windows 独占性功能)
+- [x] GitHub Actions 自动测试编译工作流 (使用 __Nuitka__ 和 __Pytest__ 实现)
 - [ ] 设置 (目前已有占位按钮 `settings_btn`)
 - [ ] 歌词显示与滚动 (已预留了歌词路径变量 `lyricFile` 和读取函数 `lyricExistAndRead`)
 - [ ] 歌单 (目前已有占位按钮 `audioList_btn`)
@@ -36,7 +37,6 @@ ___注：`Windows-Toasts` 库只能在 Windows 下生效!___
 - [ ] 界面自动取色
 - [ ] 混音器
 - [ ] 在线获取歌曲 (__网易云__) (目前已有占位菜单按钮)
-- [ ] GitHub Actions 自动编译工作流 (使用 __Nuitka__ 实现)
 
 ## BUG 列表
 
