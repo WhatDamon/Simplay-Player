@@ -125,27 +125,34 @@ def main(page: ft.Page):
         toaster.show_toast(sysToast)
 
     def pickFileResult(e: ft.FilePickerResultEvent):
+        page.splash = ft.ProgressBar()
+        page.update()
         audioPathTemp = (
             ", ".join(map(lambda f: f.path, e.files)) if e.files else "Cancelled!"
         )
-        global audioFile, lyricFile
+        global audioFile, lyricFile, firstPlay
         if audioPathTemp == None:
             pass
         else:
             audioFile = audioPathTemp
             lyricFile = audioPathTemp[:-3] + "lrc"
+            if firstPlay == True:
+                page.overlay.append(playAudio)
+                firstPlay = False
+            playAudio.src = audioFile
         audioPathTemp = None
-        playAudio.src = audioFile
         audioInfoUpdate()
+        page.title = audioArtistText + " - " + audioTitleText + "- Simplay Player"
         global currentOS
         if currentOS == 'windows':
             windowsToastNotify()
         else:
             page.snack_bar = ft.SnackBar(ft.Text("已加载歌曲：\n" + audioArtistText+ " - " + audioTitleText))
             page.snack_bar.open = True
+        page.splash = None
         page.update()
         
-    pickFilesDialog = ft.FilePicker(on_result=pickFileResult)
+    pickFilesDialog = ft.FilePicker(on_result = pickFileResult)
     page.overlay.append(pickFilesDialog)
 
     """
@@ -158,11 +165,8 @@ def main(page: ft.Page):
     """
 
     def playOrPauseMusic(e):
-        global firstPlay, audioFile
+        global audioFile
         if audioFile != None:
-            if firstPlay == True:
-                page.overlay.append(playAudio)
-                firstPlay = False
             audioInfoUpdate()
             global playStatus
             if playStatus == False:
@@ -314,7 +318,7 @@ def main(page: ft.Page):
                         ft.MenuItemButton(
                             content = ft.Text("打开"),
                             leading = ft.Icon(ft.icons.FILE_OPEN_OUTLINED),
-                            on_click = lambda _: pickFilesDialog.pick_files(allowed_extensions=["mp3", "ogg", "flac", "m4a", "wav"]),
+                            on_click = lambda _: pickFilesDialog.pick_files(allowed_extensions=["mp3", "ogg", "flac", "m4a", "wav", "aac"]),
                         ),
                         ft.MenuItemButton(
                             content = ft.Text("从网易云中获取"),
@@ -447,6 +451,7 @@ def main(page: ft.Page):
         icon = ft.icons.LOOP_OUTLINED,
         tooltip = "循环播放",
         icon_size = 20,
+        visible = False
         # on_click = enableOrDisableLoop
     )
 
@@ -470,6 +475,7 @@ def main(page: ft.Page):
             icon = ft.icons.LIBRARY_MUSIC_OUTLINED,
             tooltip = "歌单",
             icon_size = 20,
+            visible = False
         )
     
     audioInfo_btn = ft.IconButton(
@@ -483,6 +489,7 @@ def main(page: ft.Page):
             icon = ft.icons.SETTINGS_OUTLINED,
             tooltip = "设置",
             icon_size = 20,
+            visible = False
         )
     
     lyric_text = ft.Text(size = 20)
