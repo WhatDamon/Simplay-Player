@@ -1,4 +1,4 @@
-<img width="50" height="50" align="left" style="float: left; margin: 0 10px 0 0;" alt="Simplay Player Logo" src="https://github.com/WhatDamon/Simplay-Player/blob/main/asset/simplay.png">  
+<img width="32" height="32" align="left" style="float: left; margin: 0 10px 0 0;" alt="Simplay Player Logo" src="https://github.com/WhatDamon/Simplay-Player/blob/main/asset/simplay.png">  
 
 # Simplay Player
 
@@ -15,13 +15,13 @@
 
 __Python 3.8 及更高版本__, 推荐 3.10 及更高版本以保障其正常运行
 
-开发前需要先执行...
+开发使用前 __*nix系统__ 需要先执行...
 
 ~~~Bash
 pip install -r requirements.txt
 ~~~
 
-Windows 需要执行...
+而 __Windows__ 则需要执行...
 
 ~~~Bash
 pip install -r requirements_win.txt
@@ -32,8 +32,10 @@ ___注：区分的原因是 `Windows-Toasts` 库只能在 Windows 下生效!___
 ## TODO
 
 - [x] 基本逻辑
-- [x] 吐司通知 (Windows 独占性功能)
-- [x] GitHub Actions 自动测试编译工作流 (使用 __Nuitka__ 和 __Pytest__ 实现)
+- [x] 吐司通知 (Windows 独占性功能, 其它系统使用 `SnackBar` 替代)
+- [x] 快进与倍速播放
+- [x] GitHub Actions 自动测试编译工作流 (使用 __Nuitka__ 实现)
+- [ ] 循环播放 (遇到技术性难题, 暂时注释了 `enableOrDisable` 函数, 预留了占位按钮 `playInLoop_btn` 和状态变量 `loopOpen`)
 - [ ] 设置 (目前已有占位按钮 `settings_btn`)
 - [ ] 歌词显示与滚动 (已预留了歌词路径变量 `lyricFile` 和读取函数 `lyricExistAndRead`)
 - [ ] 歌单 (目前已有占位按钮 `audioList_btn`)
@@ -49,7 +51,7 @@ ___注：区分的原因是 `Windows-Toasts` 库只能在 Windows 下生效!___
 以下内容不一定完全, 可能存在更多不在这个列表的 BUG!
 
 - [ ] 读取存在封面的歌曲后再打开无封面歌曲不会替换成占位的 `track.png`
-- [ ] `Ctrl` + `H` 快捷键后歌曲进度条无法工作
+- [ ] `Ctrl` + `H` 快捷键等操作以后后歌曲进度条无法工作
 - [ ] 更换歌曲后可能会有些不是特别影响的报错
 - [ ] 打开歌曲后需要连续点击三次播放键才可以进入播放状态
 

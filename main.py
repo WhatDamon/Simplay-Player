@@ -5,6 +5,7 @@ audioFile = None
 lyricFile = None
 firstPlay = True
 playStatus = False
+loopOpen = False
 progressChanging = False
 audioTag = None
 audioCoverBase64 = None
@@ -176,14 +177,59 @@ def main(page: ft.Page):
                 page.title = audioArtistText + " - " + audioTitleText + "- Simplay Player"
             page.update()
 
+    def audioForward10sec(e):
+        if playAudio.get_current_position() + 10000 > playAudio.get_duration():
+            playAudio.seek(playAudio.get_duration())
+        else:
+            playAudio.seek(playAudio.get_current_position() + 10000)
+
+    def audioBack10sec(e):
+        if playAudio.get_current_position() - 10000 < 0:
+            playAudio.seek(0)
+        else:
+            playAudio.seek(playAudio.get_current_position() - 10000)
+
+    def rateChangeTo05(e):
+        playAudio.playback_rate = 0.5
+        playAudio.update()
+    
+    def rateChangeTo10(e):
+        playAudio.playback_rate = 1.0
+        playAudio.update()
+
+    def rateChangeTo15(e):
+        playAudio.playback_rate = 1.5
+        playAudio.update()
+
+    def rateChangeTo20(e):
+        playAudio.playback_rate = 2.0
+        playAudio.update()
+
     def autoKeepAudioProgress(e):
         if progressChanging == False:
             audioProgressBar.value = playAudio.get_current_position() / playAudio.get_duration() * 1000
+        global loopOpen
+        if playAudio.get_current_position() == playAudio.get_duration() and loopOpen == True:
+            playAudio.seek(0)
         currentLength = secondConvert(playAudio.get_current_position() // 1000)
         totalLength = secondConvert(playAudio.get_duration() // 1000)
         audioProgressStatus.value = currentLength + "/" + totalLength
         page.update()
 
+    """
+    def enableOrDisableLoop(e):
+        global loopOpen
+        if loopOpen == False:
+            loopOpen = True
+            page.snack_bar = ft.SnackBar(ft.Text("已启用循环播放"))
+            page.snack_bar.open = True
+        elif loopOpen == True:
+            loopOpen = False
+            page.snack_bar = ft.SnackBar(ft.Text("已禁用循环播放"))
+            page.snack_bar.open = True
+        page.update()
+    """
+    
     def autoStopKeepAudioProgress(e):
         global progressChanging
         progressChanging = True
@@ -302,7 +348,49 @@ def main(page: ft.Page):
                                     content = ft.Text("向右移"),
                                     leading = ft.Icon(ft.icons.ARROW_FORWARD_OUTLINED),
                                     on_click = balanceRight
+                                )
+                            ]
+                        ),
+                        ft.SubmenuButton(
+                            content = ft.Text("进度"),
+                            leading = ft.Icon(ft.icons.TIMER_OUTLINED),
+                            controls = [
+                                ft.MenuItemButton(
+                                    content = ft.Text("快进 10s"),
+                                    leading = ft.Icon(ft.icons.ARROW_FORWARD_OUTLINED),
+                                    on_click = audioForward10sec
                                 ),
+                                ft.MenuItemButton(
+                                    content = ft.Text("后退 10s"),
+                                    leading = ft.Icon(ft.icons.ARROW_BACK_OUTLINED),
+                                    on_click = audioBack10sec
+                                )
+                            ]
+                        ),
+                        ft.SubmenuButton(
+                            content = ft.Text("倍速"),
+                            leading = ft.Icon(ft.icons.SLOW_MOTION_VIDEO_OUTLINED),
+                            controls = [
+                                ft.MenuItemButton(
+                                    content = ft.Text("0.5x"),
+                                    leading = ft.Icon(ft.icons.ARROW_BACK_OUTLINED),
+                                    on_click = rateChangeTo05
+                                ),
+                                ft.MenuItemButton(
+                                    content = ft.Text("1x"),
+                                    leading = ft.Icon(ft.icons.STOP_OUTLINED),
+                                    on_click = rateChangeTo10
+                                ),
+                                ft.MenuItemButton(
+                                    content = ft.Text("1.5x"),
+                                    leading = ft.Icon(ft.icons.ARROW_FORWARD_OUTLINED),
+                                    on_click = rateChangeTo15
+                                ),
+                                ft.MenuItemButton(
+                                    content = ft.Text("2x"),
+                                    leading = ft.Icon(ft.icons.ROCKET_LAUNCH_OUTLINED),
+                                    on_click = rateChangeTo20
+                                )
                             ]
                         ),
                         ft.MenuItemButton(
@@ -355,6 +443,13 @@ def main(page: ft.Page):
         on_click = playOrPauseMusic
     )
 
+    playInLoop = ft.IconButton(
+        icon = ft.icons.LOOP_OUTLINED,
+        tooltip = "循环播放",
+        icon_size = 20,
+        # on_click = enableOrDisableLoop
+    )
+
     volume_btn = ft.IconButton(
         icon = ft.icons.VOLUME_UP_OUTLINED,
         tooltip = "音量",
@@ -374,22 +469,25 @@ def main(page: ft.Page):
     audioList_btn = ft.IconButton(
             icon = ft.icons.LIBRARY_MUSIC_OUTLINED,
             tooltip = "歌单",
+            icon_size = 20,
         )
     
     audioInfo_btn = ft.IconButton(
             icon = ft.icons.INFO_OUTLINE,
             tooltip = "歌曲信息",
+            icon_size = 20,
             on_click = openAudioInfoDlg
         )
 
     settings_btn = ft.IconButton(
             icon = ft.icons.SETTINGS_OUTLINED,
             tooltip = "设置",
+            icon_size = 20,
         )
     
     lyric_text = ft.Text(size = 20)
 
-    playbackCtrl_row = ft.Row(controls = [playPause_btn, volume_btn, volume_panel])
+    playbackCtrl_row = ft.Row(controls = [playPause_btn, playInLoop, volume_btn, volume_panel])
     moreBtns_row = ft.Row(controls = [audioList_btn, audioInfo_btn, settings_btn])
     btns_row = ft.Row(controls = [playbackCtrl_row, moreBtns_row], alignment = ft.MainAxisAlignment.SPACE_BETWEEN)
 
@@ -399,6 +497,8 @@ if __name__ == '__main__':
     detectOS()
     if currentOS == 'wsl':
         print("发现您正在使用 WSL, 实际上, 我们更推荐您直接使用 Windows 版本以避免潜在的 BUG")
+    if currentOS == 'cygwin':
+        print("发现您正在使用 Cygwin, 实际上, 我们更推荐您直接使用 Windows 版本以避免潜在的 BUG")
     if currentOS == "windows":
         from windows_toasts import Toast, ToastDisplayImage, WindowsToaster
     else:
