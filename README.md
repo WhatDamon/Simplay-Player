@@ -1,6 +1,6 @@
-<img width="32" height="32" align="left" style="float: left; margin: 0 10px 0 0;" alt="SlimPlayer Logo" src="https://github.com/WhatDamon/Simplay-Player/blob/main/asset/simplay.png">  
+<img width="32" height="32" align="left" style="float: left; margin: 0 10px 0 0;" alt="StrimPlayer Logo" src="https://github.com/WhatDamon/Simplay-Player/blob/main/asset/simplay.png">  
 
-# SlimPlayer
+# StrimPlayer
 
 > [!IMPORTANT]  
 > WIP! 大部分功能还在开发中, 并且目前也存在着非常严重的恶性 BUG 需要修复, 基本处于勉勉强强可用的状态
