@@ -31,6 +31,8 @@ pip install -r requirements_win.txt
 
 ___注：区分的原因是 `Windows-Toasts` 库只能在 Windows 下生效!___
 
+此外, 该软件 __不能在含有 CJK 文本的路径下正常开发与运行__!
+
 ## TODO
 
 - [x] 基本逻辑

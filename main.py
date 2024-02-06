@@ -121,7 +121,8 @@ def main(page: ft.Page):
     def windowsToastNotify():
         toaster = WindowsToaster('Simplay Player')
         sysToast = Toast()
-        sysToast.AddImage(ToastDisplayImage.fromPath('./asset/simplay.png'))
+        if os.path.exists("./asset/simplay.png"):
+            sysToast.AddImage(ToastDisplayImage.fromPath('./asset/simplay.png'))
         sysToast.text_fields = ["已加载歌曲: ", audioArtistText + " - " + audioTitleText]
         toaster.show_toast(sysToast)
 
