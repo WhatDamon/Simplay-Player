@@ -6,6 +6,7 @@ lyricFile = None
 firstPlay = True
 playStatus = False
 loopOpen = False
+audioListShown = False
 progressChanging = False
 audioTag = None
 audioCoverBase64 = None
@@ -261,6 +262,24 @@ def main(page: ft.Page):
             volume_btn.icon = ft.icons.VOLUME_DOWN_OUTLINED
         page.update()
 
+    def audioListCtrl(e):
+        if audioListShown == False:
+            showAudioList(0)
+        elif audioListShown == True:
+            hideAudioList(0)
+
+    def showAudioList(e):
+        global audioListShown
+        audioList_menu.offset = ft.transform.Offset(0, 0)
+        audioListShown = True
+        audioList_menu.update()
+
+    def hideAudioList(e):
+        global audioListShown
+        audioList_menu.offset = ft.transform.Offset(-2, 0)
+        audioListShown = False
+        audioList_menu.update()
+
     def openAudioInfoDlg(e):
         audioInfo_dlg = ft.AlertDialog(
             title = ft.Text("详细信息"),
@@ -318,7 +337,7 @@ def main(page: ft.Page):
                         ft.MenuItemButton(
                             content = ft.Text("打开"),
                             leading = ft.Icon(ft.icons.FILE_OPEN_OUTLINED),
-                            on_click = lambda _: pickFilesDialog.pick_files(allowed_extensions=["mp3", "ogg", "flac", "m4a", "wav", "aac"]),
+                            on_click = lambda _: pickFilesDialog.pick_files(allowed_extensions=["mp3", "flac", "m4a", "wav", "aac"]),
                         ),
                         ft.MenuItemButton(
                             content = ft.Text("从网易云中获取"),
@@ -431,7 +450,7 @@ def main(page: ft.Page):
         visible = True
     )
 
-    audioCover = ft.Image(src = './asset/track.png', width = 128, height = 128, border_radius = 6)
+    audioCover = ft.Image(src = './asset/track.png', width = 128, height = 128, border_radius = 5)
     audioTitle = ft.Text(audioTitleText, weight = ft.FontWeight.BOLD, size = 25, overflow = ft.TextOverflow.ELLIPSIS)
     audioArtist = ft.Text(audioArtistText, size = 18, opacity = 90)
     audioProgressStatus = ft.Text("00:00/00:00", size = 15, opacity = 90)
@@ -475,8 +494,35 @@ def main(page: ft.Page):
             icon = ft.icons.LIBRARY_MUSIC_OUTLINED,
             tooltip = "歌单",
             icon_size = 20,
-            visible = False
+            on_click = audioListCtrl
         )
+    
+    audioList_menu = ft.Container(
+        content = ft.Column(
+            [
+                ft.Row(
+                    controls = [
+                        ft.Text("歌单", size = 20, weight = ft.FontWeight.BOLD),
+                        ft.IconButton(icon = ft.icons.CLOSE, on_click = hideAudioList)
+                    ],
+                    alignment = ft.MainAxisAlignment.SPACE_BETWEEN,
+                ),
+                ft.ListTile(
+                    leading = ft.Icon(ft.icons.CONSTRUCTION_OUTLINED, color = ft.colors.AMBER),
+                    title = ft.Text("施工中", color = ft.colors.AMBER)
+                )
+            ],
+        ),
+        left = 10,
+        top = 10,
+        width = 250,
+        height = 400,
+        bgcolor = ft.colors.SURFACE_VARIANT,
+        border_radius = 5,
+        padding = 8,
+        offset = ft.transform.Offset(-2, 0),
+        animate_offset = ft.animation.Animation(200, ft.AnimationCurve.EASE_IN),
+    )
     
     audioInfo_btn = ft.IconButton(
             icon = ft.icons.INFO_OUTLINE,
@@ -498,6 +544,7 @@ def main(page: ft.Page):
     moreBtns_row = ft.Row(controls = [audioList_btn, audioInfo_btn, settings_btn])
     btns_row = ft.Row(controls = [playbackCtrl_row, moreBtns_row], alignment = ft.MainAxisAlignment.SPACE_BETWEEN)
 
+    page.overlay.append(audioList_menu)
     page.add(ft.Column(controls = [ft.Row(controls = [menuBar]), audioBasicInfo, audioProgressBar, btns_row, lyric_text]))
 
 if __name__ == '__main__':

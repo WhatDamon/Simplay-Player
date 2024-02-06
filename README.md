@@ -9,7 +9,7 @@
 
 最早被称为 __Simply Player__ 即 __简单的播放器__, __Simplay__ 是在码字过程中意外中得到名字
 
-支持 `MP3`、`OGG`、`M4A`、`FLAC`、`WAV`、`AAC` 格式 (已测试的所有格式中, `APE`、`MP2`、`WMA` 有不同程度的不支持, 其他格式也有可能支持)
+支持 `MP3`、`M4A`、`FLAC`、`WAV`、`AAC` 格式 (已测试的所有格式中, `APE`、`MP2`、`WMA`、`OGG`有不同程度的不支持, 其他格式也有可能支持)
 
 如果喜欢可以点个 Star, 当然目前我还是更希望各位可以为项目开发添砖加瓦, 多来点 PR
 
@@ -40,7 +40,7 @@ ___注：区分的原因是 `Windows-Toasts` 库只能在 Windows 下生效!___
 - [ ] 循环播放 (遇到技术性难题, 暂时注释了 `enableOrDisable` 函数 (函数临时被注释), 预留了占位按钮 `playInLoop_btn` (组件已隐藏) 和状态变量 `loopOpen`)
 - [ ] 设置 (目前已有占位按钮 `settings_btn`, 并隐藏)
 - [ ] 歌词显示与滚动 (已预留了歌词路径变量 `lyricFile` 和读取函数 `lyricExistAndRead`(函数临时被注释))
-- [ ] 歌单 (目前已有占位按钮 `audioList_btn`, 并隐藏)
+- [ ] 歌单 (施工中)
 - [ ] 日志输出
 - [ ] 系统托盘 (预计使用 `pystray` 实现)
 - [ ] 检查更新 (基于 __Github API__)
