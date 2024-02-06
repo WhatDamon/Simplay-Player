@@ -1,5 +1,6 @@
 import flet as ft
 import tinytag, time, base64, os, platform
+from i18n import lang
 
 audioFile = None
 lyricFile = None
@@ -10,9 +11,9 @@ audioListShown = False
 progressChanging = False
 audioTag = None
 audioCoverBase64 = None
-audioInfo = "无"
-audioTitleText = "未知歌曲"
-audioArtistText = "未知作曲家"
+audioInfo = None
+audioTitleText = None
+audioArtistText = None
 currentOS = None
 
 def detectOS():
@@ -68,7 +69,7 @@ def main(page: ft.Page):
     def hideShowMenuBar(e):
         if menuBar.visible == True:
             menuBar.visible = False
-            page.snack_bar = ft.SnackBar(ft.Text("按下 Ctrl+H 复原顶栏!"))
+            page.snack_bar = ft.SnackBar(ft.Text(value = lang.mainMenu["resetMenuBar"]))
             page.snack_bar.open = True
         elif menuBar.visible == False:
             menuBar.visible = True
@@ -78,14 +79,14 @@ def main(page: ft.Page):
         if page.window_always_on_top == False:
             page.window_always_on_top = True
             windowOnTop_btn.icon = ft.icons.PUSH_PIN
-            windowOnTop_btn.tooltip = "取消置顶"
-            page.snack_bar = ft.SnackBar(ft.Text("已置顶"))
+            windowOnTop_btn.tooltip = lang.tooltips["cancelAlwaysOnTop"]
+            page.snack_bar = ft.SnackBar(ft.Text(value = lang.mainMenu["beenTop"]))
             page.snack_bar.open = True
         elif page.window_always_on_top == True:
             page.window_always_on_top = False
             windowOnTop_btn.icon = ft.icons.PUSH_PIN_OUTLINED
-            windowOnTop_btn.tooltip = "置顶"
-            page.snack_bar = ft.SnackBar(ft.Text("已取消置顶"))
+            windowOnTop_btn.tooltip = lang.tooltips["alwaysOnTop"]
+            page.snack_bar = ft.SnackBar(ft.Text(value = lang.mainMenu["beenUntop"]))
             page.snack_bar.open = True
         page.update()
 
@@ -107,11 +108,11 @@ def main(page: ft.Page):
         if audioTag.title != None:
             audioTitleText = audioTag.title
         else:
-            audioTitleText = "未知歌曲"
+            audioTitleText = lang.mainMenu["unknownMusic"]
         if audioTag.artist != None:
             audioArtistText = audioTag.artist
         else:
-            audioArtistText = "未知作曲家"
+            audioArtistText = lang.mainMenu["unknownArtist"]
         global audioInfo
         audioInfo = "Album: " + str(audioTag.album) + "\nAlbumist: " + str(audioTag.albumartist) + "\nArtist: " + str(audioTag.artist) + "\nAudio Offset: " + str(audioTag.audio_offset) + "\nBitrate: " + str(audioTag.bitrate) + "\nBitdepth: " + str(audioTag.bitdepth) + "\nChannels: " + str(audioTag.channels) + "\nComment: " + str(audioTag.comment)+ "\nComposer: " + str(audioTag.composer) + "\nDisc: " + str(audioTag.disc) + "\nDisc Total: " + str(audioTag.disc_total) + "\nDuration: " + str(audioTag.duration) + "\nFilesize: " + str(audioTag.filesize) + "\nGenre: " + str(audioTag.genre) + "\nSamplerate: " + str(audioTag.samplerate) + "\nTitle: " + str(audioTag.title) + "\nTrack: " + str(audioTag.track) + "\nTrack Total: " + str(audioTag.track_total) + "\nYear: " + str(audioTag.year)
         audioTitle.value = audioTitleText
@@ -123,7 +124,7 @@ def main(page: ft.Page):
         sysToast = Toast()
         if os.path.exists("./asset/simplay.png"):
             sysToast.AddImage(ToastDisplayImage.fromPath('./asset/simplay.png'))
-        sysToast.text_fields = ["已加载歌曲: ", audioArtistText + " - " + audioTitleText]
+        sysToast.text_fields = [lang.mainMenu["songLoaded"], audioArtistText + " - " + audioTitleText]
         toaster.show_toast(sysToast)
 
     def pickFileResult(e: ft.FilePickerResultEvent):
@@ -149,7 +150,7 @@ def main(page: ft.Page):
         if currentOS == 'windows':
             windowsToastNotify()
         else:
-            page.snack_bar = ft.SnackBar(ft.Text("已加载歌曲：\n" + audioArtistText+ " - " + audioTitleText))
+            page.snack_bar = ft.SnackBar(ft.Text(value = lang.menuBar["songLoaded"] + "\n" + audioArtistText+ " - " + audioTitleText))
             page.snack_bar.open = True
         page.splash = None
         page.update()
@@ -160,7 +161,7 @@ def main(page: ft.Page):
     """
     def lyricExistAndRead():
         if os.path.exists(lyricFile):
-            with open(lyricFile,'r',encoding='utf-8') as f:
+            with open(lyricFile,'r',encoding = 'utf-8') as f:
                 content = f.read()
         else:
             pass
@@ -227,11 +228,11 @@ def main(page: ft.Page):
         global loopOpen
         if loopOpen == False:
             loopOpen = True
-            page.snack_bar = ft.SnackBar(ft.Text("已启用循环播放"))
+            page.snack_bar = ft.SnackBar(ft.Text(value = lang.mainMenu["enableLoop"]))
             page.snack_bar.open = True
         elif loopOpen == True:
             loopOpen = False
-            page.snack_bar = ft.SnackBar(ft.Text("已禁用循环播放"))
+            page.snack_bar = ft.SnackBar(ft.Text(value = lang.mainMenu["disableLoop"]))
             page.snack_bar.open = True
         page.update()
     """
@@ -283,7 +284,7 @@ def main(page: ft.Page):
 
     def openAudioInfoDlg(e):
         audioInfo_dlg = ft.AlertDialog(
-            title = ft.Text("详细信息"),
+            title = ft.Text(value = lang.mainMenu["moreInfo"]),
             content = ft.Text(value = audioInfo, size = 10)
         )
         page.dialog = audioInfo_dlg
@@ -292,7 +293,7 @@ def main(page: ft.Page):
 
     def openAboutDlg(e):
         about_dlg = ft.AlertDialog(
-            title = ft.Text("关于"),
+            title = ft.Text(value = lang.mainMenu["about"]),
             content = ft.Text("Simplay Player by What_Damon\n\nVersion: 1.0.0_experimentalTest\nPowered by: Flet, Tinytag\n\nRuning under Python " + platform.python_version() + "\nOS: " + platform.platform())
         )
         page.dialog = about_dlg
@@ -324,7 +325,7 @@ def main(page: ft.Page):
 
     windowOnTop_btn = ft.IconButton(
                     icon = ft.icons.PUSH_PIN_OUTLINED,
-                    tooltip = "置顶",
+                    tooltip = lang.tooltips["alwaysOnTop"],
                     on_click = alwaysOnTop
                 )
 
@@ -333,107 +334,107 @@ def main(page: ft.Page):
         controls = [
             ft.Row(controls = [
                 ft.SubmenuButton(
-                    content = ft.Text("文件"),
+                    content = ft.Text(value = lang.menuBar["files"]),
                     controls = [
                         ft.MenuItemButton(
-                            content = ft.Text("打开"),
+                            content = ft.Text(value = lang.menuBar["openFile"]),
                             leading = ft.Icon(ft.icons.FILE_OPEN_OUTLINED),
                             on_click = lambda _: pickFilesDialog.pick_files(allowed_extensions=["mp3", "flac", "m4a", "wav", "aac"]),
                         ),
                         ft.MenuItemButton(
-                            content = ft.Text("从网易云中获取"),
+                            content = ft.Text(value = lang.menuBar["getFromNeteaseMusic"]),
                             leading = ft.Icon(ft.icons.MUSIC_NOTE_OUTLINED)
                         ),
                         ft.MenuItemButton(
-                            content = ft.Text("退出"),
+                            content = ft.Text(value = lang.menuBar["exit"]),
                             leading = ft.Icon(ft.icons.EXIT_TO_APP_OUTLINED),
                             on_click = closeWindow
                         )
                     ]
                 ),
                 ft.SubmenuButton(
-                    content = ft.Text("媒体"),
+                    content = ft.Text(value = lang.menuBar["media"]),
                     controls = [
                         ft.SubmenuButton(
-                            content = ft.Text("左右声道"),
+                            content = ft.Text(value = lang.menuBar["channels"]),
                             leading = ft.Icon(ft.icons.SPEAKER_GROUP_OUTLINED),
                             controls = [
                                 ft.MenuItemButton(
-                                    content = ft.Text("平衡"),
+                                    content = ft.Text(value = lang.menuBar["balance"]),
                                     leading = ft.Icon(ft.icons.WIDTH_NORMAL),
                                     on_click = balanceMiddle
                                 ),
                                 ft.MenuItemButton(
-                                    content = ft.Text("向左移"),
+                                    content = ft.Text(value = lang.menuBar["shiftLeft"]),
                                     leading = ft.Icon(ft.icons.ARROW_BACK_OUTLINED),
                                     on_click = balanceLeft
                                 ),
                                 ft.MenuItemButton(
-                                    content = ft.Text("向右移"),
+                                    content = ft.Text(value = lang.menuBar["shiftRight"]),
                                     leading = ft.Icon(ft.icons.ARROW_FORWARD_OUTLINED),
                                     on_click = balanceRight
                                 )
                             ]
                         ),
                         ft.SubmenuButton(
-                            content = ft.Text("进度"),
+                            content = ft.Text(value = lang.menuBar["position"]),
                             leading = ft.Icon(ft.icons.TIMER_OUTLINED),
                             controls = [
                                 ft.MenuItemButton(
-                                    content = ft.Text("快进 10s"),
+                                    content = ft.Text(value = lang.menuBar["forward10s"]),
                                     leading = ft.Icon(ft.icons.ARROW_FORWARD_OUTLINED),
                                     on_click = audioForward10sec
                                 ),
                                 ft.MenuItemButton(
-                                    content = ft.Text("后退 10s"),
+                                    content = ft.Text(value = lang.menuBar["back10s"]),
                                     leading = ft.Icon(ft.icons.ARROW_BACK_OUTLINED),
                                     on_click = audioBack10sec
                                 )
                             ]
                         ),
                         ft.SubmenuButton(
-                            content = ft.Text("倍速"),
+                            content = ft.Text(value = lang.menuBar["times"]),
                             leading = ft.Icon(ft.icons.SLOW_MOTION_VIDEO_OUTLINED),
                             controls = [
                                 ft.MenuItemButton(
-                                    content = ft.Text("0.5x"),
+                                    content = ft.Text(value = lang.menuBar["0.5x"]),
                                     leading = ft.Icon(ft.icons.ARROW_BACK_OUTLINED),
                                     on_click = rateChangeTo05
                                 ),
                                 ft.MenuItemButton(
-                                    content = ft.Text("1x"),
+                                    content = ft.Text(value = lang.menuBar["1x"]),
                                     leading = ft.Icon(ft.icons.STOP_OUTLINED),
                                     on_click = rateChangeTo10
                                 ),
                                 ft.MenuItemButton(
-                                    content = ft.Text("1.5x"),
+                                    content = ft.Text(value = lang.menuBar["1.5x"]),
                                     leading = ft.Icon(ft.icons.ARROW_FORWARD_OUTLINED),
                                     on_click = rateChangeTo15
                                 ),
                                 ft.MenuItemButton(
-                                    content = ft.Text("2x"),
+                                    content = ft.Text(value = lang.menuBar["2x"]),
                                     leading = ft.Icon(ft.icons.ROCKET_LAUNCH_OUTLINED),
                                     on_click = rateChangeTo20
                                 )
                             ]
                         ),
                         ft.MenuItemButton(
-                            content = ft.Text("音量"),
+                            content = ft.Text(value = lang.menuBar["volume"]),
                             leading = ft.Icon(ft.icons.VOLUME_UP_OUTLINED),
                             on_click = openVolumePanel
                         ),
                         ft.MenuItemButton(
-                            content = ft.Text("媒体信息"),
+                            content = ft.Text(value = lang.menuBar["audioInfo"]),
                             leading = ft.Icon(ft.icons.INFO_OUTLINE),
                             on_click = openAudioInfoDlg
                         )
                     ]
                 ),
                 ft.SubmenuButton(
-                    content = ft.Text("帮助"),
+                    content = ft.Text(value = lang.menuBar["help"]),
                     controls = [
                         ft.MenuItemButton(
-                            content = ft.Text("关于"),
+                            content = ft.Text(value = lang.menuBar["about"]),
                             leading = ft.Icon(ft.icons.QUESTION_MARK_OUTLINED),
                             on_click = openAboutDlg
                         )
@@ -442,7 +443,7 @@ def main(page: ft.Page):
                 windowOnTop_btn,
                 ft.IconButton(
                         icon = ft.icons.KEYBOARD_ARROW_UP_OUTLINED,
-                        tooltip = "隐藏顶栏",
+                        tooltip = lang.tooltips["hideMenuBar"],
                         on_click = hideShowMenuBar
                 )
                 ]
@@ -458,18 +459,18 @@ def main(page: ft.Page):
     audioDetail = ft.Column(controls = [audioTitle, audioArtist, audioProgressStatus])
     audioBasicInfo = ft.Row(controls = [audioCover, audioDetail])
 
-    audioProgressBar = ft.Slider(min = 0, max = 1000, tooltip = "歌曲进度", on_change_start = autoStopKeepAudioProgress, on_change_end = progressCtrl)
+    audioProgressBar = ft.Slider(min = 0, max = 1000, tooltip = lang.tooltips["audioPosition"], on_change_start = autoStopKeepAudioProgress, on_change_end = progressCtrl)
 
     playPause_btn = ft.IconButton(
         icon = ft.icons.PLAY_CIRCLE_FILLED_OUTLINED,
-        tooltip = "播放/暂停",
+        tooltip = lang.tooltips["playOrPause"],
         icon_size = 30,
         on_click = playOrPauseMusic
     )
 
     playInLoop = ft.IconButton(
         icon = ft.icons.LOOP_OUTLINED,
-        tooltip = "循环播放",
+        tooltip = lang.tooltips["playInLoop"],
         icon_size = 20,
         visible = False
         # on_click = enableOrDisableLoop
@@ -477,7 +478,7 @@ def main(page: ft.Page):
 
     volume_btn = ft.IconButton(
         icon = ft.icons.VOLUME_UP_OUTLINED,
-        tooltip = "音量",
+        tooltip = lang.tooltips["volume"],
         icon_size = 20,
         on_click = openVolumePanel
     )
@@ -493,7 +494,7 @@ def main(page: ft.Page):
 
     audioList_btn = ft.IconButton(
             icon = ft.icons.LIBRARY_MUSIC_OUTLINED,
-            tooltip = "歌单",
+            tooltip = lang.tooltips["songList"],
             icon_size = 20,
             on_click = audioListCtrl
         )
@@ -503,14 +504,14 @@ def main(page: ft.Page):
             [
                 ft.Row(
                     controls = [
-                        ft.Text("歌单", size = 20, weight = ft.FontWeight.BOLD),
+                        ft.Text(value = lang.songList["songList"], size = 20, weight = ft.FontWeight.BOLD),
                         ft.IconButton(icon = ft.icons.CLOSE, on_click = hideAudioList)
                     ],
                     alignment = ft.MainAxisAlignment.SPACE_BETWEEN,
                 ),
                 ft.ListTile(
                     leading = ft.Icon(ft.icons.CONSTRUCTION_OUTLINED, color = ft.colors.AMBER),
-                    title = ft.Text("施工中", color = ft.colors.AMBER)
+                    title = ft.Text(value = lang.songList["construction"], color = ft.colors.AMBER)
                 )
             ],
         ),
@@ -527,14 +528,14 @@ def main(page: ft.Page):
     
     audioInfo_btn = ft.IconButton(
             icon = ft.icons.INFO_OUTLINE,
-            tooltip = "歌曲信息",
+            tooltip = lang.tooltips["audioInfo"],
             icon_size = 20,
             on_click = openAudioInfoDlg
         )
 
     settings_btn = ft.IconButton(
             icon = ft.icons.SETTINGS_OUTLINED,
-            tooltip = "设置",
+            tooltip = lang.tooltips["settings"],
             icon_size = 20,
             visible = False
         )
@@ -550,12 +551,16 @@ def main(page: ft.Page):
 
 if __name__ == '__main__':
     detectOS()
+    lang.loadLang()
     if currentOS == 'wsl':
-        print("发现您正在使用 WSL, 实际上, 我们更推荐您直接使用 Windows 版本以避免潜在的 BUG")
+        print(lang.infomation["wslWarning"])
     if currentOS == 'cygwin':
-        print("发现您正在使用 Cygwin, 实际上, 我们更推荐您直接使用 Windows 版本以避免潜在的 BUG")
+        print(lang.infomation["cygwinWarning"])
     if currentOS == "windows":
         from windows_toasts import Toast, ToastDisplayImage, WindowsToaster
     else:
-        print("除 Windows 外, 该软件没有做过稳定性测试, 可能会存在一些开发者也不清楚的 BUG 需要修复")
+        print(lang.infomation["nonTestWarning"])
+    audioArtistText = lang.mainMenu["unknownArtist"]
+    audioTitleText = lang.mainMenu["unknownMusic"]
+    audioInfo = lang.mainMenu["none"]
     ft.app(target = main)

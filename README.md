@@ -39,6 +39,7 @@ ___注：区分的原因是 `Windows-Toasts` 库只能在 Windows 下生效!___
 - [x] 吐司通知 (Windows 独占性功能, 其它系统使用 `SnackBar` 替代)
 - [x] 快进与倍速播放
 - [x] GitHub Actions 自动测试编译工作流 (使用 __Nuitka__ 实现, 详见[本项目 Actions](https://github.com/WhatDamon/Simplay-Player/actions))
+- [x] 多语言支持 (基本, 目前只有美式英语 `en_US` 和简体中文 `zh_CN`, 若要贡献翻译请到 `i18n` 目录)
 - [ ] 循环播放 (遇到技术性难题, 暂时注释了 `enableOrDisable` 函数 (函数临时被注释), 预留了占位按钮 `playInLoop_btn` (组件已隐藏) 和状态变量 `loopOpen`)
 - [ ] 设置 (目前已有占位按钮 `settings_btn`, 并隐藏)
 - [ ] 歌词显示与滚动 (已预留了歌词路径变量 `lyricFile` 和读取函数 `lyricExistAndRead`(函数临时被注释))
