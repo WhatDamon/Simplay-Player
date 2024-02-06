@@ -38,6 +38,7 @@ ___注：区分的原因是 `Windows-Toasts` 库只能在 Windows 下生效!___
 - [ ] 循环播放 (遇到技术性难题, 暂时注释了 `enableOrDisable` 函数 (函数临时被注释), 预留了占位按钮 `playInLoop_btn` (组件已隐藏) 和状态变量 `loopOpen`)
 - [ ] 设置 (目前已有占位按钮 `settings_btn`, 并隐藏)
 - [ ] 歌词显示与滚动 (已预留了歌词路径变量 `lyricFile` 和读取函数 `lyricExistAndRead`(函数临时被注释))
+- [ ] AB点
 - [ ] 歌单 (施工中)
 - [ ] 日志输出
 - [ ] 系统托盘 (预计使用 `pystray` 实现)
