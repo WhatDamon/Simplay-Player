@@ -50,7 +50,7 @@ mainMenu = {
 tooltips = {
     "alwaysOnTop": "置顶",
     "cancelAlwaysOnTop": "取消置顶",
-    "hideMenuBar": "隐藏顶栏",
+    "hideMenuBar": "隐藏顶栏 (Ctrl+H)",
     "audioPosition": "歌曲进度",
     "playOrPause": "播放/暂停",
     "playInLoop": "循环播放",

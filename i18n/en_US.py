@@ -50,7 +50,7 @@ mainMenu = {
 tooltips = {
     "alwaysOnTop": "Always on Top",
     "cancelAlwaysOnTop": "Untop",
-    "hideMenuBar": "Hide Menu Bar",
+    "hideMenuBar": "Hide Menu Bar (Ctrl-H)",
     "audioPosition": "Audio Position",
     "playOrPause": "Play/Pause",
     "playInLoop": "Loop",

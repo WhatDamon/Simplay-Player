@@ -1,6 +1,13 @@
 import flet as ft
-import tinytag, time, base64, os, platform
+import tinytag, time, base64, os, platform, logging
+
+logging.basicConfig(filename = 'player.log', format = ' %(asctime)s | %(levelname)s | %(funcName)s | %(message)s', level = logging.INFO)
+
+logging.info("Basic libs imported")
+
 from i18n import lang
+
+logging.info("Languages imported")
 
 audioFile = None
 lyricFile = None
@@ -16,6 +23,8 @@ audioTitleText = None
 audioArtistText = None
 currentOS = None
 
+logging.info("Variable initialization complete")
+
 def detectOS():
     syst = platform.system().lower()
     os = 'unknown'
@@ -28,12 +37,15 @@ def detectOS():
         try:
             with open('/proc/version', 'r') as f:
                 if 'microsoft' in f.read().lower():
+                    logging.info("Find 'microsoft' at /proc/version")
                     os = 'wsl'
-        except: pass
+        except:
+            pass
     elif 'windows' in syst:
         os = 'windows'
     elif 'bsd' in syst:
         os = 'bsd'
+    logging.info("You are using " + os)
     global currentOS
     currentOS = os
 
@@ -46,6 +58,7 @@ def main(page: ft.Page):
     page.window_min_width = 500
     page.padding = 10
     page.title = "Simplay Player"
+    logging.info("Window created")
 
     page.fonts = {
         "Inter": "./asset/Inter.ttc"
@@ -54,26 +67,44 @@ def main(page: ft.Page):
     page.theme = ft.Theme(
         font_family = "Inter", color_scheme_seed = ft.colors.BLUE
     )
+    logging.info("Assets loaded")
 
     def keyboardEventTrack(e: ft.KeyboardEvent):
+        logging.info("Keyboard event")
         if f"{e.key}" == " ":
             playOrPauseMusic(0)
-        if f"{e.ctrl}" and f"{e.key}" == "H":
+            logging.info("Press Ctrl-H to hide/show menu bar")
+        if f"{e.ctrl}" == "True" and f"{e.key}" == "H":
             hideShowMenuBar(0)
+            logging.info("Press space bar to play/pause audio")
 
     page.on_keyboard_event = keyboardEventTrack
+    logging.info("keyboardEventTrack loaded")
+
+    def windowEvent(e):
+        if e.data == "close":
+            closeWindow(0)
+
+    page.window_prevent_close = True
+    page.on_window_event = windowEvent
+    logging.info("windowEvent loaded")
 
     def closeWindow(e):
-        page.window_close()
+        page.window_destroy()
+        logging.info("Window destoryed")
 
     def hideShowMenuBar(e):
         if menuBar.visible == True:
             menuBar.visible = False
-            page.snack_bar = ft.SnackBar(ft.Text(value = lang.mainMenu["resetMenuBar"]))
-            page.snack_bar.open = True
+            logging.info("Made menu bar disappeared")
+            # page.snack_bar = ft.SnackBar(ft.Text(value = lang.mainMenu["resetMenuBar"]))
+            # page.snack_bar.open = True
+            # logging.info("Snack Bar loaded - resetMenuBar")
         elif menuBar.visible == False:
             menuBar.visible = True
+            logging.info("Made menu bar shown")
         page.update()
+        logging.info("Page updated")
 
     def alwaysOnTop(e):
         if page.window_always_on_top == False:
@@ -89,6 +120,7 @@ def main(page: ft.Page):
             page.snack_bar = ft.SnackBar(ft.Text(value = lang.mainMenu["beenUntop"]))
             page.snack_bar.open = True
         page.update()
+        logging.info("Page updated")
 
     def secondConvert(sec):
         return(time.strftime("%M:%S", time.gmtime(sec)))
@@ -99,64 +131,94 @@ def main(page: ft.Page):
         if audioTag.get_image() != None:
             global audioCoverBase64
             audioCoverBase64 = base64.b64encode(audioTag.get_image())
+            logging.info("Audio cover transcoded to base64")
             audioCover.src_base64 = audioCoverBase64.decode('utf-8')
+            logging.info("Audio cover loaded")
         else:
             audioCoverBase64 = None
             audioCover.src = './asset/track.png'
+            logging.info("Placeholder cover loaded")
         audioCover.update()
+        logging.info("audioCover updated")
         global audioTitleText, audioArtistText
         if audioTag.title != None:
             audioTitleText = audioTag.title
+            logging.info("Set audio title")
         else:
             audioTitleText = lang.mainMenu["unknownMusic"]
+            logging.info("Unknown audio title")
         if audioTag.artist != None:
             audioArtistText = audioTag.artist
+            logging.info("Set audio artist")
         else:
             audioArtistText = lang.mainMenu["unknownArtist"]
+            logging.info("Unknown audio artist")
         global audioInfo
         audioInfo = "Album: " + str(audioTag.album) + "\nAlbumist: " + str(audioTag.albumartist) + "\nArtist: " + str(audioTag.artist) + "\nAudio Offset: " + str(audioTag.audio_offset) + "\nBitrate: " + str(audioTag.bitrate) + "\nBitdepth: " + str(audioTag.bitdepth) + "\nChannels: " + str(audioTag.channels) + "\nComment: " + str(audioTag.comment)+ "\nComposer: " + str(audioTag.composer) + "\nDisc: " + str(audioTag.disc) + "\nDisc Total: " + str(audioTag.disc_total) + "\nDuration: " + str(audioTag.duration) + "\nFilesize: " + str(audioTag.filesize) + "\nGenre: " + str(audioTag.genre) + "\nSamplerate: " + str(audioTag.samplerate) + "\nTitle: " + str(audioTag.title) + "\nTrack: " + str(audioTag.track) + "\nTrack Total: " + str(audioTag.track_total) + "\nYear: " + str(audioTag.year)
+        logging.info("Set audio info")
         audioTitle.value = audioTitleText
         audioArtist.value = audioArtistText
+        logging.info("Load audio info to interface")
         page.update()
+        logging.info("Page updated")
 
     def windowsToastNotify():
         toaster = WindowsToaster('Simplay Player')
         sysToast = Toast()
         if os.path.exists("./asset/simplay.png"):
+            logging.info("./asset/simplay.png exist")
             sysToast.AddImage(ToastDisplayImage.fromPath('./asset/simplay.png'))
+            logging.info("Toast image loaded")
+        else:
+            logging.warning("Cannot load toast image")
         sysToast.text_fields = [lang.mainMenu["songLoaded"], audioArtistText + " - " + audioTitleText]
         toaster.show_toast(sysToast)
+        logging.info("Toast Notify")
 
     def pickFileResult(e: ft.FilePickerResultEvent):
         page.splash = ft.ProgressBar()
+        logging.info("Splash progress bar enabled")
         page.update()
+        logging.info("Page updated")
         audioPathTemp = (
-            ", ".join(map(lambda f: f.path, e.files)) if e.files else "Cancelled!"
+            ", ".join(map(lambda f: f.path, e.files))
         )
         global audioFile, lyricFile, firstPlay
         if audioPathTemp == None:
-            pass
+            logging.warning("Nothing Loaded")
         else:
             audioFile = audioPathTemp
             lyricFile = audioPathTemp[:-3] + "lrc"
+            logging.info("File path loaded")
+            logging.info("Audio path: " + audioFile)
+            logging.info("Lyric path: " + lyricFile)
             if firstPlay == True:
                 page.overlay.append(playAudio)
+                logging.info("Append playAudio")
                 firstPlay = False
             playAudio.src = audioFile
-        audioPathTemp = None
-        audioInfoUpdate()
-        page.title = audioArtistText + " - " + audioTitleText + "- Simplay Player"
-        global currentOS
-        if currentOS == 'windows':
-            windowsToastNotify()
-        else:
-            page.snack_bar = ft.SnackBar(ft.Text(value = lang.menuBar["songLoaded"] + "\n" + audioArtistText+ " - " + audioTitleText))
-            page.snack_bar.open = True
-        page.splash = None
-        page.update()
+            logging.info("Set playAudio.src as audioFile")
+            audioPathTemp = None
+            audioInfoUpdate()
+            page.title = audioArtistText + " - " + audioTitleText + "- Simplay Player"
+            logging.info("Window title changed")
+            global currentOS
+            if currentOS == 'windows':
+                windowsToastNotify()
+                logging.info("Load Windows toast")
+            else:
+                page.snack_bar = ft.SnackBar(ft.Text(value = lang.mainMenu["songLoaded"] + "\n" + audioArtistText+ " - " + audioTitleText))
+                page.snack_bar.open = True
+                logging.info("Snack Bar loaded - resetMenuBar")
+            page.splash = None
+            logging.info("Splash progress bar disabled")
+            page.update()
+            logging.info("Page updated")
+            logging.info("File picked")
         
     pickFilesDialog = ft.FilePicker(on_result = pickFileResult)
     page.overlay.append(pickFilesDialog)
+    logging.info("Append pickFilesDialog")
 
     """
     def lyricExistAndRead():
@@ -175,42 +237,63 @@ def main(page: ft.Page):
             if playStatus == False:
                 playStatus = True
                 playAudio.resume()
+                logging.info("Audio Play/Resume")
                 playPause_btn.icon = ft.icons.PAUSE_CIRCLE_FILLED_OUTLINED
                 page.title = "▶️ " + audioArtistText + " - " + audioTitleText + "- Simplay Player"
+                logging.info("Window title changed")
             elif playStatus == True:
                 playStatus = False
                 playAudio.pause()
+                logging.info("Audio Pause")
                 playPause_btn.icon = ft.icons.PLAY_CIRCLE_FILL_OUTLINED
                 page.title = audioArtistText + " - " + audioTitleText + "- Simplay Player"
+                logging.info("Window title changed")
             page.update()
+            logging.info("Page updated")
+        else:
+            logging.warning("No audio file")
 
     def audioForward10sec(e):
         if playAudio.get_current_position() + 10000 > playAudio.get_duration():
+            logging.warning("More than the total length of the song")
             playAudio.seek(playAudio.get_duration())
+            logging.info("Setting position to the end of the song")
         else:
             playAudio.seek(playAudio.get_current_position() + 10000)
+            logging.info("Successful forward 10sec")
 
     def audioBack10sec(e):
         if playAudio.get_current_position() - 10000 < 0:
+            logging.warning("Less than the start of the song")
             playAudio.seek(0)
+            logging.info("Setting position to the start of the song")
         else:
             playAudio.seek(playAudio.get_current_position() - 10000)
+            logging.info("Successful back 10sec")
 
     def rateChangeTo05(e):
         playAudio.playback_rate = 0.5
+        logging.info("Set audio rate to 0.5x")
         playAudio.update()
+        logging.info("playAudio updated")
     
     def rateChangeTo10(e):
         playAudio.playback_rate = 1.0
+        logging.info("Set audio rate to 1x")
         playAudio.update()
+        logging.info("playAudio updated")
 
     def rateChangeTo15(e):
         playAudio.playback_rate = 1.5
+        logging.info("Set audio rate to 1.5x")
         playAudio.update()
+        logging.info("playAudio updated")
 
     def rateChangeTo20(e):
         playAudio.playback_rate = 2.0
+        logging.info("Set audio rate to 2.0x")
         playAudio.update()
+        logging.info("playAudio updated")
 
     def autoKeepAudioProgress(e):
         if progressChanging == False:
@@ -235,27 +318,35 @@ def main(page: ft.Page):
             page.snack_bar = ft.SnackBar(ft.Text(value = lang.mainMenu["disableLoop"]))
             page.snack_bar.open = True
         page.update()
+        logging.info("Page updated")
     """
     
     def autoStopKeepAudioProgress(e):
         global progressChanging
         progressChanging = True
+        logging.info("Set progressChanging as True")
 
     def progressCtrl(e):
         global progressChanging
         progressChanging = False
+        logging.info("Set progressChanging as False")
         playAudio.seek(int(playAudio.get_duration() * (audioProgressBar.value / 1000)))
+        logging.info("Audio seek completed")
 
     def openVolumePanel(e):
         if volume_panel.visible == True:
             volume_panel.visible = False
+            logging.info("Volume panel not visiable")
         elif volume_panel.visible == False:
             volume_panel.visible = True
+            logging.info("Volume panel visiable")
         page.update()
+        logging.info("Page updated")
 
     def volumeChange(e):
         playAudio.volume = volume_silder.value / 100
         playAudio.update()
+        logging.info("playAudio updated")
         if volume_silder.value >= 50:
             volume_btn.icon = ft.icons.VOLUME_UP_OUTLINED
         elif volume_silder.value == 0:
@@ -263,6 +354,7 @@ def main(page: ft.Page):
         elif volume_silder.value < 50:
             volume_btn.icon = ft.icons.VOLUME_DOWN_OUTLINED
         page.update()
+        logging.info("Page updated")
 
     def audioListCtrl(e):
         if audioListShown == False:
@@ -274,13 +366,17 @@ def main(page: ft.Page):
         global audioListShown
         audioList_menu.offset = ft.transform.Offset(0, 0)
         audioListShown = True
+        logging.info("Audio list shown")
         audioList_menu.update()
+        logging.info("audioList_menu updated")
 
     def hideAudioList(e):
         global audioListShown
         audioList_menu.offset = ft.transform.Offset(-2, 0)
         audioListShown = False
+        logging.info("Audio list disappeared")
         audioList_menu.update()
+        logging.info("audioList_menu updated")
 
     def openAudioInfoDlg(e):
         audioInfo_dlg = ft.AlertDialog(
@@ -289,7 +385,9 @@ def main(page: ft.Page):
         )
         page.dialog = audioInfo_dlg
         audioInfo_dlg.open = True
+        logging.info("Dialog audioInfo_dlg opened")
         page.update()
+        logging.info("Page updated")
 
     def openAboutDlg(e):
         about_dlg = ft.AlertDialog(
@@ -298,29 +396,37 @@ def main(page: ft.Page):
         )
         page.dialog = about_dlg
         about_dlg.open = True
+        logging.info("Dialog about_dlg opened")
         page.update()
+        logging.info("Page updated")
 
     def balanceLeft(e):
         playAudio.balance -= 0.1
+        logging.info("Channel left shift to " + str(playAudio.balance))
         playAudio.update()
+        logging.info("playAudio updated")
 
     def balanceRight(e):
         playAudio.balance += 0.1
+        logging.info("Channel right shift to " + str(playAudio.balance))
         playAudio.update()
+        logging.info("playAudio updated")
 
     def balanceMiddle(e):
-        playAudio.balance = 0.5
+        playAudio.balance = 0
+        logging.info("Channel set banlace to 0")
         playAudio.update()
+        logging.info("playAudio updated")
 
     playAudio = ft.Audio(
         autoplay = False,
         volume = 1,
         balance = 0,
-        on_loaded = lambda _: print("Loaded"),
-        on_duration_changed = lambda e: print("Duration changed:", e.data),
+        on_loaded = lambda _: logging.info("Audio loaded: " + audioFile + " => " + audioArtistText + " - " + audioTitleText),
+        on_duration_changed = lambda e: logging.info("Duration changed:" + e.data),
         on_position_changed = autoKeepAudioProgress,
-        on_state_changed = lambda e: print("State changed:", e.data),
-        on_seek_complete = lambda _: print("Seek complete"),
+        on_state_changed = lambda e: logging.info("State changed:" + e.data),
+        on_seek_complete = lambda _: logging.info("Seek complete"),
     )
 
     windowOnTop_btn = ft.IconButton(
@@ -339,7 +445,7 @@ def main(page: ft.Page):
                         ft.MenuItemButton(
                             content = ft.Text(value = lang.menuBar["openFile"]),
                             leading = ft.Icon(ft.icons.FILE_OPEN_OUTLINED),
-                            on_click = lambda _: pickFilesDialog.pick_files(allowed_extensions=["mp3", "flac", "m4a", "wav", "aac"]),
+                            on_click = lambda _: pickFilesDialog.pick_files(allowed_extensions = ["mp3", "flac", "m4a", "wav", "aac"]),
                         ),
                         ft.MenuItemButton(
                             content = ft.Text(value = lang.menuBar["getFromNeteaseMusic"]),
@@ -547,20 +653,28 @@ def main(page: ft.Page):
     btns_row = ft.Row(controls = [playbackCtrl_row, moreBtns_row], alignment = ft.MainAxisAlignment.SPACE_BETWEEN)
 
     page.overlay.append(audioList_menu)
+    logging.info("Append audioList_menu")
     page.add(ft.Column(controls = [ft.Row(controls = [menuBar]), audioBasicInfo, audioProgressBar, btns_row, lyric_text]))
+    logging.info("Window initialization complete")
 
 if __name__ == '__main__':
+    logging.info("Program start")
     detectOS()
     lang.loadLang()
     if currentOS == 'wsl':
         print(lang.infomation["wslWarning"])
+        logging.warning("Using WSL")
     if currentOS == 'cygwin':
         print(lang.infomation["cygwinWarning"])
+        logging.warning("Using Cygwin")
     if currentOS == "windows":
         from windows_toasts import Toast, ToastDisplayImage, WindowsToaster
+        logging.info("Lib Windows-Toasts imported")
     else:
         print(lang.infomation["nonTestWarning"])
+        logging.warning("Non-test OS")
     audioArtistText = lang.mainMenu["unknownArtist"]
     audioTitleText = lang.mainMenu["unknownMusic"]
     audioInfo = lang.mainMenu["none"]
+    logging.info("Basic initialization complete")
     ft.app(target = main)

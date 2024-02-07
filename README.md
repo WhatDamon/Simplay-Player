@@ -1,4 +1,4 @@
-<img width="32" height="32" align="left" style="float: left; margin: 0 10px 0 0;" alt="Simplay Player Logo" src="https://github.com/WhatDamon/Simplay-Player/blob/main/asset/simplay.png">  
+<img width="48" height="48" align="left" style="float: left; margin: 0 10px 0 0;" alt="Simplay Player Logo" src="https://github.com/WhatDamon/Simplay-Player/blob/main/asset/simplay.png">  
 
 # Simplay Player
 
@@ -40,11 +40,11 @@ ___注：区分的原因是 `Windows-Toasts` 库只能在 Windows 下生效!___
 - [x] 快进与倍速播放
 - [x] GitHub Actions 自动测试编译工作流 (使用 __Nuitka__ 实现, 详见[本项目 Actions](https://github.com/WhatDamon/Simplay-Player/actions))
 - [x] 多语言支持 (基本, 目前只有美式英语 `en_US` 和简体中文 `zh_CN`, 若要贡献翻译请到 `i18n` 目录)
+- [x] 日志输出 (注: 会产生大量日志信息)
 - [ ] 循环播放 (遇到技术性难题, 暂时注释了 `enableOrDisable` 函数 (函数临时被注释), 预留了占位按钮 `playInLoop_btn` (组件已隐藏) 和状态变量 `loopOpen`)
 - [ ] 设置 (目前已有占位按钮 `settings_btn`, 并隐藏)
 - [ ] 歌词显示与滚动 (已预留了歌词路径变量 `lyricFile` 和读取函数 `lyricExistAndRead`(函数临时被注释))
 - [ ] 歌单 (施工中)
-- [ ] 日志输出
 - [ ] 系统托盘 (预计使用 `pystray` 实现)
 - [ ] 检查更新 (基于 __Github API__)
 - [ ] 界面自动取色
@@ -56,8 +56,8 @@ ___注：区分的原因是 `Windows-Toasts` 库只能在 Windows 下生效!___
 以下内容不一定完全, 可能存在更多不在这个列表的 BUG!
 
 - [x] 打开歌曲后需要连续点击三次播放键才可以进入播放状态 (通过调整代码逻辑修复)
+- [x] 隐藏顶栏或者 `Ctrl` + `H` 快捷键等操作以后后歌曲进度条无法工作, 并无法彻底关闭软件 (已知是 SnackBar 导致的, 暂时注释掉了)
 - [ ] 读取存在封面的歌曲后再打开无封面歌曲不会替换成占位的 `track.png`
-- [ ] 隐藏顶栏或者 `Ctrl` + `H` 快捷键等操作以后后歌曲进度条无法工作, 并无法彻底关闭软件
 - [ ] 加载歌曲或更换歌曲后前可能会有些不是特别影响的报错
 - [ ] 窗口标题有时不能按希望的方式显示 (实际解决很简单, 但是我希望能够整合一下)
 
@@ -70,3 +70,5 @@ ___注：区分的原因是 `Windows-Toasts` 库只能在 Windows 下生效!___
 - [flet](https://github.com/flet-dev/flet) (Apache-2.0 license)
 - [TinyTag](https://github.com/devsnd/tinytag) (MIT license)
 - [Windows-Toasts](https://github.com/DatGuy1/Windows-Toasts) (Apache-2.0 license)
+
+___其他的都是 Python 内建库了...___
