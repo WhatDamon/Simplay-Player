@@ -307,7 +307,7 @@ def main(page: ft.Page):
         page.update()
 
     """
-    def enableOrDisableLoop(e):
+    def enableOrDisableLoop(e):    
         global loopOpen
         if loopOpen == False:
             loopOpen = True
@@ -315,8 +315,8 @@ def main(page: ft.Page):
             page.snack_bar.open = True
         elif loopOpen == True:
             loopOpen = False
-            page.snack_bar = ft.SnackBar(ft.Text(value = lang.mainMenu["disableLoop"]))
-            page.snack_bar.open = True
+        print(playAudio.release_mode)
+        # playAudio.release_mode = ReleaseMode.LOOP
         page.update()
         logging.info("Page updated")
     """
@@ -400,23 +400,38 @@ def main(page: ft.Page):
         page.update()
         logging.info("Page updated")
 
+    def stereoBalanceNotSupport():
+        logging.warning("Not support with macOS")
+        page.snack_bar = ft.SnackBar(ft.Text(value = lang.mainMenu["notSupportMacOS"]))
+        page.snack_bar.open = True
+        logging.info("Snack Bar loaded - notSupportMacOS")
+
     def balanceLeft(e):
-        playAudio.balance -= 0.1
-        logging.info("Channel left shift to " + str(playAudio.balance))
-        playAudio.update()
-        logging.info("playAudio updated")
+        if currentOS == "darwin":
+            stereoBalanceNotSupport()
+        else:
+            playAudio.balance -= 0.1
+            logging.info("Channel left shift to " + str(playAudio.balance))
+            playAudio.update()
+            logging.info("playAudio updated")
 
     def balanceRight(e):
-        playAudio.balance += 0.1
-        logging.info("Channel right shift to " + str(playAudio.balance))
-        playAudio.update()
-        logging.info("playAudio updated")
+        if currentOS == "darwin":
+            stereoBalanceNotSupport()
+        else:
+            playAudio.balance += 0.1
+            logging.info("Channel right shift to " + str(playAudio.balance))
+            playAudio.update()
+            logging.info("playAudio updated")
 
     def balanceMiddle(e):
-        playAudio.balance = 0
-        logging.info("Channel set banlace to 0")
-        playAudio.update()
-        logging.info("playAudio updated")
+        if currentOS == "darwin":
+            stereoBalanceNotSupport()
+        else:
+            playAudio.balance = 0
+            logging.info("Channel set banlace to 0")
+            playAudio.update()
+            logging.info("playAudio updated")
 
     playAudio = ft.Audio(
         autoplay = False,
@@ -673,6 +688,10 @@ if __name__ == '__main__':
     else:
         print(lang.infomation["nonTestWarning"])
         logging.warning("Non-test OS")
+    if currentOS == "bsd" or currentOS == "unknown":
+        print(lang.mainMenu("unsupportWithYourOS"))
+        logging.error("Unsupport with the current os: " + currentOS)
+        exit()
     audioArtistText = lang.mainMenu["unknownArtist"]
     audioTitleText = lang.mainMenu["unknownMusic"]
     audioInfo = lang.mainMenu["none"]

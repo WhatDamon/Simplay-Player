@@ -44,7 +44,9 @@ mainMenu = {
     "beenUntop": "Canceled always on top",
     "resetMenuBar": "Press Ctrl-H to reset the menu bar!",
     "enableLoop": "Looped playback enabled",
-    "disableLoop": "Looped playback disabled"
+    "disableLoop": "Looped playback disabled",
+    "unsupportWithYourOS": "Unsupport with your OS! \n Exiting...",
+    "notSupportMacOS": "Not supported on macOS"
 }
 
 tooltips = {

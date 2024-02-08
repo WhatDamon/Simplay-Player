@@ -44,7 +44,9 @@ mainMenu = {
     "beenUntop": "已取消置顶",
     "resetMenuBar": "按下 Ctrl+H 复原顶栏!",
     "enableLoop": "已启用循环播放",
-    "disableLoop": "已禁用循环播放"
+    "disableLoop": "已禁用循环播放",
+    "unsupportWithYourOS": "不支持您的操作系统! \n 正在退出·...",
+    "notSupportMacOS": "不支持 macOS"
 }
 
 tooltips = {
