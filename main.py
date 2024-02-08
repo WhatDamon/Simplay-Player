@@ -181,7 +181,7 @@ def main(page: ft.Page):
         page.update()
         logging.info("Page updated")
         audioPathTemp = (
-            ", ".join(map(lambda f: f.path, e.files))
+            ", ".join(map(lambda f: f.path, e.files)) if e.files else None
         )
         global audioFile, lyricFile, firstPlay
         if audioPathTemp == None:
@@ -210,11 +210,11 @@ def main(page: ft.Page):
                 page.snack_bar = ft.SnackBar(ft.Text(value = lang.mainMenu["songLoaded"] + "\n" + audioArtistText+ " - " + audioTitleText))
                 page.snack_bar.open = True
                 logging.info("Snack Bar loaded - resetMenuBar")
-            page.splash = None
-            logging.info("Splash progress bar disabled")
-            page.update()
-            logging.info("Page updated")
-            logging.info("File picked")
+        page.splash = None
+        logging.info("Splash progress bar disabled")
+        page.update()
+        logging.info("Page updated")
+        logging.info("File picked")
         
     pickFilesDialog = ft.FilePicker(on_result = pickFileResult)
     page.overlay.append(pickFilesDialog)
