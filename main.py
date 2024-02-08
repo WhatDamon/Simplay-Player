@@ -111,14 +111,14 @@ def main(page: ft.Page):
             page.window_always_on_top = True
             windowOnTop_btn.icon = ft.icons.PUSH_PIN
             windowOnTop_btn.tooltip = lang.tooltips["cancelAlwaysOnTop"]
-            page.snack_bar = ft.SnackBar(ft.Text(value = lang.mainMenu["beenTop"]))
-            page.snack_bar.open = True
+            # page.snack_bar = ft.SnackBar(ft.Text(value = lang.mainMenu["beenTop"]))
+            # page.snack_bar.open = True
         elif page.window_always_on_top == True:
             page.window_always_on_top = False
             windowOnTop_btn.icon = ft.icons.PUSH_PIN_OUTLINED
             windowOnTop_btn.tooltip = lang.tooltips["alwaysOnTop"]
-            page.snack_bar = ft.SnackBar(ft.Text(value = lang.mainMenu["beenUntop"]))
-            page.snack_bar.open = True
+            # page.snack_bar = ft.SnackBar(ft.Text(value = lang.mainMenu["beenUntop"]))
+            # page.snack_bar.open = True
         page.update()
         logging.info("Page updated")
 
