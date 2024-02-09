@@ -2,6 +2,13 @@
 
 # Simplay Player
 
+![Python requirement](https://img.shields.io/badge/python-≥3.8-brightgreen?logo=python)
+![GitHub repo size](https://img.shields.io/github/repo-size/WhatDamon/Simplay-Player)
+![GitHub repo license](https://img.shields.io/github/license/WhatDamon/Simplay-Player)
+![GitHub Action #1](https://github.com/WhatDamon/Simplay-Player/actions/workflows/build.yml/badge.svg)
+![GitHub Action #2](https://github.com/WhatDamon/Simplay-Player/actions/workflows/buildwin.yml/badge.svg)
+![GitHub repo stars](https://img.shields.io/github/stars/WhatDamon/Simplay-Player)
+
 > [!IMPORTANT]  
 > WIP! 大部分功能还在开发中, 并且目前也存在着非常严重的恶性 BUG 需要修复, 基本处于勉勉强强可用的状态
 

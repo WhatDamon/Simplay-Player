@@ -41,7 +41,6 @@ jobs:
         with:
           nuitka-version: main
           script-name: main.py
-          onefile: true
           standalone: true
           disable-console: true
           windows-icon-from-ico: ./asset/spicon.ico
@@ -51,4 +50,4 @@ jobs:
         with:
           name: ${{ runner.os }} Build
           path: |
-            build/*.exe
+            build/*
