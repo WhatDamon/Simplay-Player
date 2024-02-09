@@ -21,6 +21,7 @@ audioCoverBase64 = None
 audioInfo = None
 audioTitleText = None
 audioArtistText = None
+audioAlbumText = None
 currentOS = None
 
 logging.info("Variable initialization complete")
@@ -140,24 +141,32 @@ def main(page: ft.Page):
             logging.info("Placeholder cover loaded")
         audioCover.update()
         logging.info("audioCover updated")
-        global audioTitleText, audioArtistText
+        global audioTitleText, audioArtistText, audioAlbumText
         if audioTag.title != None:
             audioTitleText = audioTag.title
-            logging.info("Set audio title")
+            logging.info("Set audio title: " + audioTitleText)
         else:
             audioTitleText = lang.mainMenu["unknownMusic"]
             logging.info("Unknown audio title")
         if audioTag.artist != None:
             audioArtistText = audioTag.artist
-            logging.info("Set audio artist")
+            logging.info("Set audio artist: " + audioArtistText)
         else:
             audioArtistText = lang.mainMenu["unknownArtist"]
             logging.info("Unknown audio artist")
+        if audioTag.album != None:
+            audioAlbumText = audioTag.album
+            logging.info("Find audio album and loaded: " + audioAlbumText)
         global audioInfo
         audioInfo = "Album: " + str(audioTag.album) + "\nAlbumist: " + str(audioTag.albumartist) + "\nArtist: " + str(audioTag.artist) + "\nAudio Offset: " + str(audioTag.audio_offset) + "\nBitrate: " + str(audioTag.bitrate) + "\nBitdepth: " + str(audioTag.bitdepth) + "\nChannels: " + str(audioTag.channels) + "\nComment: " + str(audioTag.comment)+ "\nComposer: " + str(audioTag.composer) + "\nDisc: " + str(audioTag.disc) + "\nDisc Total: " + str(audioTag.disc_total) + "\nDuration: " + str(audioTag.duration) + "\nFilesize: " + str(audioTag.filesize) + "\nGenre: " + str(audioTag.genre) + "\nSamplerate: " + str(audioTag.samplerate) + "\nTitle: " + str(audioTag.title) + "\nTrack: " + str(audioTag.track) + "\nTrack Total: " + str(audioTag.track_total) + "\nYear: " + str(audioTag.year)
         logging.info("Set audio info")
         audioTitle.value = audioTitleText
-        audioArtist.value = audioArtistText
+        if audioAlbumText == None:
+            audioArtistAndAlbum.value = audioArtistText
+            logging.info("No album text loaded")
+        else:
+            audioArtistAndAlbum.value = audioArtistText + " · " + audioAlbumText
+            logging.info("Album text loaded")
         logging.info("Load audio info to interface")
         page.update()
         logging.info("Page updated")
@@ -298,28 +307,25 @@ def main(page: ft.Page):
     def autoKeepAudioProgress(e):
         if progressChanging == False:
             audioProgressBar.value = playAudio.get_current_position() / playAudio.get_duration() * 1000
-        global loopOpen
-        if playAudio.get_current_position() == playAudio.get_duration() and loopOpen == True:
-            playAudio.seek(0)
         currentLength = secondConvert(playAudio.get_current_position() // 1000)
         totalLength = secondConvert(playAudio.get_duration() // 1000)
         audioProgressStatus.value = currentLength + "/" + totalLength
         page.update()
 
-    """
     def enableOrDisableLoop(e):    
         global loopOpen
         if loopOpen == False:
             loopOpen = True
-            page.snack_bar = ft.SnackBar(ft.Text(value = lang.mainMenu["enableLoop"]))
-            page.snack_bar.open = True
+            playAudio.release_mode = ft.audio.ReleaseMode.LOOP
+            playInLoop_btn.icon = ft.icons.STOP_CIRCLE_OUTLINED
+            logging.info("Loop enabled")
         elif loopOpen == True:
             loopOpen = False
-        print(playAudio.release_mode)
-        # playAudio.release_mode = ReleaseMode.LOOP
+            playAudio.release_mode = ft.audio.ReleaseMode.RELEASE
+            playInLoop_btn.icon = ft.icons.LOOP_OUTLINED
+            logging.info("Loop disabled")
         page.update()
         logging.info("Page updated")
-    """
     
     def autoStopKeepAudioProgress(e):
         global progressChanging
@@ -575,9 +581,9 @@ def main(page: ft.Page):
 
     audioCover = ft.Image(src = './asset/track.png', width = 128, height = 128, border_radius = 5)
     audioTitle = ft.Text(audioTitleText, weight = ft.FontWeight.BOLD, size = 25, overflow = ft.TextOverflow.ELLIPSIS)
-    audioArtist = ft.Text(audioArtistText, size = 18, opacity = 90)
+    audioArtistAndAlbum = ft.Text(audioArtistText, size = 18, opacity = 90)
     audioProgressStatus = ft.Text("00:00/00:00", size = 15, opacity = 90)
-    audioDetail = ft.Column(controls = [audioTitle, audioArtist, audioProgressStatus])
+    audioDetail = ft.Column(controls = [audioTitle, audioArtistAndAlbum, audioProgressStatus])
     audioBasicInfo = ft.Row(controls = [audioCover, audioDetail])
 
     audioProgressBar = ft.Slider(min = 0, max = 1000, tooltip = lang.tooltips["audioPosition"], on_change_start = autoStopKeepAudioProgress, on_change_end = progressCtrl)
@@ -587,14 +593,6 @@ def main(page: ft.Page):
         tooltip = lang.tooltips["playOrPause"],
         icon_size = 30,
         on_click = playOrPauseMusic
-    )
-
-    playInLoop = ft.IconButton(
-        icon = ft.icons.LOOP_OUTLINED,
-        tooltip = lang.tooltips["playInLoop"],
-        icon_size = 20,
-        visible = False
-        # on_click = enableOrDisableLoop
     )
 
     volume_btn = ft.IconButton(
@@ -612,6 +610,13 @@ def main(page: ft.Page):
             height = 46,
             width = 200
         )
+    
+    playInLoop_btn = ft.IconButton(
+        icon = ft.icons.LOOP_OUTLINED,
+        tooltip = lang.tooltips["playInLoop"],
+        icon_size = 20,
+        on_click = enableOrDisableLoop
+    )
 
     audioList_btn = ft.IconButton(
             icon = ft.icons.LIBRARY_MUSIC_OUTLINED,
@@ -663,8 +668,8 @@ def main(page: ft.Page):
     
     lyric_text = ft.Text(size = 20)
 
-    playbackCtrl_row = ft.Row(controls = [playPause_btn, playInLoop, volume_btn, volume_panel])
-    moreBtns_row = ft.Row(controls = [audioList_btn, audioInfo_btn, settings_btn])
+    playbackCtrl_row = ft.Row(controls = [playPause_btn, volume_btn, volume_panel])
+    moreBtns_row = ft.Row(controls = [playInLoop_btn, audioList_btn, audioInfo_btn, settings_btn])
     btns_row = ft.Row(controls = [playbackCtrl_row, moreBtns_row], alignment = ft.MainAxisAlignment.SPACE_BETWEEN)
 
     page.overlay.append(audioList_menu)

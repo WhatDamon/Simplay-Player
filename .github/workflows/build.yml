@@ -41,6 +41,7 @@ jobs:
         with:
           nuitka-version: main
           script-name: main.py
+          onefile: true
           standalone: true
           disable-console: true
 
