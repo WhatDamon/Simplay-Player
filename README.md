@@ -39,7 +39,7 @@ ___注：区分的原因是 `Windows-Toasts` 库只能在 Windows 下生效!___
 - [ ] 设置 (目前已有占位按钮 `settings_btn`, 并隐藏)
 - [ ] 歌词显示与滚动 (已预留了歌词路径变量 `lyricFile` 和读取函数 `lyricExistAndRead`(函数临时被注释))
 - [ ] AB点
-- [ ] 歌单 (施工中)
+- [ ] 歌单/播放列表 (施工中)
 - [ ] 日志输出
 - [ ] 系统托盘 (预计使用 `pystray` 实现)
 - [ ] 检查更新 (基于 __Github API__)
