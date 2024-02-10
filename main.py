@@ -137,6 +137,7 @@ def main(page: ft.Page):
             logging.info("Audio cover loaded")
         else:
             audioCoverBase64 = None
+            audioCover.src_base64 = None
             audioCover.src = './asset/track.png'
             logging.info("Placeholder cover loaded")
         audioCover.update()
@@ -157,6 +158,9 @@ def main(page: ft.Page):
         if audioTag.album != None:
             audioAlbumText = audioTag.album
             logging.info("Find audio album and loaded: " + audioAlbumText)
+        else:
+            audioAlbumText = None
+            logging.info("Clean audioAlbumText")
         global audioInfo
         audioInfo = "Album: " + str(audioTag.album) + "\nAlbumist: " + str(audioTag.albumartist) + "\nArtist: " + str(audioTag.artist) + "\nAudio Offset: " + str(audioTag.audio_offset) + "\nBitrate: " + str(audioTag.bitrate) + "\nBitdepth: " + str(audioTag.bitdepth) + "\nChannels: " + str(audioTag.channels) + "\nComment: " + str(audioTag.comment)+ "\nComposer: " + str(audioTag.composer) + "\nDisc: " + str(audioTag.disc) + "\nDisc Total: " + str(audioTag.disc_total) + "\nDuration: " + str(audioTag.duration) + "\nFilesize: " + str(audioTag.filesize) + "\nGenre: " + str(audioTag.genre) + "\nSamplerate: " + str(audioTag.samplerate) + "\nTitle: " + str(audioTag.title) + "\nTrack: " + str(audioTag.track) + "\nTrack Total: " + str(audioTag.track_total) + "\nYear: " + str(audioTag.year)
         logging.info("Set audio info")
@@ -317,12 +321,12 @@ def main(page: ft.Page):
         if loopOpen == False:
             loopOpen = True
             playAudio.release_mode = ft.audio.ReleaseMode.LOOP
-            playInLoop_btn.icon = ft.icons.STOP_CIRCLE_OUTLINED
+            playInLoop_btn.icon = ft.icons.REPEAT_ONE_ON
             logging.info("Loop enabled")
         elif loopOpen == True:
             loopOpen = False
             playAudio.release_mode = ft.audio.ReleaseMode.RELEASE
-            playInLoop_btn.icon = ft.icons.LOOP_OUTLINED
+            playInLoop_btn.icon = ft.icons.REPEAT_ONE
             logging.info("Loop disabled")
         page.update()
         logging.info("Page updated")
@@ -612,7 +616,7 @@ def main(page: ft.Page):
         )
     
     playInLoop_btn = ft.IconButton(
-        icon = ft.icons.LOOP_OUTLINED,
+        icon = ft.icons.REPEAT_ONE_OUTLINED,
         tooltip = lang.tooltips["playInLoop"],
         icon_size = 20,
         on_click = enableOrDisableLoop
