@@ -10,7 +10,7 @@
 ![GitHub repo stars](https://img.shields.io/github/stars/WhatDamon/Simplay-Player)
 
 > [!IMPORTANT]  
-> WIP! 大部分功能还在开发中, 并且目前也存在着非常严重的恶性 BUG 需要修复, 基本处于勉勉强强可用的状态
+> WIP! 大部分功能还在开发中, macOS 和 Linux 下可能存在影响比较大的 BUG 需要注意, Windows 端基本稳定并可用
 
 这是一个 __闲得发慌时__ 开发出来的小作品, 而我动手做这玩意的原因是我周围的人大多都在写类似的项目
 
@@ -38,7 +38,7 @@ pip install -r requirements_win.txt
 
 ___注：区分的原因是 `Windows-Toasts` 库只能在 Windows 下生效!___
 
-此外, 该软件 __不能在含有 CJK 文本的路径下正常开发与运行__!
+此外, 该软件 __不能在含有 CJK 文本 (即中文、日语、韩文) 的路径下正常开发与运行__!
 
 ## TODO
 
@@ -46,25 +46,29 @@ ___注：区分的原因是 `Windows-Toasts` 库只能在 Windows 下生效!___
 - [x] 吐司通知 (Windows 独占性功能, 其它系统使用 `SnackBar` 替代)
 - [x] 快进与倍速播放
 - [x] GitHub Actions 自动测试编译工作流 (使用 __Nuitka__ 实现, 详见[本项目 Actions](https://github.com/WhatDamon/Simplay-Player/actions))
-- [x] 多语言支持 (基本, 目前只有美式英语 `en_US` 和简体中文 `zh_CN`, 若要贡献翻译请到 `i18n` 目录)
-- [x] 日志输出 (注: 会产生大量日志信息)
+- [x] 多语言支持 (基本, 目前只有美式英语 `en_US` 和简体中文 `zh_CN`, 若要贡献翻译请查看 [Wiki](https://github.com/WhatDamon/Simplay-Player/wiki/%E8%BD%AF%E4%BB%B6%E7%BF%BB%E8%AF%91))
+- [x] 日志输出 (注: 会产生大量日志信息保存在本地)
 - [x] 循环播放
 - [ ] 设置 (目前已有占位按钮 `settings_btn`, 并隐藏)
 - [ ] 歌词显示与滚动 (已预留了歌词路径变量 `lyricFile` 和读取函数 `lyricExistAndRead`(函数临时被注释))
 - [ ] 歌单 (施工中)
 - [ ] 系统托盘 (预计使用 `pystray` 实现)
 - [ ] 检查更新 (基于 __Github API__)
-- [ ] 界面自动取色
-- [ ] 混音器
+- [ ] 界面自动取色 (可能使用 __OpenCV__ 实现)
+- [ ] 混音器 (目前使用的组件未提供相关接口, 暂时搁置)
 - [ ] 在线获取歌曲 (__网易云__) (目前已有占位菜单按钮, 但代码还没开写)
+- [ ] SMTC 支持
+- [ ] 任务栏进度条与按键操作 (仅 Windows 支持)
+
+对于其他可能的新功能可以到[本项目 Discussions](https://github.com/WhatDamon/Simplay-Player/discussions) 提交
 
 ## BUG 列表
 
 以下内容不一定完全, 可能存在更多不在这个列表的 BUG!
 
 - [x] 打开歌曲后需要连续点击三次播放键才可以进入播放状态 (通过调整代码逻辑修复)
-- [x] 隐藏顶栏或者 `Ctrl` + `H` 快捷键等操作以后后歌曲进度条无法工作, 并无法彻底关闭软件 (已知是 SnackBar 导致的, 暂时注释掉了)
-- [ ] 读取存在封面的歌曲后再打开无封面歌曲不会替换成占位的 `track.png`
+- [x] 隐藏顶栏或者 `Ctrl` + `H` 快捷键等操作以后后歌曲进度条无法工作 (已知是 `SnackBar` 导致的, 暂时注释掉了, 但是当前还有很多会造成问题的 `SnackBar` 由于一些原因尚未被注释)
+- [x] 读取存在封面的歌曲后再打开无封面歌曲不会替换成占位的 `track.png`
 - [ ] 加载歌曲或更换歌曲后前可能会有些不是特别影响的报错
 - [ ] 窗口标题有时不能按希望的方式显示 (实际解决很简单, 但是我希望能够整合一下)
 
