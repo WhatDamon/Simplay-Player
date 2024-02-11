@@ -23,11 +23,18 @@ menuBar = {
     "forward10s": "Forward 10sec",
     "back10s": "Back 10sec",
     "times": "Times",
+    "speed": "Speed",
     "0.5x": "0.5x",
     "1x": "1x",
     "1.5x": "1.5x",
     "2x": "2x",
     "volume": "Volume",
+    "lyrics": "Lyrics",
+    "mode": "Mode",
+    "playInOrder": "Play In Order",
+    "loop": "Loop",
+    "repeat": "Repeat",
+    "shuffle": "Shuffle",
     "audioInfo": "Audio Info",
     "help": "Help",
     "about": "About"
@@ -44,9 +51,7 @@ mainMenu = {
     "beenUntop": "Canceled always on top",
     "resetMenuBar": "Press Ctrl-H to reset the menu bar!",
     "enableLoop": "Looped playback enabled",
-    "disableLoop": "Looped playback disabled",
-    "unsupportWithYourOS": "Unsupport with your OS! \n Exiting...",
-    "notSupportMacOS": "Not supported on macOS"
+    "disableLoop": "Looped playback disabled"
 }
 
 tooltips = {
@@ -54,9 +59,13 @@ tooltips = {
     "cancelAlwaysOnTop": "Untop",
     "hideMenuBar": "Hide Menu Bar (Ctrl-H)",
     "audioPosition": "Audio Position",
+    "skipPrevious": "Skip Previous",
     "playOrPause": "Play/Pause",
+    "skipNext": "Skip Next",
     "playInLoop": "Loop",
+    "playRepeat": "Repeat",
     "volume": "Volume",
+    "lyrics": "Lyrics",
     "songList": "Song List",
     "audioInfo": "Audio Info",
     "settings": "Settings"
