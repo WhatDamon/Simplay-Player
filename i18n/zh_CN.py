@@ -11,9 +11,11 @@ infomation = {
 
 menuBar = {
     "files": "文件",
-    "openFile": "打开",
+    "openFile": "打开文件",
+    "openSonglist": "导入播放列表",
     "getFromNeteaseMusic": "从网易云中获取",
     "exit": "退出",
+    "play": "播放",
     "media": "媒体",
     "channels": "左右声道",
     "balance": "平衡",
@@ -22,12 +24,18 @@ menuBar = {
     "position": "进度",
     "forward10s": "快进 10s",
     "back10s": "后退 10s",
-    "times": "倍速",
+    "speed": "倍速",
     "0.5x": "0.5x",
     "1x": "1x",
     "1.5x": "1.5x",
     "2x": "2x",
     "volume": "音量",
+    "lyrics": "歌词",
+    "mode": "模式",
+    "playInOrder": "顺序播放",
+    "loop": "列表循环",
+    "repeat": "单曲循环",
+    "shuffle": "随机播放",
     "audioInfo": "媒体信息",
     "help": "帮助",
     "about": "关于"
@@ -37,6 +45,7 @@ mainMenu = {
     "none": "无",
     "unknownMusic": "未知歌曲",
     "unknownArtist": "未知作曲家",
+    "unknownAlbum": "未知专辑",
     "moreInfo": "详细信息",
     "songLoaded": "已加载歌曲:",
     "about": "关于",
@@ -44,9 +53,7 @@ mainMenu = {
     "beenUntop": "已取消置顶",
     "resetMenuBar": "按下 Ctrl+H 复原顶栏!",
     "enableLoop": "已启用循环播放",
-    "disableLoop": "已禁用循环播放",
-    "unsupportWithYourOS": "不支持您的操作系统! \n 正在退出·...",
-    "notSupportMacOS": "不支持 macOS"
+    "disableLoop": "已禁用循环播放"
 }
 
 tooltips = {
@@ -54,15 +61,19 @@ tooltips = {
     "cancelAlwaysOnTop": "取消置顶",
     "hideMenuBar": "隐藏顶栏 (Ctrl+H)",
     "audioPosition": "歌曲进度",
+    "skipPrevious": "上一首",
     "playOrPause": "播放/暂停",
+    "skipNext": "下一首",
     "playInLoop": "循环播放",
+    "playRepeat": "单曲循环",
     "volume": "音量",
-    "songList": "歌单",
+    "lyrics": "歌词",
+    "songList": "播放列表",
     "audioInfo": "媒体信息",
     "settings": "设置"
 }
 
 songList = {
-    "songList": "歌单",
+    "songList": "播放列表",
     "construction": "施工中"
 }
