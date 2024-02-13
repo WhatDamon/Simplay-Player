@@ -12,7 +12,8 @@ infomation = {
 menuBar = {
     "files": "Files",
     "openFile": "Open file",
-    "getFromNeteaseMusic": "Fetch from Netease",
+    "getFromNetease": "Fetch from Netease Cloud Music",
+    "getFromMusicWebsite": "Get From Music Website",
     "exit": "Exit",
     "media": "Media",
     "channels": "Channels",
@@ -74,4 +75,11 @@ tooltips = {
 songList = {
     "songList": "Song List",
     "construction": "Under Construction"
+}
+
+dialog = {
+    "songIdInput": "Enter Song ID:",
+    "songIdHint": "(Currently only NetEase Cloud and free songs)",
+    "vipAlert": "Sorry, currently only free songs are supported",
+    "errorPrompt": "Please enter correct song ID"
 }
