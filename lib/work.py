@@ -98,22 +98,21 @@ def audioFromUrlInfo(audioID): #网站音频信息更新
         logging.warning("Invalid input")
         return False
     if ID_json['songs'] != []:
-        if ID_json['songs'][0]['copyright'] == 2:
-            logging.warning("VIP Songs Not Supported")
-            return "vipSong"
-        elif ID_json['songs'][0]['copyright'] < 2:
+        audioUrl = 'https://music.163.com/song/media/outer/url?id='+audioID+'.mp3'
+        audioUrl = requests.get(audioUrl).url
+        if "/#/404" in audioUrl:
+            logging.warning("Songs Not Supported")
+            return "NotSuptSong"
+        elif "/#/404" not in audioUrl:
             audioCover_src = ID_json['songs'][0]['al']['picUrl']
             audioTitleText = ID_json['songs'][0]['name']
             audioArtistText = ID_json['songs'][0]['ar'][0]['name']
             audioAlbumText = ID_json['songs'][0]['al']['name']
-            audioUrl = 'https://music.163.com/song/media/outer/url?id='+audioID+'.mp3'
-            audioUrl = requests.get(audioUrl).url
+            audioInfo = "Album: " + str(audioAlbumText) + "\nArtist: " + str(audioArtistText)
             playAudio.src = audioUrl
             currentLength = secondConvert(0)
-            audioInfo = "Album: " + str(audioAlbumText) + "\nArtist: " + str(audioArtistText)
             return True
     elif ID_json['songs'] == [] or ID_json['code'] != 200:
-        idPrompt_text = "请输入正确的歌曲ID！"
         logging.warning("Invalid input")
         return False
 
@@ -124,16 +123,26 @@ def lyricRead(lyricFile):#读取本地歌词
         lines = lrcContent.split('\n')
         lyricsProcess()
 
-def lyricUrlRead(audioID):
+def lyricUrlRead(audioID):#读取网络歌词
     global lyricsUrl, lines
     lyricsUrl = 'https://music.163.com/api/song/lyric?id='+audioID+'&lv=1&tv=-1'
     lyricsGet = requests.get(lyricsUrl)
     lyricsGet = lyricsGet.text
     lyricsJson = json.loads(lyricsGet)
     lyrics = lyricsJson['lrc']['lyric'].split('\n')#获取原文歌词
-    tlyrics = lyricsJson['tlyric']['lyric'].split('\n')#获取译文歌词
-    lines = lyrics+tlyrics
-    lyricsProcess()
+    lyricsJson = json.loads(lyricsGet)
+    if "pureMusic" in lyricsJson and lyricsJson["pureMusic"] == True:
+        lines = ""
+        logging.info("Pure Music")
+        return False
+    else:
+        if 'tlyric' in lyricsJson:
+            tlyrics = lyricsJson['tlyric']['lyric'].split('\n')#获取译文歌词
+            lines = lyrics+tlyrics
+        elif 'tlyric' not in lyricsJson:
+            lines = lyrics
+        lyricsProcess()
+        return True
 
 def lyricsProcess():#歌词处理
     global lyricsBefore, lyricsText, lyricsAfter
