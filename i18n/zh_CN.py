@@ -13,7 +13,8 @@ menuBar = {
     "files": "文件",
     "openFile": "打开文件",
     "openSonglist": "导入播放列表",
-    "getFromNeteaseMusic": "从网易云中获取",
+    "getFromNetease": "从网易云音乐获取",
+    "getFromMusicWebsite": "从音乐网站获取",
     "exit": "退出",
     "play": "播放",
     "media": "媒体",
@@ -76,4 +77,11 @@ tooltips = {
 songList = {
     "songList": "播放列表",
     "construction": "施工中"
+}
+
+dialog = {
+    "songIdInput": "输入歌曲ID：",
+    "songIdHint": "（目前仅限网易云+非会员歌曲）",
+    "vipAlert": "抱歉，目前只支持非会员歌曲",
+    "errorPrompt": "请输入正确的歌曲ID"
 }
