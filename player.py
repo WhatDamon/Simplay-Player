@@ -1,7 +1,7 @@
 import flet as ft
 import platform, logging, os
 from lib import work # 工作模块
-logging.basicConfig(filename = 'player.log', format = ' %(asctime)s | %(levelname)s | %(funcName)s | %(message)s', level = logging.INFO)
+logging.basicConfig(filename = 'player.log', format = ' %(asctime)s | %(levelname)s | %(funcName)s | %(message)s', level = logging.info)
 from i18n import lang
 logging.info("Languages imported")
 logging.info("Variable initialization complete")
@@ -207,7 +207,7 @@ def main(page: ft.Page):
             audioCover.update()
             lyricUrlRead(songID)
             closeSongWeb_dlg(e)
-        elif getReturn == "vipSong":
+        elif getReturn == "notSuptSong":
             songID_input.error_text = lang.dialog["vipAlert"]
         elif getReturn == False:
             songID_input.error_text = lang.dialog["errorPrompt"]
@@ -248,10 +248,16 @@ def main(page: ft.Page):
     
     #网络歌词读取
     def lyricUrlRead(songID):
-        work.lyricUrlRead(songID)
-        lyrics_before.value = work.lyricsBefore
-        lyrics_text.value = work.lyricsText
-        lyrics_after.value = work.lyricsAfter
+        readRes = work.lyricUrlRead(songID)
+        if readRes == True:
+            lyrics_before.value = work.lyricsBefore
+            lyrics_text.value = work.lyricsText
+            lyrics_after.value = work.lyricsAfter
+        if readRes == False:
+            lyrics_before.value = ""
+            lyrics_text.value = ""
+            lyrics_after.value = ""
+            
     
     #网络歌词处理（主要部分在work.py）
     def lyricsProcess():
