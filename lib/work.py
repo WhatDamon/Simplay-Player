@@ -107,10 +107,20 @@ def lyricUrlRead(audioID):
     lyricsGet = requests.get(lyricsUrl)
     lyricsGet = lyricsGet.text
     lyricsJson = json.loads(lyricsGet)
-    lyrics = lyricsJson['lrc']['lyric'].split('\n') # 获取原文歌词
-    tlyrics = lyricsJson['tlyric']['lyric'].split('\n') # 获取译文歌词
-    lines = lyrics + tlyrics
-    lyricsProcess()
+    lyrics = lyricsJson['lrc']['lyric'].split('\n')#获取原文歌词
+    lyricsJson = json.loads(lyricsGet)
+    if "pureMusic" in lyricsJson and lyricsJson["pureMusic"] == True:
+        lines = ""
+        log_init.logging.info("Pure Music")
+        return False
+    else:
+        if 'tlyric' in lyricsJson:
+            tlyrics = lyricsJson['tlyric']['lyric'].split('\n')#获取译文歌词
+            lines = lyrics + tlyrics
+        elif 'tlyric' not in lyricsJson:
+            lines = lyrics
+        lyricsProcess()
+        return True
 
 def lyricsProcess(): # 歌词处理
     global lyricsBefore, lyricsText, lyricsAfter

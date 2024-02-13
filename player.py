@@ -255,10 +255,15 @@ def main(page: ft.Page):
     
     # 网络歌词读取
     def lyricUrlRead(songID):
-        work.lyricUrlRead(songID)
-        lyrics_before.value = work.lyricsBefore
-        lyrics_text.value = work.lyricsText
-        lyrics_after.value = work.lyricsAfter
+        readRes = work.lyricUrlRead(songID)
+        if readRes == True:
+            lyrics_before.value = work.lyricsBefore
+            lyrics_text.value = work.lyricsText
+            lyrics_after.value = work.lyricsAfter
+        if readRes == False:
+            lyrics_before.value = ""
+            lyrics_text.value = ""
+            lyrics_after.value = ""
     
     # 网络歌词处理（主要部分在work.py）
     def lyricsProcess():
