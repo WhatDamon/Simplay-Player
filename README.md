@@ -40,6 +40,10 @@ ___注：区分的原因是 `Windows-Toasts` 库只能在 Windows 下生效!___
 
 此外, 该软件 __不能在含有 CJK 文本 (即中文、日语、韩文) 的路径下正常开发与运行__!
 
+
+## 演示
+![image](https://github.com/WhatDamon/Simplay-Player/assets/89229642/124399eb-85b8-4408-b8fa-bc134a0e5998)
+
 ## TODO
 
 - [x] 基本逻辑
