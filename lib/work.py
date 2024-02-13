@@ -1,5 +1,5 @@
 import flet as ft
-import tinytag, time, base64, os, platform, logging
+import tinytag, time, base64, os, platform, logging, requests, json
 logging.info("Basic libs imported")
 from i18n import lang
 
@@ -46,8 +46,11 @@ def detectOS():
 def secondConvert(sec):
     return(time.strftime("%M:%S", time.gmtime(sec)))
 
+currentLength = secondConvert(0)
+
 def audioInfoUpdate(audioFile):
-    global audioTag, audioTitleText, audioArtistText, audioAlbumText, audioInfo, audioCoverBase64, audioCover_src
+    global audioTag, audioTitleText, audioArtistText, audioAlbumText, audioInfo, audioCoverBase64, audioCover_src, currentLength
+    currentLength = secondConvert(0)
     audioTag = tinytag.TinyTag.get(audioFile, image = True)
     if audioTag.get_image() != None:
         audioCoverBase64 = base64.b64encode(audioTag.get_image())
@@ -78,58 +81,107 @@ def audioInfoUpdate(audioFile):
     else:
         audioAlbumText = None
         logging.info("Unknown audio album")
+    playAudio.src = audioFile
+    logging.info("Set playAudio.src as audioFile")
     audioInfo = "Album: " + str(audioTag.album) + "\nAlbumist: " + str(audioTag.albumartist) + "\nArtist: " + str(audioTag.artist) + "\nAudio Offset: " + str(audioTag.audio_offset) + "\nBitrate: " + str(audioTag.bitrate) + "\nBitdepth: " + str(audioTag.bitdepth) + "\nChannels: " + str(audioTag.channels) + "\nComment: " + str(audioTag.comment)+ "\nComposer: " + str(audioTag.composer) + "\nDisc: " + str(audioTag.disc) + "\nDisc Total: " + str(audioTag.disc_total) + "\nDuration: " + str(audioTag.duration) + "\nFilesize: " + str(audioTag.filesize) + "\nGenre: " + str(audioTag.genre) + "\nSamplerate: " + str(audioTag.samplerate) + "\nTitle: " + str(audioTag.title) + "\nTrack: " + str(audioTag.track) + "\nTrack Total: " + str(audioTag.track_total) + "\nYear: " + str(audioTag.year)
+    print(audioInfo)
     logging.info("Set audio info")
 
-def lyricRead(lyricFile):#读取歌词
-    global lyricsBefore, lyricsText, lyricsAfter
-    lyricsBefore = lyricsText = lyricsAfter = ""
+def audioFromUrlInfo(audioID): #网站音频信息更新
+    global audioTitleText, audioArtistText, audioAlbumText, audioInfo, audioCoverBase64, audioCover_src, audioUrl, idPrompt_text, currentLength
+    response =  requests.get('https://music.dsb.ink/api/song/detail?id=' + audioID) #请求音频信息
+    audioIdInfo = response.text
+    try: #尝试读取
+        ID_json = json.loads(audioIdInfo)
+    except json.decoder.JSONDecodeError: #如果检测到错误（有非数字字符的ID会返回两个json，导致报错）
+        ID_json = {'songs':[]}
+        logging.warning("Invalid input")
+        return False
+    if ID_json['songs'] != []:
+        if ID_json['songs'][0]['copyright'] == 2:
+            logging.warning("VIP Songs Not Supported")
+            return "vipSong"
+        elif ID_json['songs'][0]['copyright'] < 2:
+            audioCover_src = ID_json['songs'][0]['al']['picUrl']
+            audioTitleText = ID_json['songs'][0]['name']
+            audioArtistText = ID_json['songs'][0]['ar'][0]['name']
+            audioAlbumText = ID_json['songs'][0]['al']['name']
+            audioUrl = 'https://music.163.com/song/media/outer/url?id='+audioID+'.mp3'
+            audioUrl = requests.get(audioUrl).url
+            playAudio.src = audioUrl
+            currentLength = secondConvert(0)
+            audioInfo = "Album: " + str(audioAlbumText) + "\nArtist: " + str(audioArtistText)
+            return True
+    elif ID_json['songs'] == [] or ID_json['code'] != 200:
+        idPrompt_text = "请输入正确的歌曲ID！"
+        logging.warning("Invalid input")
+        return False
+
+def lyricRead(lyricFile):#读取本地歌词
+    global lines
     with open(lyricFile,'r',encoding='utf-8') as f:
-        content = f.read()
-        lines = content.split('\n')
-        for i in range(len(lines)):
-            #if lines[i][1:3] == 'ti' and work.audioTag.title == None:
-            if len(lines) == 1:
+        lrcContent = f.read()
+        lines = lrcContent.split('\n')
+        lyricsProcess()
+
+def lyricUrlRead(audioID):
+    global lyricsUrl, lines
+    lyricsUrl = 'https://music.163.com/api/song/lyric?id='+audioID+'&lv=1&tv=-1'
+    lyricsGet = requests.get(lyricsUrl)
+    lyricsGet = lyricsGet.text
+    lyricsJson = json.loads(lyricsGet)
+    lyrics = lyricsJson['lrc']['lyric'].split('\n')#获取原文歌词
+    tlyrics = lyricsJson['tlyric']['lyric'].split('\n')#获取译文歌词
+    lines = lyrics+tlyrics
+    lyricsProcess()
+
+def lyricsProcess():#歌词处理
+    global lyricsBefore, lyricsText, lyricsAfter
+    lyricsDict = {}
+    for line in lines:
+        lyric_split = list(filter(None, line.split(']')))
+        if len(lyric_split) > 1:
+            lyricsDict.setdefault(lyric_split[0]+']',[]).append(lyric_split[1])
+    lyricsBefore = lyricsText = lyricsAfter = ""
+    for key in lyricsDict.keys():
+        lyricsDict[key] = '\n'.join(lyricsDict[key])
+    lyricDict_list = list(lyricsDict.items())#将字典转换成列表
+    for i in range(len(lyricDict_list)):
+        if len(lyricDict_list) == 1:
+            lyricsBefore = ""
+            lyricsText = lyricDict_list[i][1]
+            lyricsAfter = "" 
+        elif lyricDict_list[i][0][1:6] <= currentLength:
+            if i == 0:
                 lyricsBefore = ""
-                lyricsText = lines[i]
+                lyricsText = lyricDict_list[i][1]
+                lyricsAfter = lyricDict_list[i+1][1]
+            elif i == len(lyricDict_list)-1:
+                lyricsBefore = lyricDict_list[i-1][1]
+                lyricsText = lyricDict_list[i][1]
                 lyricsAfter = ""
-            elif lines[i][1:6] <= currentLength:
-                lyricsText = ''.join(lines[i].split(']')[1:])
-                if i == 0:
-                    lyricsBefore = ""   
-                    lyricsAfter = ''.join(lines[i+1].split(']')[1:])    
-                elif i == len(lines)-1:
-                    lyricsBefore = ''.join(lines[i-1].split(']')[1:])
-                    lyricsAfter = ""
-                else:
-                    lyricsBefore = ''.join(lines[i-1].split(']')[1:])
-                    lyricsAfter = ''.join(lines[i+1].split(']')[1:])        
-                if lines[i][1:6] == lines[i-1][1:6] and len(lines) != 1:#双行歌词  
-                    lyricsText = ''.join(lines[i-1].split(']')[1:]) +'\n' +lyricsText 
-                    if i-2<=0:lyricsBefore = ""
-                    elif i-2>0:lyricsBefore = ''.join(lines[i-3].split(']')[1:]) +'\n' +''.join(lines[i-2].split(']')[1:])
-                    if i+1>=len(lines)-1:lyricsAfter = ""
-                    elif i+1<len(lines)-1:lyricsAfter = ''.join(lines[i+1].split(']')[1:]) +'\n' +''.join(lines[i+2].split(']')[1:])
+            else:
+                lyricsBefore = lyricDict_list[i-1][1]
+                lyricsText = lyricDict_list[i][1]
+                lyricsAfter = lyricDict_list[i+1][1]
+            
 
 def playOrPauseMusic(audioFile):#歌曲播放/暂停
     global playStatus, playPause_btn_icon, page_title
-    if audioFile != None:
-        audioInfoUpdate(audioFile)
-        if playStatus == False:
-            playStatus = True
-            playAudio.resume()
-            logging.info("Audio Play/Resume")
-            playPause_btn_icon = ft.icons.PAUSE_CIRCLE_FILLED_OUTLINED
-            page_title = "♫ " + audioArtistText + " - " + audioTitleText + "- Simplay Player"
-            logging.info("Window title changed")
-        elif playStatus == True:
-            playStatus = False
-            playAudio.pause()
-            logging.info("Audio Pause")
-            playPause_btn_icon = ft.icons.PLAY_CIRCLE_FILL_OUTLINED
-            page_title = "◼ "+ audioArtistText + " - " + audioTitleText + "- Simplay Player"
-            logging.info("Window title changed")
-        logging.info("Page updated")
+    if playStatus == False:
+        playStatus = True
+        playAudio.resume()
+        logging.info("Audio Play/Resume")
+        playPause_btn_icon = ft.icons.PAUSE_CIRCLE_FILLED_OUTLINED
+        page_title = "♫ " + audioArtistText + " - " + audioTitleText + "- Simplay Player"
+        logging.info("Window title changed")
+    elif playStatus == True:
+        playStatus = False
+        playAudio.pause()
+        logging.info("Audio Pause")
+        playPause_btn_icon = ft.icons.PLAY_CIRCLE_FILL_OUTLINED
+        page_title = "◼ "+ audioArtistText + " - " + audioTitleText + "- Simplay Player"
+        logging.info("Window title changed")
     else:
         logging.warning("No audio file")
 
@@ -178,13 +230,17 @@ def rateChangeTo20(e):
 def autoKeepAudioProgress(e):
     global loopOpen, audioProgressBar_value, audioProgressStatus_value, currentLength, totalLength
     if progressChanging == False:
-        audioProgressBar_value = playAudio.get_current_position() / playAudio.get_duration() * 1000
-    if playAudio.get_current_position() == playAudio.get_duration() and loopOpen == True:
-        playAudio.seek(0)
-    currentLength = secondConvert(playAudio.get_current_position() // 1000)
-    totalLength = secondConvert(playAudio.get_duration() // 1000)
-    audioProgressStatus_value = currentLength + "/" + totalLength
-    return audioProgressBar_value, audioProgressStatus_value
+        try: 
+            audioProgressBar_value = playAudio.get_current_position() / playAudio.get_duration() * 1000
+            if playAudio.get_current_position() == playAudio.get_duration() and loopOpen == True:
+                playAudio.seek(0)
+            currentLength = secondConvert(playAudio.get_current_position() // 1000)
+            totalLength = secondConvert(playAudio.get_duration() // 1000)
+            audioProgressStatus_value = currentLength + "/" + totalLength
+        except ValueError:
+                logging.warning("ValueError")
+                pass
+        return audioProgressBar_value, audioProgressStatus_value
 
 def enableOrDisableRepeat(e):
     global loopOpen
