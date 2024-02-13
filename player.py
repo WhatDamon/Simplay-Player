@@ -6,7 +6,9 @@ from i18n import lang
 logging.info("Languages imported")
 logging.info("Variable initialization complete")
 
+ver = "2.0.0_experimentaltest"
 audioFile = None
+lyricFile = ""
 audioListShown = False
 firstPlay = True
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -34,14 +36,15 @@ def main(page: ft.Page):
 
     page.scroll = ft.ScrollMode.AUTO
 
+    #快捷键
     def keyboardEventTrack(e: ft.KeyboardEvent):
         logging.info("Keyboard event")
         if f"{e.key}" == " ":
-            work.playOrPauseMusic(0)
-            logging.info("Press Ctrl-H to hide/show menu bar")
-        if f"{e.ctrl}" == "True" and f"{e.key}" == "H":
-            hideShowMenuBar(0)
+            playOrPauseMusic(0)  
             logging.info("Press space bar to play/pause audio")
+        if f"{e.ctrl}" == "True" and f"{e.key}" == "H":
+            hideShowMenuBar(0)           
+            logging.info("Press Ctrl-H to hide/show menu bar")
 
     page.on_keyboard_event = keyboardEventTrack
     logging.info("keyboardEventTrack loaded")
@@ -110,7 +113,6 @@ def main(page: ft.Page):
         audioPathTemp = (
             ", ".join(map(lambda f: f.path, e.files)) if e.files else None
         )
-        print(audioPathTemp)
         if audioPathTemp == None:
             logging.warning("Nothing Loaded")
             pass
@@ -119,11 +121,12 @@ def main(page: ft.Page):
             readSong(audioPathTemp)
 
     def readSong(audioPathTemp):
-        global audioFile, lyricFile, firstPlay
+        global audioFile, lyricFile, firstPlay, getReturn
         page.splash = ft.ProgressBar()
         logging.info("Splash progress bar enabled")
         page.update()
         logging.info("Page updated")
+        getReturn = False  
         audioFile = audioPathTemp
         lyricFile = ''.join(audioPathTemp.split('.')[:-1]) + ".lrc"
         lyrics_before.value = ""
@@ -136,8 +139,6 @@ def main(page: ft.Page):
             page.overlay.append(work.playAudio)
             logging.info("Append playAudio")
             firstPlay = False
-        work.playAudio.src = audioFile
-        logging.info("Set playAudio.src as audioFile")
         audioPathTemp = None
         audioInfoUpdate()
         page.title = work.audioArtistText + " - " + audioTitleText + " - Simplay Player"
@@ -173,6 +174,46 @@ def main(page: ft.Page):
     pickSonglistDialog = ft.FilePicker(on_result = pickFolderResult) 
     page.overlay.extend([pickFilesDialog, pickSonglistDialog])
 
+    #本地音频信息更新
+    def audioInfoUpdate():
+        work.audioInfoUpdate(audioFile)
+        audioCover.src_base64 = work.audioCoverBase64
+        audioCover.src = work.audioCover_src
+        audioTitle.value = work.audioTitleText
+        audioArtist.value = work.audioArtistText
+        audioAlbum.value = work.audioAlbumText
+        audioCover.update()
+        page.update()
+
+    #网络音频信息更新
+    def audioFromUrlInfo(e):
+        global audioFile, lyricFile, getReturn, firstPlay
+        songID_text = songID_input.value
+        songID = songID_text
+        getReturn = work.audioFromUrlInfo(songID)
+        if getReturn == True:        
+            if firstPlay == True:
+                page.overlay.append(work.playAudio)
+                logging.info("Append playAudio")
+                firstPlay = False
+            audioFile = work.audioUrl
+            lyricFile = ""
+            audioCover.src_base64 = ""
+            audioCover.src = work.audioCover_src
+            audioTitle.value = work.audioTitleText
+            audioArtist.value = work.audioArtistText
+            audioAlbum.value = work.audioAlbumText
+            songID_input.error_text = ""
+            audioCover.update()
+            lyricUrlRead(songID)
+            closeSongWeb_dlg(e)
+        elif getReturn == "vipSong":
+            songID_input.error_text = lang.dialog["vipAlert"]
+        elif getReturn == False:
+            songID_input.error_text = lang.dialog["errorPrompt"]
+        page.update()
+
+    #播放列表类
     class audioTile(ft.UserControl):
         def __init__(self, song):
             super().__init__()
@@ -195,7 +236,7 @@ def main(page: ft.Page):
         for song in songList:
             songlist_tiles.controls.append(audioTile(song))
 
-    #歌词读取    
+    #本地歌词读取    
     def lyricExistAndRead():
         if os.path.exists(lyricFile):
             work.lyricRead(lyricFile)
@@ -204,6 +245,20 @@ def main(page: ft.Page):
             lyrics_after.value = work.lyricsAfter
         else:
             pass
+    
+    #网络歌词读取
+    def lyricUrlRead(songID):
+        work.lyricUrlRead(songID)
+        lyrics_before.value = work.lyricsBefore
+        lyrics_text.value = work.lyricsText
+        lyrics_after.value = work.lyricsAfter
+    
+    #网络歌词处理（主要部分在work.py）
+    def lyricsProcess():
+        work.lyricsProcess()
+        lyrics_before.value = work.lyricsBefore
+        lyrics_text.value = work.lyricsText
+        lyrics_after.value = work.lyricsAfter
 
     #歌词显示/隐藏
     def lyricShow(e):
@@ -217,17 +272,6 @@ def main(page: ft.Page):
             lyrics_text.visible = True
             lyrics_after.visible = True
             lyrics_btn.icon = ft.icons.LYRICS
-        page.update()
-
-    #歌词信息更新
-    def audioInfoUpdate():
-        work.audioInfoUpdate(audioFile)
-        audioCover.src_base64 = work.audioCoverBase64
-        audioCover.src = work.audioCover_src
-        audioTitle.value = work.audioTitleText
-        audioArtist.value = work.audioArtistText
-        audioAlbum.value = work.audioAlbumText
-        audioCover.update()
         page.update()
   
     #歌曲播放/暂停
@@ -246,7 +290,10 @@ def main(page: ft.Page):
         work.autoKeepAudioProgress(e)
         audioProgressBar.value = work.audioProgressBar_value
         audioProgressStatus.value = work.audioProgressStatus_value
-        lyricExistAndRead()
+        if lyricFile != "":
+            lyricExistAndRead()
+        elif getReturn == True:
+            lyricsProcess()
         page.update()
 
     def progressCtrl(e):
@@ -302,6 +349,35 @@ def main(page: ft.Page):
         logging.info("Audio list disappeared")
         audioList_menu.update()
         logging.info("audioList_menu updated")
+   
+    #关闭窗口
+    def closeSongWeb_dlg(e):
+        songWeb_dlg.open = False
+        page.update()
+
+    songID_hint = ft.Text(value=lang.dialog["songIdHint"]) 
+    songID_input = ft.TextField(label="",error_text = "")
+    songWeb_dlg = ft.AlertDialog(
+            adaptive = True,
+            title = ft.Text(value=lang.dialog["songIdInput"]),
+            content = ft.Column(controls=[
+                songID_hint,
+                songID_input,],
+                height = 100,
+                width = 400,),
+                actions=[
+                ft.TextButton("取消",on_click=closeSongWeb_dlg),
+                ft.TextButton("确定",on_click=audioFromUrlInfo),
+                ],
+                actions_alignment=ft.MainAxisAlignment.END
+            )
+
+    def getSongFromWebsite(e):
+        page.dialog = songWeb_dlg
+        songWeb_dlg.open = True
+        logging.info("Dialog songWeb_dlg opened")
+        page.update()
+        logging.info("Page updated")
 
     #媒体信息
     def openAudioInfoDlg(e):
@@ -314,24 +390,27 @@ def main(page: ft.Page):
         logging.info("Dialog audioInfo_dlg opened")
         page.update()
         logging.info("Page updated")
-
+    
+    #关于信息
     def openAboutDlg(e):
         about_dlg = ft.AlertDialog(
             title = ft.Text(value = lang.mainMenu["about"]),
-            content = ft.Text("Simplay Player by What_Damon\n\nVersion: 1.1.0_experimentalTest\nPowered by: Flet, Tinytag\n\nRuning under Python " + platform.python_version() + "\nOS: " + platform.platform())
+            content = ft.Text("Simplay Player by What_Damon\n\nVersion: "+ver+"\nPowered by: Flet, Tinytag\n\nRuning under Python " + platform.python_version() + "\nOS: " + platform.platform())
         )
         page.dialog = about_dlg
         about_dlg.open = True
         logging.info("Dialog about_dlg opened")
         page.update()
         logging.info("Page updated")
-    
+
+    #窗口置顶按钮
     windowOnTop_btn = ft.IconButton(
                     icon = ft.icons.PUSH_PIN_OUTLINED,
                     tooltip = lang.tooltips["alwaysOnTop"],
                     on_click = alwaysOnTop
                 )
 
+    #菜单栏
     menuBar = ft.MenuBar(
         expand = True,
         controls = [
@@ -346,12 +425,23 @@ def main(page: ft.Page):
                         ),
                         ft.MenuItemButton(
                             content = ft.Text(value = lang.menuBar["openSonglist"]),
-                            leading = ft.Icon(ft.icons.DRIVE_FILE_MOVE_OUTLINE),
+                            leading = ft.Icon(ft.icons.PLAYLIST_ADD_OUTLINED),
                             on_click = lambda _: pickSonglistDialog.get_directory_path(),
                         ),
-                        ft.MenuItemButton(
-                            content = ft.Text(value = lang.menuBar["getFromNeteaseMusic"]),
-                            leading = ft.Icon(ft.icons.MUSIC_NOTE_OUTLINED)
+                        ft.SubmenuButton(
+                            content = ft.Text(value = lang.menuBar["getFromMusicWebsite"]),
+                            leading = ft.Icon(ft.icons.TRAVEL_EXPLORE_OUTLINED),
+                            controls = [
+                                ft.MenuItemButton(
+                                    content = ft.Text("获取歌曲"),
+                                    leading = ft.Icon(ft.icons.MUSIC_NOTE_OUTLINED),
+                                    on_click = getSongFromWebsite
+                                ),
+                                ft.MenuItemButton(
+                                    content = ft.Text("获取专辑/歌单"),
+                                    leading = ft.Icon(ft.icons.ALBUM_OUTLINED)
+                                )
+                            ]
                         ),
                         ft.MenuItemButton(
                             content = ft.Text(value = lang.menuBar["exit"]),
@@ -365,7 +455,7 @@ def main(page: ft.Page):
                     controls = [
                         ft.SubmenuButton(
                             content = ft.Text(value = lang.menuBar["channels"]),
-                            leading = ft.Icon(ft.icons.SPEAKER_GROUP_OUTLINED),
+                            leading = ft.Icon(ft.icons.TUNE_OUTLINED),
                             controls = [
                                 ft.MenuItemButton(
                                     content = ft.Text(value = lang.menuBar["balance"]),
