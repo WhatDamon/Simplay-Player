@@ -22,10 +22,11 @@ def main(page: ft.Page):
     page.window_top = 100
     page.window_height = 600
     page.window_width = 800
-    page.window_min_height = 350
-    page.window_min_width = 500
+    page.window_min_height = 360
+    page.window_min_width = 540
     page.padding = 10
     page.title = "Simplay Player"
+    # page.window_title_bar_hidden = True
     log_init.logging.info("Window created")
 
     page.theme = ft.Theme(color_scheme_seed = ft.colors.BLUE)
@@ -456,7 +457,7 @@ def main(page: ft.Page):
     def openAboutDlg(e):
         about_dlg = ft.AlertDialog(
             title = ft.Text(value = lang.mainMenu["about"]),
-            content = ft.Text("Simplay Player by What_Damon\n\nVersion: "+ver+"\nPowered by: Flet, Tinytag\n\nRuning under Python " + platform.python_version() + "\nOS: " + platform.platform())
+            content = ft.Text("Simplay Player by What_Damon\n\nVersion: " + ver + "\nPowered by: Flet, Tinytag\n\nRuning under Python " + platform.python_version() + "\nOS: " + platform.platform())
         )
         page.dialog = about_dlg
         about_dlg.open = True
@@ -464,12 +465,31 @@ def main(page: ft.Page):
         page.update()
         log_init.logging.info("Page updated")
 
+    """
+    titleBar = ft.Row(
+        [
+            ft.WindowDragArea(
+                ft.Container(
+                    ft.Row(controls = [
+                        ft.Row(controls = [ft.Icon(ft.icons.MUSIC_NOTE_OUTLINED, size = 20), ft.Text(page.title)]),
+                        ft.Row(controls = [ft.IconButton(ft.icons.CLOSE, icon_size = 16, on_click = closeWindow)])
+                    ],
+                    alignment = ft.MainAxisAlignment.SPACE_BETWEEN
+                    )
+                ),
+                expand = True
+            )
+        ],
+        height = 24
+    )
+    """
+
     # 窗口置顶按钮
     windowOnTop_btn = ft.IconButton(
-                    icon = ft.icons.PUSH_PIN_OUTLINED,
-                    tooltip = lang.tooltips["alwaysOnTop"],
-                    on_click = alwaysOnTop
-                )
+        icon = ft.icons.PUSH_PIN_OUTLINED,
+        tooltip = lang.tooltips["alwaysOnTop"],
+        on_click = alwaysOnTop
+    )
 
     # 菜单栏
     menuBar = ft.MenuBar(
@@ -494,12 +514,12 @@ def main(page: ft.Page):
                             leading = ft.Icon(ft.icons.TRAVEL_EXPLORE_OUTLINED),
                             controls = [
                                 ft.MenuItemButton(
-                                    content = ft.Text("获取歌曲"),
+                                    content = ft.Text(value = lang.menuBar["getWebMusic"]),
                                     leading = ft.Icon(ft.icons.MUSIC_NOTE_OUTLINED),
                                     on_click = getSongFromWebsite
                                 ),
                                 ft.MenuItemButton(
-                                    content = ft.Text("获取专辑/歌单"),
+                                    content = ft.Text(value = lang.menuBar["getWebAlbum"]),
                                     leading = ft.Icon(ft.icons.ALBUM_OUTLINED)
                                 )
                             ]
@@ -685,11 +705,11 @@ def main(page: ft.Page):
     volume_silder = ft.Slider(min = 0, max = 100, divisions = 100, label = "{value}", value = 100, on_change = volumeChange)
 
     volume_panel = ft.Card(
-            content = volume_silder,
-            visible = False,
-            height = 46,
-            width = 200
-        )
+        content = volume_silder,
+        visible = False,
+        height = 46,
+        width = 200
+    )
     
     lyrics_btn = ft.IconButton(
         icon = ft.icons.LYRICS,
@@ -708,18 +728,18 @@ def main(page: ft.Page):
     )
 
     audioList_btn = ft.IconButton(
-            icon = ft.icons.LIBRARY_MUSIC_OUTLINED,
-            tooltip = lang.tooltips["songList"],
-            icon_size = 20,
-            on_click = audioListCtrl
-        )
+        icon = ft.icons.LIBRARY_MUSIC_OUTLINED,
+        tooltip = lang.tooltips["songList"],
+        icon_size = 20,
+        on_click = audioListCtrl
+    )
     songlist_tiles = ft.Column(controls=[],
-                          height = 380,
-                          spacing = 0,
-                          scroll = ft.ScrollMode.AUTO,)
+        height = 380,
+        spacing = 0,
+        scroll = ft.ScrollMode.AUTO
+    )
     audioList_menu = ft.Container(
-        content = ft.Column(
-            [
+        content = ft.Column(controls = [
                 ft.Row(
                     controls = [
                         ft.Text(value = lang.songList["songList"], size = 20, weight = ft.FontWeight.BOLD),
