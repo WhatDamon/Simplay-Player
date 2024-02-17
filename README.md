@@ -47,11 +47,11 @@ ___注：区分的原因是 `Windows-Toasts` 库只能在 Windows 下生效!___
 - [x] 快进与倍速播放
 - [x] GitHub Actions 自动测试编译工作流 (使用 __Nuitka__ 实现, 详见[本项目 Actions](https://github.com/WhatDamon/Simplay-Player/actions))
 - [x] 多语言支持 (基本, 目前只有美式英语 `en_US` 和简体中文 `zh_CN`, 若要贡献翻译请查看 [Wiki](https://github.com/WhatDamon/Simplay-Player/wiki/%E8%BD%AF%E4%BB%B6%E7%BF%BB%E8%AF%91))
-- [x] 日志输出 (注: 会产生大量日志信息保存在本地)
+- [x] 日志输出 (注: 会产生大量日志信息保存在本地, 提交 issue 请附带该文件)
 - [x] 循环播放
 - [x] 歌词显示与滚动 (基本完成, 但依旧不兼容逐字歌词, 姑且算完成了)
 - [x] 在线获取网易云歌曲 (还有一些 BUG, 慢慢修)
-- [x] 歌单 (除了不支持删除以外基本完成)
+- [x] 歌单 (除了不支持删除和添加在线歌曲以外基本完成)
 - [x] 检查更新 (基于 __Github API__)
 - [ ] 进阶逻辑
 - [ ] 进阶播放方式选择
@@ -61,6 +61,7 @@ ___注：区分的原因是 `Windows-Toasts` 库只能在 Windows 下生效!___
 - [ ] 混音器 (目前使用的组件未提供相关接口, 暂时搁置)
 - [ ] SMTC 支持
 - [ ] 任务栏进度条与按键操作 (仅 Windows 支持)
+- [ ] 多线程支持
 
 对于其他可能的新功能可以到[本项目 Discussions](https://github.com/WhatDamon/Simplay-Player/discussions) 提交
 

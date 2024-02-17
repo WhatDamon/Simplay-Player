@@ -5,6 +5,7 @@ from lib import work, log_init, update, platform_check
 log_init.logging.info("Basic libs imported at player.py")
 
 from i18n import lang
+
 log_init.logging.info("Languages imported at player.py")
 
 ver = "2.0.0_experimentaltest"
@@ -491,6 +492,18 @@ def main(page: ft.Page):
         on_click = alwaysOnTop
     )
 
+    # 机翻警告
+    machineTranslateWarning_icon = ft.Icon(
+        ft.icons.WARNING_AMBER_OUTLINED,
+        color = ft.colors.AMBER,
+        tooltip = lang.infomation["machineTranslate"],
+        visible = False
+    )
+
+    if lang.langInfo["machineTranslated"] == True:
+        machineTranslateWarning_icon.visible = True
+        log_init.logging.info("Add machine translate warning")
+
     # 菜单栏
     menuBar = ft.MenuBar(
         expand = True,
@@ -605,6 +618,7 @@ def main(page: ft.Page):
                         ft.MenuItemButton(
                             content = ft.Text(value = lang.menuBar["lyrics"]),
                             leading = ft.Icon(ft.icons.LYRICS_OUTLINED),
+                            on_click = lyricShow
                         ),
                         ft.SubmenuButton(
                             content = ft.Text(value = lang.menuBar["mode"]),
@@ -655,7 +669,8 @@ def main(page: ft.Page):
                         icon = ft.icons.KEYBOARD_ARROW_UP_OUTLINED,
                         tooltip = lang.tooltips["hideMenuBar"],
                         on_click = hideShowMenuBar
-                )
+                ),
+                machineTranslateWarning_icon
                 ]
             )
         ],

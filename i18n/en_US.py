@@ -2,13 +2,15 @@ langInfo = {
     "engName": "English (United States)",
     "orgiName": "",
     "code": "en_US",
-    "font": ""
+    "font": "",
+    "machineTranslated": True
 }
 
 infomation = {
     "wslWarning": "We noticed that you are using WSL, in fact, we recommend you to use the Windows version directly to avoid potential bugs.",
     "cygwinWarning": "We noticed that you are using Cygwin, in fact, we recommend you to use the Windows version directly to avoid potential bugs.",
-    "nonTestWarning": "The software has not been tested for stability except for Windows, and there may be bugs that need to be fixed that the developer is not aware of."
+    "nonTestWarning": "The software has not been tested for stability except for Windows, and there may be bugs that need to be fixed that the developer is not aware of.",
+    "machineTranslate": "The language you are using is machine-translated and may have some language comprehension issues"
 }
 
 menuBar = {

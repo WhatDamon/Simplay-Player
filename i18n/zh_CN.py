@@ -2,13 +2,15 @@ langInfo = {
     "engName": "Chinese (Simplified)",
     "orgiName": "简体中文",
     "code": "zh_CN",
-    "font": "Microsoft YaHei"
+    "font": "Microsoft YaHei",
+    "machineTranslated": False
 }
 
 infomation = {
     "wslWarning": "发现您正在使用 WSL, 实际上, 我们更推荐您直接使用 Windows 版本以避免潜在的 BUG",
     "cygwinWarning": "发现您正在使用 Cygwin, 实际上, 我们更推荐您直接使用 Windows 版本以避免潜在的 BUG",
-    "nonTestWarning": "除 Windows 外, 该软件没有做过稳定性测试, 可能会存在一些开发者也不清楚的 BUG 需要修复"
+    "nonTestWarning": "除 Windows 外, 该软件没有做过稳定性测试, 可能会存在一些开发者也不清楚的 BUG 需要修复",
+    "machineTranslate": "您所使用的语言是机器翻译得到的，可能会存在一些语言理解性问题"
 }
 
 menuBar = {
