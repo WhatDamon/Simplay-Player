@@ -28,6 +28,7 @@ def update_api():
 
 # 版本检查
 def version_check(ver):
+    ver == "v" + ver
     update_api()
     global latestVer
     latestVer = allInfo[0]['tag_name'] # 获取最新版本
@@ -62,7 +63,7 @@ def update(ver):
                 scContent = lang.update["darwinCompatibility"] # 内容添加
             if platform_check.currentOS == "linux":
                 scContent = lang.update["linuxCompatibility"] # 内容添加
-            updContent = lang.update["contentCurrentVer"] + ver + lang.update["contentLatestVer"] + latestVer + lang.update["contentMore"] + detail  + prereleaseContent + scContent # 弹窗内容
+            updContent = lang.update["contentCurrentVer"] + "v" + ver + lang.update["contentLatestVer"] + latestVer + lang.update["contentMore"] + detail  + prereleaseContent + scContent # 弹窗内容
             return updContent
     except requests.exceptions.RequestException as e:
         log_init.logging.error("Check for update failure")

@@ -384,7 +384,7 @@ def main(page: ft.Page):
             ),
             actions = [
                 ft.TextButton(text = lang.dialog["cancel"], icon = ft.icons.CLOSE_OUTLINED, on_click = closeSongWeb_dlg),
-                ft.FilledButton(text = lang.dialog["ok"], icon = ft.icons.CHECK_OUTLINED, on_click=audioFromUrlInfo)
+                ft.FilledButton(text = lang.dialog["ok"], icon = ft.icons.CHECK_OUTLINED, on_click = audioFromUrlInfo)
             ],
             actions_alignment = ft.MainAxisAlignment.END
         )
@@ -458,7 +458,7 @@ def main(page: ft.Page):
     def openAboutDlg(e):
         about_dlg = ft.AlertDialog(
             title = ft.Text(value = lang.mainMenu["about"]),
-            content = ft.Text("Simplay Player by What_Damon\n\nVersion: " + ver + "\nPowered by: Flet, Tinytag\n\nRuning under Python " + platform.python_version() + "\nOS: " + platform.platform())
+            content = ft.Markdown("__Simplay Player__\n\rby WhatDamon & open source community\n\r- Version: " + ver + "\n\r- Powered by: Flet, Tinytag\n\r- Python: " + platform.python_version() + "\n\r- OS: " + platform.platform() + "-" + platform.machine(), selectable = True)
         )
         page.dialog = about_dlg
         about_dlg.open = True
@@ -674,10 +674,11 @@ def main(page: ft.Page):
                 ]
             )
         ],
-        visible = True
+        visible = True,
+        style = ft.MenuStyle(shape = ft.RoundedRectangleBorder(radius = 8))
     )
 
-    audioCover = ft.Image(src = "./asset/track.png", width = 128, height = 128, border_radius = 5)
+    audioCover = ft.Image(src = "./asset/track.png", width = 128, height = 128, border_radius = 8)
     audioTitle = ft.Text(audioTitleText, weight = ft.FontWeight.BOLD, size = 25, overflow = ft.TextOverflow.ELLIPSIS)
     audioArtistAndAlbum = ft.Text(audioArtistText, size = 18, opacity = 90)
     audioProgressStatus = ft.Text("00:00/00:00", size = 15, opacity = 90)
