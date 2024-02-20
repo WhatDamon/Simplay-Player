@@ -28,13 +28,12 @@ def update_api():
 
 # 版本检查
 def version_check(ver):
-    ver == "v" + ver
     update_api()
     global latestVer
     latestVer = allInfo[0]['tag_name'] # 获取最新版本
     log_init.logging.info("Versions in the server: " + latestVer)
     log_init.logging.info("Comparing versions...")
-    if ver == latestVer:
+    if "v" + ver == latestVer:
         return False
     else:
         return True
