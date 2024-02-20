@@ -8,7 +8,7 @@ from i18n import lang
 
 log_init.logging.info("Languages imported at player.py")
 
-ver = "2.0.0_experimentaltest"
+ver = "2.0.0_pre"
 audioFile = None
 lyricFile = ""
 audioListShown = False
@@ -466,6 +466,20 @@ def main(page: ft.Page):
         page.update()
         log_init.logging.info("Page updated")
 
+    def displaySettings(e):
+        page.views.append(settingsPage.settings_pageView)
+        page.go("/settings")
+        log_init.logging.info("Set to page: settings")
+        page.update
+        log_init.logging.info("Page updated")
+
+    def viewPop(e):
+        page.views.pop()
+        topView = page.views[-1]
+        page.go(topView.route)
+        log_init.logging.info("View go backward")
+
+
     """
     titleBar = ft.Row(
         [
@@ -788,7 +802,7 @@ def main(page: ft.Page):
             icon = ft.icons.SETTINGS_OUTLINED,
             tooltip = lang.tooltips["settings"],
             icon_size = 20,
-            visible = False
+            on_click = displaySettings
         )
     
     lyrics_before = ft.Text(size = 16, visible = True, color = ft.colors.GREY)
@@ -801,7 +815,11 @@ def main(page: ft.Page):
 
     page.overlay.append(audioList_menu)
     log_init.logging.info("Append audioList_menu")
-    page.add(ft.Column(controls = [ft.Row(controls = [menuBar]), audioBasicInfo, audioProgressBar, btns_row, lyrics_before, lyrics_text, lyrics_after]))
+    main_pageView = ft.View("/", controls = [ft.Column(controls = [ft.Row(controls = [menuBar]), audioBasicInfo, audioProgressBar, btns_row, lyrics_before, lyrics_text, lyrics_after])])
+    page.views.append(main_pageView)
+    page.go("/")
+    log_init.logging.info("Set to page: main")
+    page.on_view_pop = viewPop
     log_init.logging.info("Window initialization complete")
 
 if __name__ == '__main__':
@@ -824,4 +842,6 @@ if __name__ == '__main__':
     audioArtistText = lang.mainMenu["unknownArtist"]
     work.audioInfo = lang.mainMenu["none"]
     log_init.logging.info("Basic initialization complete")
+    from pages import settingsPage
+    log_init.logging.info("Imported settingsPage")
     ft.app(target = main)

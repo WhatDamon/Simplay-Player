@@ -106,3 +106,8 @@ update = {
     "contentLatestVer": "\n \r- Latest version: ",
     "contentMore": "\n \r## Detailed Info\n \r"
 }
+
+sets = {
+    "settings": "Settings",
+    "construction": "Under Construction"
+}

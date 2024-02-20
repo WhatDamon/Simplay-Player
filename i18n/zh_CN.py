@@ -106,3 +106,8 @@ update = {
     "contentLatestVer": "\n \r- 新版本: ",
     "contentMore": "\n \r## 详细信息\n \r"
 }
+
+sets = {
+    "settings": "设置",
+    "construction": "正在施工"
+}
