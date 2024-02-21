@@ -10,7 +10,7 @@
 ![GitHub repo stars](https://img.shields.io/github/stars/WhatDamon/Simplay-Player)
 
 > [!IMPORTANT]  
-> WIP! 大部分功能还在开发中, macOS 和 Linux 下可能存在影响比较大的 BUG 需要注意, Windows 端基本稳定并可用
+> 注意, 该软件在 macOS 和 Linux 下可能存在影响比较大的 BUG 需要注意, Windows 端基本稳定并可用. 由于一些原因该项目将会进入缓慢更新阶段, 望谅解!
 
 这是一个 __闲得发慌时__ 开发出来的小作品, 写得很烂请见谅
 
@@ -75,6 +75,8 @@ ___注：区分的原因是 `Windows-Toasts` 库只能在 Windows 下生效!___
 - [x] 读取存在封面的歌曲后再打开无封面歌曲不会替换成占位的 `track.png`
 - [x] 加载歌曲或更换歌曲后前可能会有些不是特别影响的报错 (`try` 大法成功忽略)
 - [ ] 窗口标题有时不能按希望的方式显示 (实际解决很简单, 但是我希望能够整合一下)
+
+___注: 接下来将不再这里更新 BUG, 有关 BUG 内容请看 [Releases](https://github.com/WhatDamon/Simplay-Player/releases)___
 
 ## 急切的任务
 

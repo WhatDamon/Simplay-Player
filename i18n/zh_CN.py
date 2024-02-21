@@ -109,5 +109,9 @@ update = {
 
 sets = {
     "settings": "设置",
-    "construction": "正在施工"
+    "construction": "正在施工",
+    "language": "语言",
+    "appearances": "外观",
+    "play": "播放",
+    "lyrics": "歌词"
 }

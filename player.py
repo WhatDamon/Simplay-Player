@@ -8,7 +8,7 @@ from i18n import lang
 
 log_init.logging.info("Languages imported at player.py")
 
-ver = "2.0.0_pre"
+ver = "2.0.0_pre2"
 audioFile = None
 lyricFile = ""
 audioListShown = False
@@ -228,7 +228,7 @@ def main(page: ft.Page):
         def __init__(self, song):
             super().__init__()
             self.song = song
-            self.song_name = song.split('\\')[-1]
+            self.songName = song.split('\\')[-1]
 
         def playSong(self,e):
             readSong(self.song)
@@ -237,9 +237,12 @@ def main(page: ft.Page):
 
         def build(self):
             return ft.Row(controls = [
-                ft.Icon(name = ft.icons.MUSIC_NOTE_OUTLINED),
-                ft.Text(self.song_name, width = 200),
-                ft.IconButton(icon = ft.icons.PLAY_CIRCLE_FILLED_OUTLINED, on_click = self.playSong)], width = 300)
+                        ft.Icon(name = ft.icons.MUSIC_NOTE_OUTLINED),
+                        ft.Text(self.songName, width = 200),
+                        ft.IconButton(icon = ft.icons.PLAY_CIRCLE_FILLED_OUTLINED, on_click = self.playSong)
+                    ],
+                    width = 300
+                )
         
     def songListTiles(songList):
         for song in songList:
@@ -431,7 +434,7 @@ def main(page: ft.Page):
             # 定义“发现更新”窗口
             findUpd_dlg = ft.AlertDialog(
                 title = ft.Text(value = lang.dialog["findUpdate"]),
-                content = ft.Markdown(content, selectable = True),
+                content = ft.Column(controls = [ft.Markdown(content, selectable = True)], scroll = ft.ScrollMode.AUTO, width = 450),
                 actions = [
                     ft.Row(controls = [
                         ft.TextButton(
@@ -763,7 +766,7 @@ def main(page: ft.Page):
         icon_size = 20,
         on_click = audioListCtrl
     )
-    songlist_tiles = ft.Column(controls=[],
+    songlist_tiles = ft.Column(controls = [],
         height = 380,
         spacing = 0,
         scroll = ft.ScrollMode.AUTO
@@ -777,18 +780,18 @@ def main(page: ft.Page):
                     ],
                     alignment = ft.MainAxisAlignment.SPACE_BETWEEN,
                 ),
-                songlist_tiles,
+                songlist_tiles
             ],
         ),
         left = 10,
-        top = 70,
+        top = 65,
         width = 300,
         height = 450,
         bgcolor = ft.colors.SURFACE_VARIANT,
-        border_radius = 5,
+        border_radius = 6,
         padding = 8,
         offset = ft.transform.Offset(-2, 0),
-        animate_offset = ft.animation.Animation(200, ft.AnimationCurve.EASE_IN),
+        animate_offset = ft.animation.Animation(300, ft.AnimationCurve.EASE_IN_OUT_CUBIC),
     )
     
     audioInfo_btn = ft.IconButton(

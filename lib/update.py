@@ -12,7 +12,7 @@ allInfo = None
 latestVer = None
 
 # API更新
-def update_api():
+def updateApi():
     # API定义
     global api
     if lang.langInfo["code"] == "zh_CN": 
@@ -27,8 +27,8 @@ def update_api():
     log_init.logging.info("API infomation get")
 
 # 版本检查
-def version_check(ver):
-    update_api()
+def versionCheck(ver):
+    updateApi()
     global latestVer
     latestVer = allInfo[0]['tag_name'] # 获取最新版本
     log_init.logging.info("Versions in the server: " + latestVer)
@@ -41,11 +41,11 @@ def version_check(ver):
 # 更新程序
 def update(ver):
     # 主体
-    update_api()
+    updateApi()
     log_init.logging.info("Testing...")
     try:
         response = api.text # 用于是否可以连接
-        if version_check(ver) == False:
+        if versionCheck(ver) == False:
             log_init.logging.info("You are using the latest version")
             return "NUL"
         else:

@@ -109,5 +109,9 @@ update = {
 
 sets = {
     "settings": "Settings",
-    "construction": "Under Construction"
+    "construction": "Under Construction",
+    "language": "Languages",
+    "appearances": "Appearances",
+    "play": "Play",
+    "lyrics": "Lyrics"
 }
