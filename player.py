@@ -31,14 +31,12 @@ def main(page: ft.Page):
     log_init.logging.info("Window created")
 
     page.theme = ft.Theme(color_scheme_seed = ft.colors.BLUE)
-    if lang.langInfo["font"] == None:
+    if lang.langInfo["font"] == "":
         page.fonts = {"Inter": "./asset/Inter.ttc"}
         page.theme = ft.Theme(font_family = "Inter")
     else:
         page.theme = ft.Theme(font_family = lang.langInfo["font"])
     log_init.logging.info("Assets loaded")
-
-    page.scroll = ft.ScrollMode.AUTO
 
     # 快捷键
     def keyboardEventTrack(e: ft.KeyboardEvent):
@@ -461,7 +459,18 @@ def main(page: ft.Page):
     def openAboutDlg(e):
         about_dlg = ft.AlertDialog(
             title = ft.Text(value = lang.mainMenu["about"]),
-            content = ft.Markdown("__Simplay Player__\n\rby WhatDamon & open source community\n\r- Version: " + ver + "\n\r- Powered by: Flet, Tinytag\n\r- Python: " + platform.python_version() + "\n\r- OS: " + platform.platform() + "-" + platform.machine(), selectable = True)
+            content = ft.Markdown("__Simplay Player__\n\rby WhatDamon & open source community\n\r- Version: " + ver + "\n\r- Powered by: Flet, Tinytag\n\r- Python: " + platform.python_version() + "\n\r- OS: " + platform.platform() + "-" + platform.machine(), selectable = True),
+            actions = [
+                ft.Row(controls = [
+                    ft.TextButton(
+                        text = lang.dialog["githubRepo"],
+                        icon = ft.icons.COLLECTIONS_BOOKMARK_OUTLINED,
+                        url = "https://github.com/WhatDamon/Simplay-Player/"
+                    )
+                ],
+                alignment = ft.MainAxisAlignment.END
+                )
+            ]
         )
         page.dialog = about_dlg
         about_dlg.open = True
@@ -816,9 +825,27 @@ def main(page: ft.Page):
     moreBtns_row = ft.Row(controls = [lyrics_btn, playInRepeat_btn, audioList_btn, audioInfo_btn, settings_btn])
     btns_row = ft.Row(controls = [playbackCtrl_row, moreBtns_row], alignment = ft.MainAxisAlignment.SPACE_BETWEEN)
 
+    releaseWarning = ft.Text(visible = False, size = 10, color = ft.colors.GREY)
+
+    if "pre" in ver:
+        releaseWarning.value = "Pre-release version for testing purposes only! Current Version: " + ver
+        log_init.logging.warning("You are using a pre-release version")
+        releaseWarning.visible = True
+        log_init.logging.info("Set releaseWarning as visible")
+    if "debug" in ver:
+        releaseWarning.value = "Debug version for development use! Current Version: " + ver
+        log_init.logging.warning("You are using a debug version")
+        releaseWarning.visible = True
+        log_init.logging.info("Set releaseWarning as visible")
+    if "experiment" in ver:
+        releaseWarning.value = "Experimental version for develop and testing! Current Version: " + ver
+        log_init.logging.warning("You are using a experiment version")
+        releaseWarning.visible = True
+        log_init.logging.info("Set releaseWarning as visible")
+
     page.overlay.append(audioList_menu)
     log_init.logging.info("Append audioList_menu")
-    main_pageView = ft.View("/", controls = [ft.Column(controls = [ft.Row(controls = [menuBar]), audioBasicInfo, audioProgressBar, btns_row, lyrics_before, lyrics_text, lyrics_after])])
+    main_pageView = ft.View("/", controls = [ft.Column(controls = [ft.Row(controls = [menuBar]), audioBasicInfo, releaseWarning, audioProgressBar, btns_row, lyrics_before, lyrics_text, lyrics_after])], scroll = ft.ScrollMode.AUTO)
     page.views.append(main_pageView)
     page.go("/")
     log_init.logging.info("Set to page: main")
@@ -845,6 +872,7 @@ if __name__ == '__main__':
     audioArtistText = lang.mainMenu["unknownArtist"]
     work.audioInfo = lang.mainMenu["none"]
     log_init.logging.info("Basic initialization complete")
+    log_init.logging.info("You are using " + ver)
     from pages import settingsPage
     log_init.logging.info("Imported settingsPage")
     ft.app(target = main)

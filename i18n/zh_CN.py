@@ -3,14 +3,16 @@ langInfo = {
     "orgiName": "简体中文",
     "code": "zh_CN",
     "font": "Microsoft YaHei",
-    "machineTranslated": False
+    "machineTranslated": False,
+    "useKKGithub": True
 }
 
 infomation = {
     "wslWarning": "发现您正在使用 WSL, 实际上, 我们更推荐您直接使用 Windows 版本以避免潜在的 BUG",
     "cygwinWarning": "发现您正在使用 Cygwin, 实际上, 我们更推荐您直接使用 Windows 版本以避免潜在的 BUG",
     "nonTestWarning": "除 Windows 外, 该软件没有做过稳定性测试, 可能会存在一些开发者也不清楚的 BUG 需要修复",
-    "machineTranslate": "您所使用的语言是机器翻译得到的，可能会存在一些语言理解性问题"
+    "machineTranslate": "您所使用的语言是机器翻译得到的，可能会存在一些语言理解性问题",
+    "updateUseKKGithubMirror": "注: 使用该语言时检查更新将切换为 KKGitHub 镜像站"
 }
 
 menuBar = {
@@ -89,13 +91,14 @@ dialog = {
     "songIdInput": "输入歌曲 ID:",
     "songIdHint": "(目前仅限网易云 + 非会员歌曲)",
     "vipOrNoCopyrightAlert": "抱歉, 不支持获取会员或由于版权问题无法播放的歌曲",
-    "errorPrompt": "请输入正确的歌曲ID",
+    "errorPrompt": "请输入正确的歌曲 ID",
     "updateTimeout": "检查更新超时, 请检查网络连接",
     "youAreUsingLatest": "你正在使用最新版本",
     "findUpdate": "发现更新",
     "update": "更新",
     "cancel": "取消",
-    "ok": "确定"
+    "ok": "确定",
+    "githubRepo": "GitHub 仓库"
 }
 
 update = {
@@ -109,9 +112,31 @@ update = {
 
 sets = {
     "settings": "设置",
+    "note": "这里也可以用空格键来控制音乐的播放与暂停哟~",
+    "pleaseSelect": "请选择...",
     "construction": "正在施工",
     "language": "语言",
+    "systemDefault": "系统默认",
+    "langNameEng": "英文名: ",
+    "langNameOrigial": "名称: ",
+    "langCode": "语言代码: ",
+    "langFont": "语言字体: ",
     "appearances": "外观",
+    "colorMode": "亮暗模式: ",
+    "colorLight": "亮色",
+    "colorDark": "暗色",
+    "colorSchemes": "配色方案: ",
+    "blue": "蓝色",
+    "pink": "粉色",
+    "green": "绿色",
+    "brown": "棕色",
+    "purple": "紫色",
     "play": "播放",
-    "lyrics": "歌词"
+    "immediatelyPlay": "加载歌曲后立即播放",
+    "lyrics": "歌词",
+    "lyricsDefaultVis": "歌词默认显示",
+    "feedback": "反馈",
+    "bugReport": "报告 BUG",
+    "shareIdeas": "分享新功能想法",
+    "discussion": "加入讨论"
 }

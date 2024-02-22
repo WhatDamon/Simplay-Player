@@ -3,14 +3,16 @@ langInfo = {
     "orgiName": "",
     "code": "en_US",
     "font": "",
-    "machineTranslated": True
+    "machineTranslated": True,
+    "useKKGithub": False
 }
 
 infomation = {
     "wslWarning": "We noticed that you are using WSL, in fact, we recommend you to use the Windows version directly to avoid potential bugs.",
     "cygwinWarning": "We noticed that you are using Cygwin, in fact, we recommend you to use the Windows version directly to avoid potential bugs.",
     "nonTestWarning": "The software has not been tested for stability except for Windows, and there may be bugs that need to be fixed that the developer is not aware of.",
-    "machineTranslate": "The language you are using is machine-translated and may have some language comprehension issues"
+    "machineTranslate": "The language you are using is machine-translated and may have some language comprehension issues",
+    "updateUseKKGithubMirror": "Note: Switching to KKGitHub mirrors when checking for updates while use this language"
 }
 
 menuBar = {
@@ -95,7 +97,8 @@ dialog = {
     "findUpdate": "Discover Update",
     "update": "Update",
     "cancel": "Cancel",
-    "ok": "OK"
+    "ok": "OK",
+    "githubRepo": "GitHub Repo"
 }
 
 update = {
@@ -109,9 +112,31 @@ update = {
 
 sets = {
     "settings": "Settings",
+    "note": "The spacebar can also be used here to control the play and pause of the music.",
+    "pleaseSelect": "Please select...",
     "construction": "Under Construction",
     "language": "Languages",
+    "systemDefault": "System",
+    "langNameEng": "English Name: ",
+    "langNameOrigial": "Name: ",
+    "langCode": "Language Code: ",
+    "langFont": "Language Font: ",
     "appearances": "Appearances",
+    "colorMode": "Color Mode: ",
+    "colorLight": "Light",
+    "colorDark": "Dark",
+    "colorSchemes": "Color Schemes: ",
+    "blue": "Blue",
+    "pink": "Pink",
+    "green": "Green",
+    "brown": "Brown",
+    "purple": "Purple",
     "play": "Play",
-    "lyrics": "Lyrics"
+    "immediatelyPlay": "Play the song immediately after loading",
+    "lyrics": "Lyrics",
+    "lyricsDefaultVis": "Lyrics display by default",
+    "feedback": "Feedback",
+    "bugReport": "Report a BUG",
+    "shareIdeas": "Share new feature ideas",
+    "discussion": "Join discussions"
 }

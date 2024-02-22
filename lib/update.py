@@ -15,7 +15,7 @@ latestVer = None
 def updateApi():
     # API定义
     global api
-    if lang.langInfo["code"] == "zh_CN": 
+    if lang.langInfo["useKKGithub"] == True: 
         api = requests.get("https://api.kkgithub.com/repos/WhatDamon/Simplay-Player/releases", timeout = 10, verify = False) # SSL禁用
         log_init.logging.info("Using KKGitHub mirror")
     else:

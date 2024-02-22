@@ -290,5 +290,5 @@ playAudio = ft.Audio(
     balance = 0,
     on_duration_changed = lambda e: log_init.logging.info("Duration changed:" + e.data),
     on_state_changed = lambda e: log_init.logging.info("State changed:" + e.data),
-    on_seek_complete = lambda _: log_init.logging.info("Seek complete"),
-    )
+    on_seek_complete = lambda _: log_init.logging.info("Seek complete")
+)
