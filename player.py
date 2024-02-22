@@ -99,7 +99,6 @@ def main(page: ft.Page):
         log_init.logging.info("Page updated")
     
     def windowsToastNotify():
-        from windows_toasts import Toast, ToastDisplayImage, WindowsToaster    
         toaster = WindowsToaster('Simplay Player')
         sysToast = Toast()
         if os.path.exists("./asset/simplay.png"):
@@ -197,7 +196,7 @@ def main(page: ft.Page):
         songID_text = songID_input.value
         songID = songID_text
         getReturn = work.audioFromUrlInfo(songID)
-        if getReturn == True:        
+        if getReturn == True:
             if firstPlay == True:
                 page.overlay.append(work.playAudio)
                 log_init.logging.info("Append playAudio")
@@ -863,7 +862,15 @@ if __name__ == '__main__':
         print(lang.infomation["cygwinWarning"])
         log_init.logging.warning("Using Cygwin")
     if platform_check.currentOS == "windows":
+        from windows_toasts import Toast, ToastDisplayImage, WindowsToaster    
         log_init.logging.info("Lib Windows-Toasts imported")
+        from sys import getwindowsversion
+        windowsBuild = getwindowsversion().build
+        log_init.logging.info("Windows build: " + str(windowsBuild))
+        if windowsBuild > 10240:
+            # from lib import smtc
+            pass
+        del windowsBuild
     else:
         print(lang.infomation["nonTestWarning"])
         log_init.logging.warning("Non-test OS")

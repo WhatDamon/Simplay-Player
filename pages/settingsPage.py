@@ -138,6 +138,37 @@ lyricsSetCard = ft.Card(
     disabled = True
 )
 
+onlineAPI_tf = ft.TextField(label = i18n.lang.sets["inputAPI"], value = "https://music.dsb.ink/api/")
+
+onlineSetCard = ft.Card(
+    content = ft.Container(
+        content = ft.Column(controls = [
+                ft.Row(controls = [ft.Icon(ft.icons.MUSIC_NOTE_OUTLINED), ft.Text(value = i18n.lang.sets["webMusic"], size = 18)]),
+                onlineAPI_tf,
+                ft.Text(value = i18n.lang.sets["webAPIInfo"], selectable = True)
+            ]
+        ),
+        padding = 15
+    ),
+    elevation = 0.5,
+    disabled = True
+)
+
+smtcEnable_switch = ft.Switch(label = i18n.lang.sets["enableSMTC"], value = False)
+
+systemSetCard = ft.Card(
+    content = ft.Container(
+        content = ft.Column(controls = [
+                ft.Row(controls = [ft.Icon(ft.icons.DISPLAY_SETTINGS_OUTLINED), ft.Text(value = i18n.lang.sets["systemIntegration"], size = 18)]),
+                smtcEnable_switch
+            ]
+        ),
+        padding = 15
+    ),
+    elevation = 0.5,
+    disabled = True
+)
+
 feedbackSetCard = ft.Card(
     content = ft.Container(
         content = ft.Column(controls = [
@@ -156,4 +187,4 @@ feedbackSetCard = ft.Card(
     elevation = 0.5
 )
 
-settings_pageView = ft.View("/settings", controls = [appBar, constructionNotice, settingsNotice, languageSetCard, appearancesSetCard, playSetCard, lyricsSetCard, feedbackSetCard], scroll = ft.ScrollMode.AUTO)
+settings_pageView = ft.View("/settings", controls = [appBar, constructionNotice, settingsNotice, languageSetCard, appearancesSetCard, playSetCard, lyricsSetCard, onlineSetCard, systemSetCard, feedbackSetCard], scroll = ft.ScrollMode.AUTO)
