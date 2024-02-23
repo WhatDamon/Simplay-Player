@@ -112,7 +112,7 @@ update = {
 
 sets = {
     "settings": "设置",
-    "note": "这里也可以用空格键来控制音乐的播放与暂停哟~",
+    "note": "这里也可以用空格键来控制音乐的播放与暂停哟~\n大部分设置将在重启后生效",
     "pleaseSelect": "请选择...",
     "construction": "正在施工",
     "language": "语言",
@@ -142,6 +142,8 @@ sets = {
     "webAPIInfo": "必须使用 https://github.com/Kevin0z0/Python_NetEaseMusicAPI 的部署方案以保证兼容性!",
     "systemIntegration": "系统集成",
     "enableSMTC": "启用 SMTC (未完成)",
+    "dangerous": "高危选项",
+    "delConfigAndClose": "删除配置并关闭软件",
     "feedback": "反馈",
     "bugReport": "报告 BUG",
     "shareIdeas": "分享新功能想法",

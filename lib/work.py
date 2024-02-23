@@ -1,6 +1,6 @@
 import flet as ft
 import tinytag, time, base64, requests, json
-from lib import log_init
+from lib import log_init, cfg
 
 log_init.logging.info("Basic libs imported at work.py")
 
@@ -20,6 +20,10 @@ audioInfo = None
 audioTitleText = None
 audioArtistText = None
 audioState = None
+
+apiUrl = cfg.cfgData["online"][0]["onlineAPI"]
+if apiUrl[-1] != '/':
+    apiUrl += '/'
 
 log_init.logging.info("Variable initialization complete at work.py")
 
@@ -67,8 +71,8 @@ def audioInfoUpdate(audioFile):
     log_init.logging.info("Set audio info")
 
 def audioFromUrlInfo(audioID): # 网站音频信息更新
-    global audioTitleText, audioArtistText, audioAlbumText, audioInfo, audioCoverBase64, audioCover_src, audioUrl, currentLength
-    response =  requests.get('https://music.dsb.ink/api/song/detail?id=' + audioID) # 请求音频信息
+    global audioTitleText, audioArtistText, audioAlbumText, audioInfo, audioCoverBase64, audioCover_src, audioUrl, currentLength, apiUrl
+    response =  requests.get(apiUrl + 'song/detail?id=' + audioID) # 请求音频信息
     audioIdInfo = response.text
     try: # 尝试读取
         ID_json = json.loads(audioIdInfo)
@@ -298,7 +302,7 @@ def stateSet(e):
 
 playAudio = ft.Audio(
     autoplay = False,
-    volume = 1,
+    volume = cfg.cfgData["play"][0]["defaultVolume"] / 100,
     balance = 0,
     on_duration_changed = lambda e: log_init.logging.info("Duration changed:" + e.data),
     on_state_changed = stateSet,

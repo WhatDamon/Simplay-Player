@@ -1,11 +1,13 @@
 import flet as ft
 import platform, os
-from lib import work, log_init, update, platform_check
 
+from lib import cfg
+cfg.loadConfig()
+
+from lib import work, log_init, update, platform_check
 log_init.logging.info("Basic libs imported at player.py")
 
 from i18n import lang
-
 log_init.logging.info("Languages imported at player.py")
 
 ver = "2.0.0_pre2"
@@ -158,6 +160,10 @@ def main(page: ft.Page):
         page.update()
         log_init.logging.info("Page updated")
         log_init.logging.info("File picked")
+        if cfg.cfgData["play"][0]["immediatelyPlay"] == True:
+            if work.audioState == True:
+                playOrPauseMusic(0)
+            playOrPauseMusic(0)   
     
     def pickFolderResult(e: ft.FilePickerResultEvent):
         allowed_extensions = ['mp3']
@@ -749,7 +755,7 @@ def main(page: ft.Page):
         on_click = openVolumePanel
     )
 
-    volume_silder = ft.Slider(min = 0, max = 100, divisions = 100, label = "{value}", value = 100, on_change = volumeChange)
+    volume_silder = ft.Slider(min = 0, max = 100, divisions = 100, label = "{value}", value = cfg.cfgData["play"][0]["defaultVolume"], on_change = volumeChange)
 
     volume_panel = ft.Card(
         content = volume_silder,
@@ -856,6 +862,11 @@ def main(page: ft.Page):
     log_init.logging.info("Set to page: main")
     page.on_view_pop = viewPop
     log_init.logging.info("Window initialization complete")
+
+    if cfg.cfgData["lyrics"][0]["lyricsDefaultVisible"] == False:
+        lyricShow(0)
+    if cfg.cfgData["play"][0]["defaultPlayInLoop"] == True:
+        enableOrDisableRepeat(0)
 
 if __name__ == '__main__':
     log_init.logging.info("Program start")

@@ -1,10 +1,8 @@
 import flet as ft
-from lib import log_init
-
+from lib import log_init, cfg
 log_init.logging.info("Basic libs imported at settingsPage.py")
 
 import i18n
-
 log_init.logging.info("Languages imported at settingsPage.py")
 
 appBar = ft.AppBar(title = ft.Row(controls = [ft.Icon(ft.icons.SETTINGS_OUTLINED), ft.Text(value = i18n.lang.sets["settings"])]))
@@ -108,9 +106,34 @@ appearancesSetCard = ft.Card(
     disabled = True
 )
 
-playImmediatelyAfterLoaded_switch = ft.Switch(label = i18n.lang.sets["immediatelyPlay"])
-defaultPlayInLoop_switch = ft.Switch(label = i18n.lang.sets["defaultLoop"])
-defaultVolume_slider = ft.Slider(min = 0, max = 100, divisions = 100, label = "{value}", value = 100)
+def playImmediatelyAfterLoadedWrite(e):
+    if playImmediatelyAfterLoaded_switch.value == True:
+        cfg.cfgData["play"][0]["immediatelyPlay"] = True
+        log_init.logging.info("Set immediatelyPlay at play as True")
+    else:
+        cfg.cfgData["play"][0]["immediatelyPlay"] = False
+        log_init.logging.info("Set immediatelyPlay at play as False")
+    cfg.saveConfig()
+
+playImmediatelyAfterLoaded_switch = ft.Switch(label = i18n.lang.sets["immediatelyPlay"], value = cfg.cfgData["play"][0]["immediatelyPlay"], on_change = playImmediatelyAfterLoadedWrite)
+
+def defaultPlayInLoopWrite(e):
+    if defaultPlayInLoop_switch.value == True:
+        cfg.cfgData["play"][0]["defaultPlayInLoop"] = True
+        log_init.logging.info("Set defaultPlayInLoop at play as True")
+    else:
+        cfg.cfgData["play"][0]["defaultPlayInLoop"] = False
+        log_init.logging.info("Set defaultPlayInLoop at play as False")
+    cfg.saveConfig()
+
+defaultPlayInLoop_switch = ft.Switch(label = i18n.lang.sets["defaultLoop"], value = cfg.cfgData["play"][0]["defaultPlayInLoop"], on_change = defaultPlayInLoopWrite)
+
+def defaultVolumeWrite(e):
+    cfg.cfgData["play"][0]["defaultVolume"] = defaultVolume_slider.value
+    log_init.logging.info("Set defaultVolume at play as " + onlineAPI_tf.value)
+    cfg.saveConfig()
+
+defaultVolume_slider = ft.Slider(min = 0, max = 100, divisions = 100, label = "{value}", value = cfg.cfgData["play"][0]["defaultVolume"], on_change_end = defaultVolumeWrite)
 
 playSetCard = ft.Card(
     content = ft.Container(
@@ -124,11 +147,22 @@ playSetCard = ft.Card(
         ),
         padding = 15
     ),
-    elevation = 0.5,
-    disabled = True
+    elevation = 0.5
 )
 
-lyricsDefaultVisible_switch = ft.Switch(label = i18n.lang.sets["lyricsDefaultVis"], value = True)
+def lyricsDefaultVisibleWrite(e):
+    if lyricsDefaultVisible_switch.value == True:
+        cfg.cfgData["lyrics"][0]["lyricsDefaultVisible"] = True
+        log_init.logging.info("Set lyricsDefaultVisible at lyrics as True")
+    else:
+        cfg.cfgData["lyrics"][0]["lyricsDefaultVisible"] = False
+        log_init.logging.info("Set lyricsDefaultVisible at lyrics as False")
+    cfg.saveConfig()
+
+lyricsDefaultVisible_switch = ft.Switch(label = i18n.lang.sets["lyricsDefaultVis"], on_change = lyricsDefaultVisibleWrite, value = cfg.cfgData["lyrics"][0]["lyricsDefaultVisible"])
+
+if cfg.cfgData["lyrics"][0]["lyricsDefaultVisible"] == True:
+    lyricsDefaultVisible_switch.value = True
 
 lyricsSetCard = ft.Card(
     content = ft.Container(
@@ -139,11 +173,15 @@ lyricsSetCard = ft.Card(
         ),
         padding = 15
     ),
-    elevation = 0.5,
-    disabled = True
+    elevation = 0.5
 )
 
-onlineAPI_tf = ft.TextField(label = i18n.lang.sets["inputAPI"], value = "https://music.dsb.ink/api/")
+def onlineAPIWrite(e):
+    cfg.cfgData["online"][0]["onlineAPI"] = onlineAPI_tf.value
+    log_init.logging.info("Set onlineAPI at online as " + onlineAPI_tf.value)
+    cfg.saveConfig()
+
+onlineAPI_tf = ft.TextField(label = i18n.lang.sets["inputAPI"], value = cfg.cfgData["online"][0]["onlineAPI"], on_change = onlineAPIWrite)
 
 onlineSetCard = ft.Card(
     content = ft.Container(
@@ -155,8 +193,7 @@ onlineSetCard = ft.Card(
         ),
         padding = 15
     ),
-    elevation = 0.5,
-    disabled = True
+    elevation = 0.5
 )
 
 smtcEnable_switch = ft.Switch(label = i18n.lang.sets["enableSMTC"], value = False)
@@ -166,6 +203,19 @@ systemSetCard = ft.Card(
         content = ft.Column(controls = [
                 ft.Row(controls = [ft.Icon(ft.icons.DISPLAY_SETTINGS_OUTLINED), ft.Text(value = i18n.lang.sets["systemIntegration"], size = 18)]),
                 smtcEnable_switch
+            ]
+        ),
+        padding = 15
+    ),
+    elevation = 0.5,
+    disabled = True
+)
+
+advanceSetCard = ft.Card(
+    content = ft.Container(
+        content = ft.Column(controls = [
+                ft.Row(controls = [ft.Icon(ft.icons.DANGEROUS_OUTLINED), ft.Text(value = i18n.lang.sets["dangerous"], size = 18)]),
+                ft.ElevatedButton(text = i18n.lang.sets["delConfigAndClose"], icon = ft.icons.DELETE_FOREVER_OUTLINED, bgcolor = ft.colors.RED, color = ft.colors.WHITE, elevation = 0, disabled = True, )
             ]
         ),
         padding = 15
@@ -192,4 +242,4 @@ feedbackSetCard = ft.Card(
     elevation = 0.5
 )
 
-settings_pageView = ft.View("/settings", controls = [appBar, constructionNotice, settingsNotice, languageSetCard, appearancesSetCard, playSetCard, lyricsSetCard, onlineSetCard, systemSetCard, feedbackSetCard], scroll = ft.ScrollMode.AUTO)
+settings_pageView = ft.View("/settings", controls = [appBar, constructionNotice, settingsNotice, languageSetCard, appearancesSetCard, playSetCard, lyricsSetCard, onlineSetCard, systemSetCard, advanceSetCard, feedbackSetCard], scroll = ft.ScrollMode.AUTO)

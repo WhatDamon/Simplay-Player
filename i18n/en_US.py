@@ -112,7 +112,7 @@ update = {
 
 sets = {
     "settings": "Settings",
-    "note": "The spacebar can also be used here to control the play and pause of the music.",
+    "note": "The spacebar can also be used here to control the play and pause of the music.\nMost settings will take effect after restarting the software",
     "pleaseSelect": "Please select...",
     "construction": "Under Construction",
     "language": "Languages",
@@ -142,6 +142,8 @@ sets = {
     "webAPIInfo": "Deployment scenarios from https://github.com/Kevin0z0/Python_NetEaseMusicAPI must be used to ensure compatibility!",
     "systemIntegration": "System integration",
     "enableSMTC": "Enable SMTC (incomplete)",
+    "dangerous": "Dangerous",
+    "delConfigAndClose": "Delete the configuration and close the software",
     "feedback": "Feedback",
     "bugReport": "Report a BUG",
     "shareIdeas": "Share new feature ideas",
