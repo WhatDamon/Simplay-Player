@@ -109,12 +109,17 @@ appearancesSetCard = ft.Card(
 )
 
 playImmediatelyAfterLoaded_switch = ft.Switch(label = i18n.lang.sets["immediatelyPlay"])
+defaultPlayInLoop_switch = ft.Switch(label = i18n.lang.sets["defaultLoop"])
+defaultVolume_slider = ft.Slider(min = 0, max = 100, divisions = 100, label = "{value}", value = 100)
 
 playSetCard = ft.Card(
     content = ft.Container(
         content = ft.Column(controls = [
                 ft.Row(controls = [ft.Icon(ft.icons.PLAY_ARROW_OUTLINED), ft.Text(value = i18n.lang.sets["play"], size = 18)]),
-                playImmediatelyAfterLoaded_switch
+                playImmediatelyAfterLoaded_switch,
+                defaultPlayInLoop_switch,
+                ft.Text(value = i18n.lang.sets["defaultVolume"]),
+                defaultVolume_slider
             ]
         ),
         padding = 15

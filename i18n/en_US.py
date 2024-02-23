@@ -133,6 +133,8 @@ sets = {
     "purple": "Purple",
     "play": "Play",
     "immediatelyPlay": "Play the song immediately after loading",
+    "defaultLoop": "Default looped playback",
+    "defaultVolume": "Default Volume: ",
     "lyrics": "Lyrics",
     "lyricsDefaultVis": "Lyrics display by default",
     "webMusic": "Online music",

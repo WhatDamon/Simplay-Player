@@ -287,13 +287,16 @@ def main(page: ft.Page):
             lyrics_after.visible = True
             lyrics_btn.icon = ft.icons.LYRICS
         page.update()
+
+    def ctrlRowUpdate():
+        playPause_btn.icon = work.playPause_btn_icon
+        page.title = work.page_title
   
     # 歌曲播放/暂停
     def playOrPauseMusic(e):
         if audioFile != None:
             work.playOrPauseMusic(audioFile)
-            playPause_btn.icon = work.playPause_btn_icon
-            page.title = work.page_title
+            ctrlRowUpdate()
         page.update()
     
     def autoStopKeepAudioProgress(e):
@@ -308,6 +311,9 @@ def main(page: ft.Page):
             lyricExistAndRead()
         elif getReturn == True:
             lyricsProcess()
+        if work.audioState == "completed":
+            work.resetPlay()
+            ctrlRowUpdate()
         page.update()
 
     def progressCtrl(e):

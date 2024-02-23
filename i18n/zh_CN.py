@@ -133,6 +133,8 @@ sets = {
     "purple": "紫色",
     "play": "播放",
     "immediatelyPlay": "加载歌曲后立即播放",
+    "defaultLoop": "默认循环播放",
+    "defaultVolume": "默认音量: ",
     "lyrics": "歌词",
     "lyricsDefaultVis": "歌词默认显示",
     "webMusic": "在线歌曲",

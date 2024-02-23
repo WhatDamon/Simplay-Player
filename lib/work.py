@@ -19,6 +19,7 @@ audioCoverBase64 = None
 audioInfo = None
 audioTitleText = None
 audioArtistText = None
+audioState = None
 
 log_init.logging.info("Variable initialization complete at work.py")
 
@@ -172,6 +173,12 @@ def playOrPauseMusic(e): # 歌曲播放/暂停
     else:
         log_init.logging.warning("No audio file")
 
+def resetPlay():
+    global playStatus, playPause_btn_icon, page_title
+    playStatus = False
+    page_title = audioArtistText + " - " + audioTitleText + " | Simplay Player"
+    playPause_btn_icon = ft.icons.PLAY_CIRCLE_FILL_OUTLINED
+
 def audioForward10sec(e):
     if playAudio.get_current_position() + 10000 > playAudio.get_duration():
         log_init.logging.warning("More than the total length of the song")
@@ -284,11 +291,16 @@ def balanceMiddle(e):
     playAudio.update()
     log_init.logging.info("playAudio updated")
 
+def stateSet(e):
+    global audioState
+    audioState = e.data
+    log_init.logging.info("State changed:" + e.data)
+
 playAudio = ft.Audio(
     autoplay = False,
     volume = 1,
     balance = 0,
     on_duration_changed = lambda e: log_init.logging.info("Duration changed:" + e.data),
-    on_state_changed = lambda e: log_init.logging.info("State changed:" + e.data),
-    on_seek_complete = lambda _: log_init.logging.info("Seek complete")
+    on_state_changed = stateSet,
+    on_seek_complete = lambda _: log_init.logging.info("Seek complete"),
 )
