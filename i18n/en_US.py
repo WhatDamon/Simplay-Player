@@ -122,6 +122,7 @@ sets = {
     "langNameOrigial": "Name: ",
     "langCode": "Language Code: ",
     "langFont": "Language Font: ",
+    "langRTL": "Default RTL Mode: ",
     "appearances": "Appearances",
     "colorMode": "Color Mode: ",
     "colorLight": "Light",

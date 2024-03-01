@@ -177,7 +177,7 @@ def main(page):
         if work.audioState == True:
             playOrPauseMusic(0)
         if cfg.cfgData["play"][0]["immediatelyPlay"] == True:
-            time.sleep(0.5)
+            time.sleep(0.8)
             playOrPauseMusic(0)   
     
     def pickFolderResult(e: ft.FilePickerResultEvent):
@@ -735,7 +735,7 @@ def main(page):
     audioArtistAndAlbum = ft.Text(audioArtistText, size = 18, opacity = 90)
     audioProgressStatus = ft.Text("00:00/00:00", size = 15, opacity = 90)
     audioDetail = ft.Column(controls = [audioTitle, audioArtistAndAlbum, audioProgressStatus])
-    audioBasicInfo = ft.Row(controls = [audioCover, audioDetail])
+    audioBasicInfo = ft.Container(content = ft.Row(controls = [audioCover, audioDetail]), padding = 3)
     audioProgressBar = ft.Slider(min = 0, max = 1000, tooltip = lang.tooltips["audioPosition"], on_change_start = autoStopKeepAudioProgress, on_change_end = progressCtrl)
     work.playAudio.on_loaded = lambda _: log_init.logging.info("Audio loaded: " + audioFile + " => " + audioArtistText + " - " + audioTitleText)
     work.playAudio.on_position_changed = autoKeepAudioProgress
@@ -776,7 +776,8 @@ def main(page):
         content = volume_silder,
         visible = False,
         height = 46,
-        width = 200
+        width = 200,
+        shape = ft.RoundedRectangleBorder(radius = 10)
     )
     
     lyrics_btn = ft.IconButton(

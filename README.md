@@ -7,6 +7,11 @@
 ![GitHub repo license](https://img.shields.io/github/license/WhatDamon/Simplay-Player)
 ![GitHub Action #1](https://github.com/WhatDamon/Simplay-Player/actions/workflows/build.yml/badge.svg)
 ![GitHub Action #2](https://github.com/WhatDamon/Simplay-Player/actions/workflows/buildwin.yml/badge.svg)
+![GitHub Release](https://img.shields.io/github/v/release/WhatDamon/Simplay-Player)
+![GitHub Downloads](https://img.shields.io/github/downloads/WhatDamon/Simplay-Player/total)
+![GitHub Issues](https://img.shields.io/github/issues/WhatDamon/Simplay-Player)
+![GitHub Pull Requests](https://img.shields.io/github/issues-pr/WhatDamon/Simplay-Player)
+![GitHub Discussions](https://img.shields.io/github/discussions/WhatDamon/Simplay-Player)
 ![GitHub repo stars](https://img.shields.io/github/stars/WhatDamon/Simplay-Player)
 
 > [!IMPORTANT]  
@@ -24,6 +29,8 @@
 
 __Python 3.8 及更高版本__, 推荐 3.10 及更高版本以保障其正常运行 (Action 中我们使用了 Python 3.11 进行编译测试)
 
+推荐 __[Flet](https://flet.dev) 0.19.0 及更高版本__, 您可以测试一下 Simplay Player 最低它能在哪个版本可以跑起来 (由于 0.20.0 开始部分组件被修改, 样式可能有点奇怪, 将在后续解决)
+
 开发使用前 __*nix系统__ 需要先执行...
 
 ~~~Bash
@@ -38,7 +45,7 @@ pip install -r requirements_win.txt
 
 ___注：区分的原因是 `Windows-Toasts` 库只能在 Windows 下生效!___
 
-如果希望开发 WinRT 相关内容 (如 SMTC), 需要执行...
+如果希望开发 WinRT 相关内容 (如 [SMTC](https://learn.microsoft.com/zh-cn/uwp/api/windows.media.systemmediatransportcontrols)), 需要执行...
 
 ~~~Bash
 pip install winsdk
@@ -62,11 +69,11 @@ pip install winsdk
 - [ ] 进阶逻辑
 - [ ] 进阶播放方式选择 (目前就只支持一个单曲循环)
 - [ ] 将主界面迁移至 `pages` 中
-- [ ] 设置 (施工中, `i18n/lang.py` 的部分功能需要重构才能实现自定义语言)
+- [ ] 设置 (施工中, `i18n/lang.py` 的部分功能需要重构才能实现自定义语言, 其余设置还需要陆续优化完善)
 - [ ] 区间播放 (即 AB 点)
 - [ ] 系统托盘 (预计使用 `pystray` 实现, 如果实现了就可以让 `Windows-Toasts` 退役了)
 - [ ] 界面自动取色 (可能使用 __OpenCV__ 实现, 或者自己算)
-- [ ] 混音器 (目前使用的组件未提供相关接口, 暂时搁置)
+- [ ] 混音器 (目前使用的组件未提供相关接口, 暂时搁置, 详见 https://github.com/flet-dev/flet/issues/2594)
 - [ ] SMTC 支持 (涉及 WinRT, 仅 Windows, 但实现有点麻烦, 调用代码已注释, 代码在 `lib/smtc.py`, 完成后可能会接入热词实现桌面歌词功能)
 - [ ] 任务栏进度条与按键操作 (仅 Windows 支持)
 - [ ] 多线程支持 (目前的想法只有独立检查更新线程, 其他还需要研究)

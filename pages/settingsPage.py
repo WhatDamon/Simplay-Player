@@ -54,6 +54,7 @@ if i18n.lang.langInfo["font"] == "":
     langInfoText += "\n· " + i18n.lang.sets["langFont"] + "Default"
 else:
     langInfoText += "\n· " + i18n.lang.sets["langFont"] + i18n.lang.langInfo["font"]
+langInfoText += "\n· " + i18n.lang.sets["langRTL"] + str(i18n.lang.langInfo["rtl"])
 if i18n.lang.langInfo["machineTranslated"] == True:
     langInfoText += "\n· " + i18n.lang.infomation["machineTranslate"]
 if i18n.lang.langInfo["useKKGithub"] == True:

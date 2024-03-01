@@ -122,6 +122,7 @@ sets = {
     "langNameOrigial": "名称: ",
     "langCode": "语言代码: ",
     "langFont": "语言字体: ",
+    "langRTL": "默认 RTL 模式: ",
     "appearances": "外观",
     "colorMode": "亮暗模式: ",
     "colorLight": "亮色",
