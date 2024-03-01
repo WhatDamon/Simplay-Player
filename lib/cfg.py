@@ -8,7 +8,8 @@ defaultJSON = """{
     "appearances": [
         {
             "mode": "sys",
-            "schemes": "blue"
+            "schemes": "blue",
+            "rtl": false
         }
     ],
     "play": [

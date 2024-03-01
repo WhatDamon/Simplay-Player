@@ -1,5 +1,5 @@
 import flet as ft
-import platform, os
+import platform, os, time
 
 from lib import cfg
 cfg.loadConfig()
@@ -20,7 +20,9 @@ os.chdir(currentDir)
 
 log_init.logging.info("Variable initialization complete at player.py")
 
-def main(page: ft.Page):
+page = ft.Page
+
+def main(page):
     page.window_left = 200
     page.window_top = 100
     page.window_height = 600
@@ -31,6 +33,18 @@ def main(page: ft.Page):
     page.title = "Simplay Player"
     # page.window_title_bar_hidden = True
     log_init.logging.info("Window created")
+
+    if cfg.cfgData["appearances"][0]["mode"] == "sys":
+        page.theme_mode = ft.ThemeMode.SYSTEM
+    elif cfg.cfgData["appearances"][0]["mode"] == "light":
+        page.theme_mode = ft.ThemeMode.LIGHT
+    elif cfg.cfgData["appearances"][0]["mode"] == "dark":
+        page.theme_mode = ft.ThemeMode.DARK
+
+    if cfg.cfgData["appearances"][0]["rtl"] == True:
+        page.rtl = True
+    else:
+        page.rtl = False
 
     page.theme = ft.Theme(color_scheme_seed = ft.colors.BLUE)
     if lang.langInfo["font"] == "":
@@ -146,7 +160,7 @@ def main(page: ft.Page):
             firstPlay = False
         audioPathTemp = None
         audioInfoUpdate()
-        page.title = work.audioArtistText + " - " + audioTitleText + " - Simplay Player"
+        page.title = work.audioArtistText + " - " + audioTitleText + " | Simplay Player"
         log_init.logging.info("Window title changed")
         if platform_check.currentOS == 'windows':
             windowsToastNotify()
@@ -160,9 +174,10 @@ def main(page: ft.Page):
         page.update()
         log_init.logging.info("Page updated")
         log_init.logging.info("File picked")
+        if work.audioState == True:
+            playOrPauseMusic(0)
         if cfg.cfgData["play"][0]["immediatelyPlay"] == True:
-            if work.audioState == True:
-                playOrPauseMusic(0)
+            time.sleep(0.5)
             playOrPauseMusic(0)   
     
     def pickFolderResult(e: ft.FilePickerResultEvent):
@@ -898,5 +913,6 @@ if __name__ == '__main__':
     log_init.logging.info("Basic initialization complete")
     log_init.logging.info("You are using " + ver)
     from pages import settingsPage
+    settingsPage.transferPage(page)
     log_init.logging.info("Imported settingsPage")
     ft.app(target = main)

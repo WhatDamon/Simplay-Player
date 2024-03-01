@@ -4,7 +4,8 @@ langInfo = {
     "code": "en_US",
     "font": "",
     "machineTranslated": True,
-    "useKKGithub": False
+    "useKKGithub": False,
+    "rtl": False
 }
 
 infomation = {
@@ -131,6 +132,7 @@ sets = {
     "green": "Green",
     "brown": "Brown",
     "purple": "Purple",
+    "rtl": "Right To Left mode",
     "play": "Play",
     "immediatelyPlay": "Play the song immediately after loading",
     "defaultLoop": "Default looped playback",
@@ -142,8 +144,9 @@ sets = {
     "webAPIInfo": "Deployment scenarios from https://github.com/Kevin0z0/Python_NetEaseMusicAPI must be used to ensure compatibility!",
     "systemIntegration": "System integration",
     "enableSMTC": "Enable SMTC (incomplete)",
-    "dangerous": "Dangerous",
-    "delConfigAndClose": "Delete the configuration and close the software",
+    "Advance": "Advance",
+    "delConfigAndClose": "Delete the configuration and close",
+    "delLogFile": "Delete the log file",
     "feedback": "Feedback",
     "bugReport": "Report a BUG",
     "shareIdeas": "Share new feature ideas",

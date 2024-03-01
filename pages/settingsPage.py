@@ -5,6 +5,12 @@ log_init.logging.info("Basic libs imported at settingsPage.py")
 import i18n
 log_init.logging.info("Languages imported at settingsPage.py")
 
+page = None
+
+def transferPage(pg):
+    global page
+    page = pg
+
 appBar = ft.AppBar(title = ft.Row(controls = [ft.Icon(ft.icons.SETTINGS_OUTLINED), ft.Text(value = i18n.lang.sets["settings"])]))
 
 constructionNotice = ft.Card(
@@ -67,6 +73,23 @@ languageSetCard = ft.Card(
     disabled = True
 )
 
+def colorModeWrite(e):
+    global page
+    if colorMode_dropd.value == "sys":
+        cfg.cfgData["appearances"][0]["mode"] = "sys"
+        log_init.logging.info("Set mode at appearances as 'sys'")
+        page.theme_mode = ft.ThemeMode.SYSTEM
+    elif colorMode_dropd.value == "light":
+        cfg.cfgData["appearances"][0]["mode"] = "light"
+        log_init.logging.info("Set mode at appearances as 'sys'")
+        page.theme_mode = ft.ThemeMode.LIGHT
+    elif colorMode_dropd.value == "sys":
+        cfg.cfgData["appearances"][0]["mode"] = "dark"
+        log_init.logging.info("Set mode at appearances as 'dark'")
+        page.theme_mode = ft.ThemeMode.DARK
+    page.update()
+    cfg.saveConfig()
+
 colorMode_dropd = ft.Dropdown(
     label = i18n.lang.sets["pleaseSelect"],
     value = "sys",
@@ -74,9 +97,10 @@ colorMode_dropd = ft.Dropdown(
         ft.dropdown.Option(key = "sys", text = i18n.lang.sets["systemDefault"]),
         ft.dropdown.Option(key = "light", text = i18n.lang.sets["colorLight"]),
         ft.dropdown.Option(key = "dark", text = i18n.lang.sets["colorDark"])
-    ]
+    ],
+    on_change = colorModeWrite,
+    disabled = True
 )
-
 
 colorSchemes_radio = ft.RadioGroup(
     value = "blue",
@@ -87,8 +111,20 @@ colorSchemes_radio = ft.RadioGroup(
             ft.Radio(value = "brown", label = i18n.lang.sets["brown"], fill_color = ft.colors.BROWN),
             ft.Radio(value = "purple", label = i18n.lang.sets["purple"], fill_color = ft.colors.DEEP_PURPLE),
         ]
-    )
+    ),
+    disabled = True
 )
+
+def enableRTLWrite(e):
+    if rtlEnable_switch.value == True:
+        cfg.cfgData["appearances"][0]["rtl"] = True
+        log_init.logging.info("Set rtl at appearances as True")
+    else:
+        cfg.cfgData["appearances"][0]["rtl"] = False
+        log_init.logging.info("Set rtl at appearances as False")
+    cfg.saveConfig()
+
+rtlEnable_switch = ft.Switch(label = i18n.lang.sets["rtl"], value = cfg.cfgData["appearances"][0]["rtl"], on_change = enableRTLWrite)
 
 appearancesSetCard = ft.Card(
     content = ft.Container(
@@ -97,13 +133,13 @@ appearancesSetCard = ft.Card(
                 ft.Text(value = i18n.lang.sets["colorMode"]),
                 colorMode_dropd,
                 ft.Text(value = i18n.lang.sets["colorSchemes"]),
-                colorSchemes_radio
+                colorSchemes_radio,
+                rtlEnable_switch
             ]
         ),
         padding = 15
     ),
-    elevation = 0.5,
-    disabled = True
+    elevation = 0.5
 )
 
 def playImmediatelyAfterLoadedWrite(e):
@@ -214,8 +250,13 @@ systemSetCard = ft.Card(
 advanceSetCard = ft.Card(
     content = ft.Container(
         content = ft.Column(controls = [
-                ft.Row(controls = [ft.Icon(ft.icons.DANGEROUS_OUTLINED), ft.Text(value = i18n.lang.sets["dangerous"], size = 18)]),
-                ft.ElevatedButton(text = i18n.lang.sets["delConfigAndClose"], icon = ft.icons.DELETE_FOREVER_OUTLINED, bgcolor = ft.colors.RED, color = ft.colors.WHITE, elevation = 0, disabled = True, )
+                ft.Row(controls = [ft.Icon(ft.icons.DANGEROUS_OUTLINED), ft.Text(value = i18n.lang.sets["advance"], size = 18)]),
+                ft.Row(controls = [
+                    ft.ElevatedButton(text = i18n.lang.sets["delConfigAndClose"], icon = ft.icons.DELETE_FOREVER_OUTLINED, bgcolor = ft.colors.RED, color = ft.colors.WHITE, elevation = 0, disabled = True),
+                    ft.ElevatedButton(text = i18n.lang.sets["delLogFile"], icon = ft.icons.DELETE_OUTLINE, bgcolor = ft.colors.RED, color = ft.colors.WHITE, elevation = 0, disabled = True)
+                ],
+                wrap = True
+                )
             ]
         ),
         padding = 15

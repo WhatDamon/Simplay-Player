@@ -4,7 +4,8 @@ langInfo = {
     "code": "zh_CN",
     "font": "Microsoft YaHei",
     "machineTranslated": False,
-    "useKKGithub": True
+    "useKKGithub": True,
+    "rtl": False
 }
 
 infomation = {
@@ -131,6 +132,7 @@ sets = {
     "green": "绿色",
     "brown": "棕色",
     "purple": "紫色",
+    "rtl": "从右到左模式",
     "play": "播放",
     "immediatelyPlay": "加载歌曲后立即播放",
     "defaultLoop": "默认循环播放",
@@ -142,8 +144,9 @@ sets = {
     "webAPIInfo": "必须使用 https://github.com/Kevin0z0/Python_NetEaseMusicAPI 的部署方案以保证兼容性!",
     "systemIntegration": "系统集成",
     "enableSMTC": "启用 SMTC (未完成)",
-    "dangerous": "高危选项",
+    "advance": "高级",
     "delConfigAndClose": "删除配置并关闭软件",
+    "delLogFile": "删除日志文件",
     "feedback": "反馈",
     "bugReport": "报告 BUG",
     "shareIdeas": "分享新功能想法",
