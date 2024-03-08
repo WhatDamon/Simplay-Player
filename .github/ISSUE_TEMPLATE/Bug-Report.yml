@@ -68,7 +68,7 @@ body:
   - type: input
     id: platform-ver
     attributes:
-      label: 系统版本:
+      label: 系统版本......
       description: 请输入您所使用系统的具体名称, 越具体越好 (如果信息不全可能会被追问)
       placeholder: Windows 11 Canary 25393
     validations:
