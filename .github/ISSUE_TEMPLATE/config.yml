@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+    - name: 帮助
+      url: https://github.com/WhatDamon/Simplay-Player/discussions/categories/q-a
+      about: 软件没有按照预期工作? 或者就是一些算不上 BUG 的小问题? 发布一条问答讨论!
+    - name: 功能请求
+      url: https://github.com/WhatDamon/Simplay-Player/discussions/categories/%E6%83%B3%E6%B3%95
+      about: 有什么新奇的想法吗? 来这里提出, 让我们一起讨论!

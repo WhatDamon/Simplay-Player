@@ -1,0 +1,101 @@
+name: 🪲报告 BUG
+description: 提交一个 BUG, 来帮助我们改进该软件.
+title: "[Bug]: "
+labels: ["bug"]
+assignees:
+  - octocat
+body:
+  - type: markdown
+    attributes:
+      value: |
+        #### ⚠️ 须知:
+        1. 请一次只提交一个 BUG;
+        2. 过度久远的版本的 BUG 不会被受理;
+        3. 请尽量详细为我们提供相关信息;
+        4. 请确保您所提供的信息真实;
+        5. 填写该 Issue 需要一点计算机知识储备;
+        6. 做到能在发布该 Issue 后能依据开发者要求进行信息提供.
+  - type: markdown
+    attributes:
+      value: |
+        ## BUG 信息:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: 发生了什么?
+      description: 请告诉我们在你预期中会发生什么? (如果有截图或视频更好)
+      placeholder: 支持 Markdown, 请在此处填写
+    validations:
+      required: true
+  - type: textarea
+    id: ways-to-happen
+    attributes:
+      label: 如何复现?
+      description: 尽可能详细得告诉我们如何复现 (如果有截图或视频更好)
+      placeholder: 支持 Markdown, 请在此处填写
+    validations:
+      required: true
+  - type: textarea
+    id: error-files
+    attributes:
+      label: 日志文件
+      description: 请将 `player.log` 拖拽到下方文本框中!
+      placeholder: 支持 Markdown, 请在此处填写, 相关文件和截图等请拖到此处
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        ## 版本信息:
+  - type: input
+    id: version
+    attributes:
+      label: QQNTim 版本:
+      description: 请提供您所使用的版本 (示例 “1.0.0”), 若是从 Actions 下载, 请填写 Build 代号 (示例“#1”)
+      placeholder: 1.0.0
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: 请提供您的运行平台:
+      multiple: true
+      options:
+        - Windows 
+        - Linux
+        - macOS
+        - 其他
+    validations:
+      required: true
+  - type: input
+    id: platform-ver
+    attributes:
+      label: 系统版本:
+      description: 请输入您所使用系统的具体名称, 越具体越好 (如果信息不全可能会被追问)
+      placeholder: Windows 11 Canary 25393
+    validations:
+      required: true
+  - type: dropdown
+    id: arch
+    attributes:
+      label: 请提供您的运行平台架构信息:
+      multiple: true
+      options:
+        - x86 (32位) 
+        - x86_64 (64位)
+        - arm (32位)
+        - aarch64 (arm64, 64位)
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        ## 杂项:
+  - type: textarea
+    id: notes
+    attributes:
+      label: 备注 (可选)
+      description: 还有什么要补充? 您可以在这里提供更详细的内容, 或者提供您所认为的解决方案, 当然其他信息也行
+      placeholder: 支持 Markdown, 请在此处填写
+    validations:
+      required: false
