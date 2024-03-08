@@ -1,9 +1,7 @@
 name: 🪲报告 BUG
 description: 提交一个 BUG, 来帮助我们改进该软件.
-title: "[Bug]: "
+title: "[Bug] "
 labels: ["bug"]
-assignees:
-  - octocat
 body:
   - type: markdown
     attributes:
