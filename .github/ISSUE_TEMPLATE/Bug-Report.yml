@@ -56,7 +56,7 @@ body:
   - type: dropdown
     id: platform
     attributes:
-      label: 请提供您的运行平台:
+      label: 请提供您的运行平台......
       multiple: true
       options:
         - Windows 
@@ -76,7 +76,7 @@ body:
   - type: dropdown
     id: arch
     attributes:
-      label: 请提供您的运行平台架构信息:
+      label: 请提供您的运行平台架构信息......
       multiple: true
       options:
         - x86 (32位) 
