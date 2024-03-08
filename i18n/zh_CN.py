@@ -84,8 +84,7 @@ tooltips = {
 }
 
 songList = {
-    "songList": "播放列表",
-    "construction": "施工中"
+    "songList": "播放列表"
 }
 
 dialog = {
@@ -133,6 +132,7 @@ sets = {
     "green": "绿色",
     "brown": "棕色",
     "purple": "紫色",
+    "appearancesSys": "外观使用当前语言中设置",
     "rtl": "从右到左模式",
     "play": "播放",
     "immediatelyPlay": "加载歌曲后立即播放",
@@ -140,9 +140,13 @@ sets = {
     "defaultVolume": "默认音量: ",
     "lyrics": "歌词",
     "lyricsDefaultVis": "歌词默认显示",
-    "webMusic": "在线歌曲",
+    "online": "在线",
+    "onlineMusic": "在线歌曲: ",
     "inputAPI": "输入 API 地址: ",
+    "setToDefault": "恢复默认",
     "webAPIInfo": "必须使用 https://github.com/Kevin0z0/Python_NetEaseMusicAPI 的部署方案以保证兼容性!",
+    "webUpdate": "更新: ",
+    "onlineSys": "在线更新 API 使用当前语言中设置",
     "systemIntegration": "系统集成",
     "enableSMTC": "启用 SMTC (未完成)",
     "advance": "高级",

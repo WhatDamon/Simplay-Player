@@ -1,5 +1,5 @@
 import flet as ft
-import platform, os, time
+import platform, os
 
 from lib import cfg
 cfg.loadConfig()
@@ -15,6 +15,7 @@ audioFile = None
 lyricFile = ""
 audioListShown = False
 firstPlay = True
+audioLoaded = None
 currentDir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(currentDir)
 
@@ -177,9 +178,18 @@ def main(page):
         if work.audioState == True:
             playOrPauseMusic(0)
         if cfg.cfgData["play"][0]["immediatelyPlay"] == True:
-            time.sleep(0.8)
-            playOrPauseMusic(0)   
+            global audioLoaded
+            while(True):
+                if audioLoaded == True:
+                    playOrPauseMusic(0)
+                    audioLoaded = False
+                    break
     
+    def loadAudio(e):
+        global audioLoaded, audioFile, audioArtistText, audioTitleText
+        audioLoaded = True
+        log_init.logging.info("Audio loaded: " + audioFile + " => " + audioArtistText + " - " + audioTitleText)
+
     def pickFolderResult(e: ft.FilePickerResultEvent):
         allowed_extensions = ['mp3']
         songList = []
@@ -332,7 +342,7 @@ def main(page):
             lyricExistAndRead()
         elif getReturn == True:
             lyricsProcess()
-        if work.audioState == "completed":
+        if work.audioStateType == "completed":
             work.resetPlay()
             ctrlRowUpdate()
         page.update()
@@ -737,7 +747,7 @@ def main(page):
     audioDetail = ft.Column(controls = [audioTitle, audioArtistAndAlbum, audioProgressStatus])
     audioBasicInfo = ft.Container(content = ft.Row(controls = [audioCover, audioDetail]), padding = 3)
     audioProgressBar = ft.Slider(min = 0, max = 1000, tooltip = lang.tooltips["audioPosition"], on_change_start = autoStopKeepAudioProgress, on_change_end = progressCtrl)
-    work.playAudio.on_loaded = lambda _: log_init.logging.info("Audio loaded: " + audioFile + " => " + audioArtistText + " - " + audioTitleText)
+    work.playAudio.on_loaded = loadAudio
     work.playAudio.on_position_changed = autoKeepAudioProgress
     
     skipPrevious_btn = ft.IconButton(

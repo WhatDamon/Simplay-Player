@@ -20,6 +20,8 @@ audioInfo = None
 audioTitleText = None
 audioArtistText = None
 audioState = None
+audioStateType = None
+audioLoaded = False
 
 apiUrl = cfg.cfgData["online"][0]["onlineAPI"]
 if apiUrl[-1] != '/':
@@ -296,9 +298,9 @@ def balanceMiddle(e):
     log_init.logging.info("playAudio updated")
 
 def stateSet(e):
-    global audioState
-    audioState = e.data
-    log_init.logging.info("State changed:" + e.data)
+    global audioStateType
+    audioStateType = e.data
+    log_init.logging.info("State changed:" + e.data) 
 
 playAudio = ft.Audio(
     autoplay = False,
@@ -306,5 +308,5 @@ playAudio = ft.Audio(
     balance = 0,
     on_duration_changed = lambda e: log_init.logging.info("Duration changed:" + e.data),
     on_state_changed = stateSet,
-    on_seek_complete = lambda _: log_init.logging.info("Seek complete"),
+    on_seek_complete = lambda _: log_init.logging.info("Seek complete")
 )

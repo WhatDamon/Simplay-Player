@@ -84,8 +84,7 @@ tooltips = {
 }
 
 songList = {
-    "songList": "Song List",
-    "construction": "Under Construction"
+    "songList": "Play List"
 }
 
 dialog = {
@@ -122,6 +121,7 @@ sets = {
     "langNameOrigial": "Name: ",
     "langCode": "Language Code: ",
     "langFont": "Language Font: ",
+    "appearancesSys": "Use the settings on current language",
     "langRTL": "Default RTL Mode: ",
     "appearances": "Appearances",
     "colorMode": "Color Mode: ",
@@ -140,9 +140,13 @@ sets = {
     "defaultVolume": "Default Volume: ",
     "lyrics": "Lyrics",
     "lyricsDefaultVis": "Lyrics display by default",
-    "webMusic": "Online music",
+    "online": "Online",
+    "onlineMusic": "Online Music: ",
     "inputAPI": "Enter the API URL: ",
+    "setToDefault": "Set to default",
     "webAPIInfo": "Deployment scenarios from https://github.com/Kevin0z0/Python_NetEaseMusicAPI must be used to ensure compatibility!",
+    "webUpdate": "Update: ",
+    "onlineSys": "Use the API settings on current language",
     "systemIntegration": "System integration",
     "enableSMTC": "Enable SMTC (incomplete)",
     "Advance": "Advance",

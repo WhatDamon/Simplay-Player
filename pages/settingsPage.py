@@ -116,6 +116,8 @@ colorSchemes_radio = ft.RadioGroup(
     disabled = True
 )
 
+appearancesSystemSets_switch = ft.Switch(label = i18n.lang.sets["appearancesSys"], value = False, disabled = True)
+
 def enableRTLWrite(e):
     if rtlEnable_switch.value == True:
         cfg.cfgData["appearances"][0]["rtl"] = True
@@ -135,6 +137,8 @@ appearancesSetCard = ft.Card(
                 colorMode_dropd,
                 ft.Text(value = i18n.lang.sets["colorSchemes"]),
                 colorSchemes_radio,
+                ft.Divider(),
+                appearancesSystemSets_switch,
                 rtlEnable_switch
             ]
         ),
@@ -167,7 +171,7 @@ defaultPlayInLoop_switch = ft.Switch(label = i18n.lang.sets["defaultLoop"], valu
 
 def defaultVolumeWrite(e):
     cfg.cfgData["play"][0]["defaultVolume"] = defaultVolume_slider.value
-    log_init.logging.info("Set defaultVolume at play as " + onlineAPI_tf.value)
+    log_init.logging.info("Set defaultVolume at play as " + defaultVolume_slider.value)
     cfg.saveConfig()
 
 defaultVolume_slider = ft.Slider(min = 0, max = 100, divisions = 100, label = "{value}", value = cfg.cfgData["play"][0]["defaultVolume"], on_change_end = defaultVolumeWrite)
@@ -214,18 +218,30 @@ lyricsSetCard = ft.Card(
 )
 
 def onlineAPIWrite(e):
-    cfg.cfgData["online"][0]["onlineAPI"] = onlineAPI_tf.value
-    log_init.logging.info("Set onlineAPI at online as " + onlineAPI_tf.value)
+    cfg.cfgData["online"][0]["onlineAPI"] = onlineMusicAPI_tf.value
+    log_init.logging.info("Set onlineAPI at online as " + onlineMusicAPI_tf.value)
     cfg.saveConfig()
 
-onlineAPI_tf = ft.TextField(label = i18n.lang.sets["inputAPI"], value = cfg.cfgData["online"][0]["onlineAPI"], on_change = onlineAPIWrite)
+onlineMusicAPI_tf = ft.TextField(label = i18n.lang.sets["inputAPI"], value = cfg.cfgData["online"][0]["onlineAPI"], on_change = onlineAPIWrite)
+
+def setMusicAPIToDefault(e):
+    onlineMusicAPI_tf.value = "https://music.dsb.ink/api/"
+
+onlineSystemSets_switch = ft.Switch(label = i18n.lang.sets["onlineSys"], value = True, disabled = True)
+onlineUpdateAPI_tf = ft.TextField(label = i18n.lang.sets["inputAPI"], visible = False)
 
 onlineSetCard = ft.Card(
     content = ft.Container(
         content = ft.Column(controls = [
-                ft.Row(controls = [ft.Icon(ft.icons.MUSIC_NOTE_OUTLINED), ft.Text(value = i18n.lang.sets["webMusic"], size = 18)]),
-                onlineAPI_tf,
-                ft.Text(value = i18n.lang.sets["webAPIInfo"], selectable = True)
+                ft.Row(controls = [ft.Icon(ft.icons.MUSIC_NOTE_OUTLINED), ft.Text(value = i18n.lang.sets["online"], size = 18)]),
+                ft.Text(value = i18n.lang.sets["onlineMusic"]),
+                ft.ResponsiveRow(controls = [onlineMusicAPI_tf, ft.FilledTonalButton(text = i18n.lang.sets["setToDefault"], icon = ft.icons.REFRESH_OUTLINED, on_click = setMusicAPIToDefault, disabled = True)]),
+                ft.Text(value = i18n.lang.sets["webAPIInfo"], selectable = True),
+                ft.Divider(),
+                ft.Text(value = i18n.lang.sets["webUpdate"]),
+                onlineSystemSets_switch,
+                ft.ResponsiveRow(controls = [onlineUpdateAPI_tf, ft.FilledTonalButton(text = i18n.lang.sets["setToDefault"], icon = ft.icons.REFRESH_OUTLINED, on_click = setMusicAPIToDefault, disabled = True, visible = False)]),
+                ft.Text(value = i18n.lang.sets["webAPIInfo"], selectable = True, visible = False) # need strings
             ]
         ),
         padding = 15
