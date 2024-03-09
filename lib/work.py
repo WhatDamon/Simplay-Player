@@ -37,40 +37,46 @@ currentLength = secondConvert(0)
 def audioInfoUpdate(audioFile):
     global audioTag, audioTitleText, audioArtistText, audioAlbumText, audioInfo, audioCoverBase64, audioCover_src, currentLength
     currentLength = secondConvert(0)
-    audioTag = tinytag.TinyTag.get(audioFile, image = True)
-    if audioTag.get_image() != None:
-        audioCoverBase64 = base64.b64encode(audioTag.get_image())
-        audioCoverBase64 = audioCoverBase64.decode('utf-8')
-        audioCover_src = audioTag.get_image()
-        log_init.logging.info("Audio cover transcoded to base64")
-        log_init.logging.info("Audio cover loaded")
-    else:
-        audioCoverBase64 = None
-        audioCover_src = "./asset/track.png"
-        log_init.logging.warning("Placeholder cover loaded")
-    log_init.logging.info("audioCover updated")
-    if audioTag.title != None:
-        audioTitleText = audioTag.title
-        log_init.logging.info("Set audio title")
+    if tinytag.TinyTag.is_supported(audioFile) == True:
+        audioTag = tinytag.TinyTag.get(audioFile, image = True)
+        if audioTag.get_image() != None:
+            audioCoverBase64 = base64.b64encode(audioTag.get_image())
+            audioCoverBase64 = audioCoverBase64.decode('utf-8')
+            audioCover_src = audioTag.get_image()
+            log_init.logging.info("Audio cover transcoded to base64")
+            log_init.logging.info("Audio cover loaded")
+        else:
+            audioCoverBase64 = None
+            audioCover_src = "./asset/track.png"
+            log_init.logging.warning("Placeholder cover loaded")
+        log_init.logging.info("audioCover updated")
+        if audioTag.title != None:
+            audioTitleText = audioTag.title
+            log_init.logging.info("Set audio title")
+        else:
+            audioTitleText = audioFile.split('\\')[-1]
+            log_init.logging.info("Unknown audio title")
+        if audioTag.artist != None:
+            audioArtistText = audioTag.artist
+            log_init.logging.info("Set audio artist")
+        else:
+            audioArtistText = lang.mainMenu["unknownArtist"]
+            log_init.logging.info("Unknown audio artist")
+        if audioTag.album != None:
+            audioAlbumText = audioTag.album
+            log_init.logging.info("Set audio album")
+        else:
+            audioAlbumText = None
+            log_init.logging.info("Unknown audio album")
+        playAudio.src = audioFile
+        log_init.logging.info("Set playAudio.src as audioFile")
+        audioInfo = "Album: " + str(audioTag.album) + "\nAlbumist: " + str(audioTag.albumartist) + "\nArtist: " + str(audioTag.artist) + "\nAudio Offset: " + str(audioTag.audio_offset) + "\nBitrate: " + str(audioTag.bitrate) + "\nBitdepth: " + str(audioTag.bitdepth) + "\nChannels: " + str(audioTag.channels) + "\nComment: " + str(audioTag.comment)+ "\nComposer: " + str(audioTag.composer) + "\nDisc: " + str(audioTag.disc) + "\nDisc Total: " + str(audioTag.disc_total) + "\nDuration: " + str(audioTag.duration) + "\nFilesize: " + str(audioTag.filesize) + "\nGenre: " + str(audioTag.genre) + "\nSamplerate: " + str(audioTag.samplerate) + "\nTitle: " + str(audioTag.title) + "\nTrack: " + str(audioTag.track) + "\nTrack Total: " + str(audioTag.track_total) + "\nYear: " + str(audioTag.year)
+        log_init.logging.info("Set audio info")
     else:
         audioTitleText = audioFile.split('\\')[-1]
-        log_init.logging.info("Unknown audio title")
-    if audioTag.artist != None:
-        audioArtistText = audioTag.artist
-        log_init.logging.info("Set audio artist")
-    else:
         audioArtistText = lang.mainMenu["unknownArtist"]
-        log_init.logging.info("Unknown audio artist")
-    if audioTag.album != None:
-        audioAlbumText = audioTag.album
-        log_init.logging.info("Set audio album")
-    else:
         audioAlbumText = None
-        log_init.logging.info("Unknown audio album")
-    playAudio.src = audioFile
-    log_init.logging.info("Set playAudio.src as audioFile")
-    audioInfo = "Album: " + str(audioTag.album) + "\nAlbumist: " + str(audioTag.albumartist) + "\nArtist: " + str(audioTag.artist) + "\nAudio Offset: " + str(audioTag.audio_offset) + "\nBitrate: " + str(audioTag.bitrate) + "\nBitdepth: " + str(audioTag.bitdepth) + "\nChannels: " + str(audioTag.channels) + "\nComment: " + str(audioTag.comment)+ "\nComposer: " + str(audioTag.composer) + "\nDisc: " + str(audioTag.disc) + "\nDisc Total: " + str(audioTag.disc_total) + "\nDuration: " + str(audioTag.duration) + "\nFilesize: " + str(audioTag.filesize) + "\nGenre: " + str(audioTag.genre) + "\nSamplerate: " + str(audioTag.samplerate) + "\nTitle: " + str(audioTag.title) + "\nTrack: " + str(audioTag.track) + "\nTrack Total: " + str(audioTag.track_total) + "\nYear: " + str(audioTag.year)
-    log_init.logging.info("Set audio info")
+        log_init.logging.warning("Cannot read the audio tag")
 
 def audioFromUrlInfo(audioID): # 网站音频信息更新
     global audioTitleText, audioArtistText, audioAlbumText, audioInfo, audioCoverBase64, audioCover_src, audioUrl, currentLength, apiUrl
