@@ -32,6 +32,7 @@ def main(page):
     page.window_min_width = 540
     page.padding = 10
     page.title = "Simplay Player"
+    page.window_center()
     # page.window_title_bar_hidden = True
     log_init.logging.info("Window created")
 
@@ -754,7 +755,7 @@ def main(page):
         icon = ft.icons.SKIP_PREVIOUS_OUTLINED,
         tooltip = lang.tooltips["skipPrevious"],
         icon_size = 25,
-        visible = False
+        disabled = True,
         # on_click = playOrPauseMusic
     )
 
@@ -769,7 +770,7 @@ def main(page):
         icon = ft.icons.SKIP_NEXT_OUTLINED,
         tooltip = lang.tooltips["skipNext"],
         icon_size = 25,
-        visible = False
+        disabled = True,
         # on_click = playOrPauseMusic
     )
 
@@ -780,14 +781,14 @@ def main(page):
         on_click = openVolumePanel
     )
 
-    volume_silder = ft.Slider(min = 0, max = 100, divisions = 100, label = "{value}", value = cfg.cfgData["play"][0]["defaultVolume"], on_change = volumeChange)
+    volume_silder = ft.Slider(min = 0, max = 100, divisions = 100, label = "{value}", value = cfg.cfgData["play"][0]["defaultVolume"], scale = 0.9, opacity = 0.9, on_change = volumeChange)
 
     volume_panel = ft.Card(
         content = volume_silder,
         visible = False,
         height = 46,
         width = 200,
-        shape = ft.RoundedRectangleBorder(radius = 10)
+        shape = ft.RoundedRectangleBorder(radius = 100)
     )
     
     lyrics_btn = ft.IconButton(

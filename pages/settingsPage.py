@@ -250,12 +250,14 @@ onlineSetCard = ft.Card(
 )
 
 smtcEnable_switch = ft.Switch(label = i18n.lang.sets["enableSMTC"], value = False)
+toastNotifyEnable_switch = ft.Switch(label = i18n.lang.sets["enableToastNotify"], value = True)
 
 systemSetCard = ft.Card(
     content = ft.Container(
         content = ft.Column(controls = [
                 ft.Row(controls = [ft.Icon(ft.icons.DISPLAY_SETTINGS_OUTLINED), ft.Text(value = i18n.lang.sets["systemIntegration"], size = 18)]),
-                smtcEnable_switch
+                smtcEnable_switch,
+                toastNotifyEnable_switch
             ]
         ),
         padding = 15
