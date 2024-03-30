@@ -150,7 +150,7 @@ sets = {
     "systemIntegration": "System integration",
     "enableSMTC": "Enable SMTC (incomplete, only Windows)",
     "enableToastNotify": "Enable toast notification (only Windows)",
-    "Advance": "Advance",
+    "advance": "Advance",
     "delConfigAndClose": "Delete the configuration and close",
     "delLogFile": "Delete the log file",
     "feedback": "Feedback",
