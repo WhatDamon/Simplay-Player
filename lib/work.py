@@ -1,6 +1,6 @@
 import flet as ft
 import tinytag, time, base64, requests, json
-from lib import log_init, cfg
+from lib import log_init, cfg, platform_check
 
 log_init.logging.info("Basic libs imported at work.py")
 
@@ -54,7 +54,10 @@ def audioInfoUpdate(audioFile):
             audioTitleText = audioTag.title
             log_init.logging.info("Set audio title")
         else:
-            audioTitleText = audioFile.split('\\')[-1]
+            if platform_check.currentOS == "windows":
+                audioTitleText = audioFile.split('\\')[-1]
+            else:
+                audioTitleText = audioFile.split('/')[-1]
             log_init.logging.info("Unknown audio title")
         if audioTag.artist != None:
             audioArtistText = audioTag.artist
@@ -73,7 +76,10 @@ def audioInfoUpdate(audioFile):
         audioInfo = "Album: " + str(audioTag.album) + "\nAlbumist: " + str(audioTag.albumartist) + "\nArtist: " + str(audioTag.artist) + "\nAudio Offset: " + str(audioTag.audio_offset) + "\nBitrate: " + str(audioTag.bitrate) + "\nBitdepth: " + str(audioTag.bitdepth) + "\nChannels: " + str(audioTag.channels) + "\nComment: " + str(audioTag.comment)+ "\nComposer: " + str(audioTag.composer) + "\nDisc: " + str(audioTag.disc) + "\nDisc Total: " + str(audioTag.disc_total) + "\nDuration: " + str(audioTag.duration) + "\nFilesize: " + str(audioTag.filesize) + "\nGenre: " + str(audioTag.genre) + "\nSamplerate: " + str(audioTag.samplerate) + "\nTitle: " + str(audioTag.title) + "\nTrack: " + str(audioTag.track) + "\nTrack Total: " + str(audioTag.track_total) + "\nYear: " + str(audioTag.year)
         log_init.logging.info("Set audio info")
     else:
-        audioTitleText = audioFile.split('\\')[-1]
+        if platform_check.currentOS == "windows":
+            audioTitleText = audioFile.split('\\')[-1]
+        else:
+            audioTitleText = audioFile.split('/')[-1]
         audioArtistText = lang.mainMenu["unknownArtist"]
         audioAlbumText = None
         log_init.logging.warning("Cannot read the audio tag")
