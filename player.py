@@ -1,5 +1,5 @@
 import flet as ft
-import platform, os
+import platform, os, time
 
 from lib import cfg
 cfg.loadConfig()
@@ -169,7 +169,7 @@ def main(page):
         audioInfoUpdate()
         page.title = work.audioArtistText + " - " + audioTitleText + " | Simplay Player"
         log_init.logging.info("Window title changed")
-        if platform_check.currentOS == 'windows':
+        if platform_check.currentOS == 'windows' and toastImportError == False:
             windowsToastNotify()
             log_init.logging.info("Load Windows toast")
         else:
@@ -186,6 +186,7 @@ def main(page):
         if cfg.cfgData["play"][0]["immediatelyPlay"] == True:
             global audioLoaded
             while(True):
+                time.sleep(1)
                 if audioLoaded == True:
                     playOrPauseMusic(0)
                     audioLoaded = False
@@ -911,7 +912,10 @@ if __name__ == '__main__':
         print(lang.infomation["cygwinWarning"])
         log_init.logging.warning("Using Cygwin")
     if platform_check.currentOS == "windows":
-        from windows_toasts import Toast, ToastDisplayImage, WindowsToaster    
+        try:
+            from windows_toasts import Toast, ToastDisplayImage, WindowsToaster
+        except ImportError:
+            toastImportError = True
         log_init.logging.info("Lib Windows-Toasts imported")
         from sys import getwindowsversion
         windowsBuild = getwindowsversion().build
