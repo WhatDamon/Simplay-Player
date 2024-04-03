@@ -1,5 +1,5 @@
 import flet as ft
-from lib import log_init, cfg
+from lib import log_init, cfg, platform_check
 log_init.logging.info("Basic libs imported at settingsPage.py")
 
 import i18n
@@ -53,7 +53,12 @@ langInfoText += "\n· " + i18n.lang.sets["langCode"] + i18n.lang.langInfo["code"
 if i18n.lang.langInfo["font"] == "":
     langInfoText += "\n· " + i18n.lang.sets["langFont"] + "Default"
 else:
-    langInfoText += "\n· " + i18n.lang.sets["langFont"] + i18n.lang.langInfo["font"]
+    if platform_check.currentOS == "windows":
+        langInfoText += "\n· " + i18n.lang.sets["langFont"] + i18n.lang.langInfo["font"][0]["windows"]
+    elif platform_check.currentOS == "darwin":
+        langInfoText += "\n· " + i18n.lang.sets["langFont"] + i18n.lang.langInfo["font"][0]["macos"]
+    else:
+        langInfoText += "\n· " + i18n.lang.sets["langFont"] + i18n.lang.langInfo["font"][0]["linux"]
 langInfoText += "\n· " + i18n.lang.sets["langRTL"] + str(i18n.lang.langInfo["rtl"])
 if i18n.lang.langInfo["machineTranslated"] == True:
     langInfoText += "\n· " + i18n.lang.infomation["machineTranslate"]

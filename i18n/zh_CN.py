@@ -2,7 +2,7 @@ langInfo = {
     "engName": "Chinese (Simplified)",
     "orgiName": "简体中文",
     "code": "zh_CN",
-    "font": "Microsoft YaHei",
+    "font": [{"windows": "Microsoft YaHei", "macos": "PingFang SC", "linux": "Noto Sans SC"}],
     "machineTranslated": False,
     "useKKGithub": True,
     "rtl": False

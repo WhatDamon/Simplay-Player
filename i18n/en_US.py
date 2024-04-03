@@ -2,7 +2,7 @@ langInfo = {
     "engName": "English (United States)",
     "orgiName": "",
     "code": "en_US",
-    "font": "",
+    "font": [{"windows": "", "macos": "", "linux": ""}],
     "machineTranslated": True,
     "useKKGithub": False,
     "rtl": False

@@ -53,7 +53,12 @@ def main(page):
         page.fonts = {"Inter": "./asset/Inter.ttc"}
         page.theme = ft.Theme(font_family = "Inter")
     else:
-        page.theme = ft.Theme(font_family = lang.langInfo["font"])
+        if platform_check.currentOS == "windows":
+            page.theme = ft.Theme(font_family = lang.langInfo["font"][0]["windows"])
+        elif platform_check.currentOS == "darwin":
+            page.theme = ft.Theme(font_family = lang.langInfo["font"][0]["macos"])
+        else:
+            page.theme = ft.Theme(font_family = lang.langInfo["font"][0]["linux"])
     log_init.logging.info("Assets loaded")
 
     # 快捷键
