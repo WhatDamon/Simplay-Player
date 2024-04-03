@@ -107,7 +107,7 @@ def audioFromUrlInfo(audioID): # 网站音频信息更新
             audioAlbumText = ID_json['songs'][0]['al']['name']
             playAudio.src = audioUrl
             currentLength = secondConvert(0)
-            audioInfo = "Album: " + str(audioAlbumText) + "\nArtist: " + str(audioArtistText)
+            audioInfo = "Album: " + str(audioAlbumText) + "\nArtist: " + str(audioArtistText) + "\nTitle: " + str(audioTitleText) + "\nNetease Cloud Music ID: " + str(audioID)
             return True
     elif ID_json['songs'] == [] or ID_json['code'] != 200:
         log_init.logging.warning("Invalid input")

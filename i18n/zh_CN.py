@@ -80,7 +80,8 @@ tooltips = {
     "lyrics": "歌词",
     "songList": "播放列表",
     "audioInfo": "媒体信息",
-    "settings": "设置"
+    "settings": "设置",
+    "onlineMusic": "在线歌曲"
 }
 
 songList = {

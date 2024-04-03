@@ -80,7 +80,8 @@ tooltips = {
     "lyrics": "Lyrics",
     "songList": "Song List",
     "audioInfo": "Audio Info",
-    "settings": "Settings"
+    "settings": "Settings",
+    "onlineMusic": "Online Music"
 }
 
 songList = {

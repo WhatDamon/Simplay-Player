@@ -16,6 +16,7 @@ lyricFile = ""
 audioListShown = False
 firstPlay = True
 audioLoaded = None
+toastImportError = False
 currentDir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(currentDir)
 
@@ -186,7 +187,7 @@ def main(page):
         if cfg.cfgData["play"][0]["immediatelyPlay"] == True:
             global audioLoaded
             while(True):
-                time.sleep(1)
+                time.sleep(0.001)
                 if audioLoaded == True:
                     playOrPauseMusic(0)
                     audioLoaded = False
@@ -226,6 +227,7 @@ def main(page):
         else:
             audioArtistAndAlbum.value = work.audioArtistText
         audioCover.update()
+        onlineAudioSign.visible = False
         page.update()
 
     # 网络音频信息更新
@@ -251,7 +253,18 @@ def main(page):
             songID_input.error_text = ""
             audioCover.update()
             lyricUrlRead(songID)
+            onlineAudioSign.visible = True
             closeSongWeb_dlg(e)
+            if work.audioState == True:
+                playOrPauseMusic(0)
+            if cfg.cfgData["play"][0]["immediatelyPlay"] == True:
+                global audioLoaded
+                while(True):
+                    time.sleep(0.001)
+                    if audioLoaded == True:
+                        playOrPauseMusic(0)
+                        audioLoaded = False
+                        break
         elif getReturn == "vipSongOrNoCopyright":
             songID_input.error_text = lang.dialog["vipOrNoCopyrightAlert"]
         elif getReturn == False:
@@ -749,9 +762,10 @@ def main(page):
 
     audioCover = ft.Image(src = "./asset/track.png", width = 128, height = 128, border_radius = 8)
     audioTitle = ft.Text(audioTitleText, weight = ft.FontWeight.BOLD, size = 25, overflow = ft.TextOverflow.ELLIPSIS)
+    onlineAudioSign = ft.Icon(ft.icons.WIFI_OUTLINED, size = 16, visible = False, tooltip = lang.tooltips["onlineMusic"])
     audioArtistAndAlbum = ft.Text(audioArtistText, size = 18, opacity = 90)
     audioProgressStatus = ft.Text("00:00/00:00", size = 15, opacity = 90)
-    audioDetail = ft.Column(controls = [audioTitle, audioArtistAndAlbum, audioProgressStatus])
+    audioDetail = ft.Column(controls = [ft.Row(controls = [audioTitle, onlineAudioSign]), audioArtistAndAlbum, audioProgressStatus])
     audioBasicInfo = ft.Container(content = ft.Row(controls = [audioCover, audioDetail]), padding = 3)
     audioProgressBar = ft.Slider(min = 0, max = 1000, tooltip = lang.tooltips["audioPosition"], on_change_start = autoStopKeepAudioProgress, on_change_end = progressCtrl)
     work.playAudio.on_loaded = loadAudio

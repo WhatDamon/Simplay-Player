@@ -23,7 +23,7 @@ sets = {}
 
 def loadLang(): 
     global langCode, langInfo, infomation, menuBar, mainMenu, tooltips, songList, dialog, update, sets
-    if langCode == 'zh_CN':
+    if 'zh_CN' in langCode:
         langInfo = zh_CN.langInfo
         infomation = zh_CN.infomation
         menuBar = zh_CN.menuBar
