@@ -86,6 +86,7 @@ def audioInfoUpdate(audioFile):
 
 def audioFromUrlInfo(audioID): # 网站音频信息更新
     global audioTitleText, audioArtistText, audioAlbumText, audioInfo, audioCoverBase64, audioCover_src, audioUrl, currentLength, apiUrl
+    audioArtistList = []
     response =  requests.get(apiUrl + 'song/detail?id=' + audioID) # 请求音频信息
     audioIdInfo = response.text
     try: # 尝试读取
@@ -103,11 +104,13 @@ def audioFromUrlInfo(audioID): # 网站音频信息更新
         else:
             audioCover_src = ID_json['songs'][0]['al']['picUrl']
             audioTitleText = ID_json['songs'][0]['name']
-            audioArtistText = ID_json['songs'][0]['ar'][0]['name']
+            for i in range(len(ID_json['songs'][0]['ar'])):
+                audioArtistList.append(ID_json['songs'][0]['ar'][i]['name'])
+                audioArtistText =  '/'.join(audioArtistList)
             audioAlbumText = ID_json['songs'][0]['al']['name']
             playAudio.src = audioUrl
             currentLength = secondConvert(0)
-            audioInfo = "Album: " + str(audioAlbumText) + "\nArtist: " + str(audioArtistText) + "\nTitle: " + str(audioTitleText) + "\nNetease Cloud Music ID: " + str(audioID)
+            audioInfo = "Album: " + str(audioAlbumText) + "\nArtist: " + str(audioArtistText)
             return True
     elif ID_json['songs'] == [] or ID_json['code'] != 200:
         log_init.logging.warning("Invalid input")
@@ -141,17 +144,19 @@ def lyricUrlRead(audioID):
         lyricsProcess()
         return True
 
+
 def lyricsProcess(): # 歌词处理
     global lyricsBefore, lyricsText, lyricsAfter
     lyricsDict = {}
     for line in lines:
         lyricSplit = list(filter(None, line.split(']')))
         if len(lyricSplit) > 1:
-            lyricsDict.setdefault(lyricSplit[0] + ']', []).append(lyricSplit[1])
+            for i in range(len(lyricSplit)-1):
+                lyricsDict.setdefault(lyricSplit[i]+']',[]).append(lyricSplit[-1])
     lyricsBefore = lyricsText = lyricsAfter = ""
     for key in lyricsDict.keys():
         lyricsDict[key] = '\n'.join(lyricsDict[key])
-    lyricDict_list = list(lyricsDict.items()) # 将字典转换成列表
+    lyricDict_list = sorted(list(lyricsDict.items()))# 将字典转换成列表
     for i in range(len(lyricDict_list)):
         if len(lyricDict_list) == 1:
             lyricsBefore = ""
@@ -169,8 +174,7 @@ def lyricsProcess(): # 歌词处理
             else:
                 lyricsBefore = lyricDict_list[i - 1][1]
                 lyricsText = lyricDict_list[i][1]
-                lyricsAfter = lyricDict_list[i + 1][1]
-            
+                lyricsAfter = lyricDict_list[i + 1][1] 
 
 def playOrPauseMusic(e): # 歌曲播放/暂停
     global playStatus, playPause_btn_icon, page_title
