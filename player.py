@@ -427,7 +427,7 @@ def main(page):
         page.update()
 
     songID_hint = ft.Text(value=lang.dialog["songIdHint"]) 
-    songID_input = ft.TextField(label = "", error_text = "")
+    songID_input = ft.TextField(label = "", error_text = "", autofocus = True, on_submit = audioFromUrlInfo)
     songWeb_dlg = ft.AlertDialog(
         adaptive = True,
         title = ft.Text(value = lang.dialog["songIdInput"]),

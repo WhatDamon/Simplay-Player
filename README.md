@@ -15,7 +15,9 @@
 ![GitHub repo stars](https://img.shields.io/github/stars/WhatDamon/Simplay-Player)
 
 > [!IMPORTANT]  
-> 注意, 该软件在 macOS 和 Linux 下可能存在影响比较大的 BUG 需要注意, Windows 端基本稳定并可用. 由于一些原因该项目将会进入缓慢更新阶段, 望谅解!
+> 注意, 该软件在 macOS 和 Linux 下可能存在影响比较大的 BUG, 其中 Linux 下可能会遇到要求 `libmpv-1` 的问题
+>
+> 由于一些原因, 本项目停止维护, 也许未来会使用 Flutter 彻底重写本应用, 也有可能会继续开发 (如果被接手就以贡献者的身份?). 如果希望接手本项目继续维护, 请邮件至 whatdamon@damon.top 与我联系!
 
 这是一个 __闲得发慌时__ 开发出来的小作品, 写得很烂请见谅
 
@@ -43,7 +45,7 @@ __Windows__ 暂无额外需求, __macOS__ 尚不明确
 
 __Python 3.8 及更高版本__, 推荐 3.10 及更高版本以保障其正常运行 (Action 中我们使用了 Python 3.11 进行编译测试)
 
-推荐 __[Flet](https://flet.dev) 0.19.0 及更高版本__, 您可以测试一下 Simplay Player 最低它能在哪个版本可以跑起来 (由于 0.20.0 开始部分组件被修改, 样式可能有点奇怪, 将在后续解决)
+推荐 __[Flet](https://flet.dev) 0.19.0 及更高版本__, 您可以测试一下 Simplay Player 最低它能在哪个版本可以跑起来 (由于 0.20.0 开始部分组件被修改, 样式可能有点奇怪, 将在后续解决, 部分写法将在 Flet 1.0 删除, 届时软件可能不可用)
 
 开发使用前 __*nix系统__ 需要先执行...
 
