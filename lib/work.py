@@ -24,9 +24,12 @@ audioState = None
 audioStateType = None
 audioLoaded = False
 
-apiUrl = cfg.cfgData["online"][0]["onlineAPI"]
-if apiUrl[-1] != '/':
-    apiUrl += '/'
+# Initialize apiUrl - will be set properly when cfg is loaded
+apiUrl = None
+if cfg.cfgData is not None:
+    apiUrl = cfg.cfgData["online"][0]["onlineAPI"]
+    if apiUrl[-1] != '/':
+        apiUrl += '/' 
 
 log_init.logging.info("Variable initialization complete at work.py")
 
@@ -203,21 +206,21 @@ def resetPlay():
     playPause_btn_icon = ft.icons.PLAY_CIRCLE_FILL_OUTLINED
 
 def audioForward10sec(e):
-    if playAudio.get_current_position() + 10000 > playAudio.get_duration():
+    if playAudio.current_position + 10000 > playAudio.duration:
         log_init.logging.warning("More than the total length of the song")
-        playAudio.seek(playAudio.get_duration())
+        playAudio.seek(playAudio.duration)
         log_init.logging.info("Setting position to the end of the song")
     else:
-        playAudio.seek(playAudio.get_current_position() + 10000)
+        playAudio.seek(playAudio.current_position + 10000)
         log_init.logging.info("Successful forward 10sec")
 
 def audioBack10sec(e):
-    if playAudio.get_current_position() - 10000 < 0:
+    if playAudio.current_position - 10000 < 0:
         log_init.logging.warning("Less than the start of the song")
         playAudio.seek(0)
         log_init.logging.info("Setting position to the start of the song")
     else:
-        playAudio.seek(playAudio.get_current_position() - 10000)
+        playAudio.seek(playAudio.current_position - 10000)
         log_init.logging.info("Successful back 10sec")
 
 def rateChangeTo05(e):
@@ -248,11 +251,11 @@ def autoKeepAudioProgress(e):
     global loopOpen, audioProgressBar_value, audioProgressStatus_value, currentLength, totalLength
     if progressChanging == False:
         try: 
-            audioProgressBar_value = playAudio.get_current_position() / playAudio.get_duration() * 1000
-            if playAudio.get_current_position() == playAudio.get_duration() and loopOpen == True:
+            audioProgressBar_value = playAudio.current_position / playAudio.duration * 1000
+            if playAudio.current_position == playAudio.duration and loopOpen == True:
                 playAudio.seek(0)
-            currentLength = secondConvert(playAudio.get_current_position() // 1000)
-            totalLength = secondConvert(playAudio.get_duration() // 1000)
+            currentLength = secondConvert(playAudio.current_position // 1000)
+            totalLength = secondConvert(playAudio.duration // 1000)
             audioProgressStatus_value = currentLength + "/" + totalLength
         except ValueError:
                 log_init.logging.warning("ValueError")
@@ -279,7 +282,7 @@ def progressCtrl(audioProgressBar):
     global progressChanging
     progressChanging = False
     log_init.logging.info("Set progressChanging as False")
-    playAudio.seek(int(playAudio.get_duration() * (audioProgressBar / 1000)))
+    playAudio.seek(int(playAudio.duration * (audioProgressBar / 1000)))
     log_init.logging.info("Audio seek completed")
 
 def volumeChange(volume_silder):
@@ -323,7 +326,7 @@ playAudio = ft_audio.Audio(
     autoplay = False,
     volume = cfg.cfgData["play"][0]["defaultVolume"] / 100,
     balance = 0,
-    on_duration_changed = lambda e: log_init.logging.info("Duration changed:" + e.data),
-    on_state_changed = stateSet,
+    on_duration_change = lambda e: log_init.logging.info("Duration changed:" + e.data),
+    on_state_change = stateSet,
     on_seek_complete = lambda _: log_init.logging.info("Seek complete")
 )

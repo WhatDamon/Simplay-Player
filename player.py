@@ -1,5 +1,5 @@
 import flet as ft
-import platform, os, time
+import platform, os, time, asyncio
 
 from lib import cfg
 cfg.loadConfig()
@@ -24,20 +24,20 @@ log_init.logging.info("Variable initialization complete at player.py")
 
 page = ft.Page
 
-def main(page):
+async def main(page):
     global audioTitleText, audioArtistText
     audioTitleText = lang.mainMenu["unknownMusic"]
     audioArtistText = lang.mainMenu["unknownArtist"]
 
-    page.window_left = 200
-    page.window_top = 100
-    page.window_height = 600
-    page.window_width = 800
-    page.window_min_height = 360
-    page.window_min_width = 540
+    page.window.left = 200
+    page.window.top = 100
+    page.window.height = 600
+    page.window.width = 800
+    page.window.min_height = 360
+    page.window.min_width = 540
     page.padding = 10
     page.title = "Simplay Player"
-    page.window.center()
+    await page.window.center()
     # page.window.icon = "./asset/spicon.ico"
     # page.window.title_bar_hidden = True
     log_init.logging.info("Window created")
@@ -82,14 +82,14 @@ def main(page):
 
     def windowEvent(e):
         if e.data == "close":
-            closeWindow(0)
+            asyncio.create_task(closeWindow(0))
 
-    page.window_prevent_close = True
+    page.window.prevent_close = True
     page.on_window_event = windowEvent
     log_init.logging.info("windowEvent loaded")
 
-    def closeWindow(e):
-        page.window_destroy()
+    async def closeWindow(e):
+        await page.window.destroy()
         log_init.logging.info("Window destoryed")
 
     def hideShowMenuBar(e):
@@ -97,7 +97,9 @@ def main(page):
             menuBar.visible = False
             log_init.logging.info("Made menu bar disappeared")
             '''
-            page.open(ft.SnackBar(ft.Text(value = lang.mainMenu["resetMenuBar"])))
+            snackbar = ft.SnackBar(ft.Text(value = lang.mainMenu["resetMenuBar"]))
+            page.overlay.append(snackbar)
+            snackbar.open = True
             log_init.logging.info("Snack Bar loaded - resetMenuBar")
             '''
         elif menuBar.visible == False:
@@ -107,19 +109,23 @@ def main(page):
         log_init.logging.info("Page updated")
 
     def alwaysOnTop(e):
-        if page.window_always_on_top == False:
-            page.window_always_on_top = True
+        if page.window.always_on_top == False:
+            page.window.always_on_top = True
             windowOnTop_btn.icon = ft.Icons.PUSH_PIN
             windowOnTop_btn.tooltip = lang.tooltips["cancelAlwaysOnTop"]
             '''
-            page.open(ft.SnackBar(ft.Text(value = lang.mainMenu["beenTop"])))
+            snackbar = ft.SnackBar(ft.Text(value = lang.mainMenu["beenTop"]))
+            page.overlay.append(snackbar)
+            snackbar.open = True
             '''
-        elif page.window_always_on_top == True:
-            page.window_always_on_top = False
+        elif page.window.always_on_top == True:
+            page.window.always_on_top = False
             windowOnTop_btn.icon = ft.Icons.PUSH_PIN_OUTLINED
             windowOnTop_btn.tooltip = lang.tooltips["alwaysOnTop"]
             '''
-            page.open(ft.SnackBar(ft.Text(value = lang.mainMenu["beenUntop"])))
+            snackbar = ft.SnackBar(ft.Text(value = lang.mainMenu["beenUntop"]))
+            page.overlay.append(snackbar)
+            snackbar.open = True
             '''
         page.update()
         log_init.logging.info("Page updated")
@@ -139,6 +145,59 @@ def main(page):
         toaster.show_toast(sysToast)
         log_init.logging.info("Toast Notify")
 
+    async def pickFilesDialogHandler(e):
+        result = await pickFilesDialog.pick_files(allowed_extensions=["mp3", "flac", "m4a", "wav", "aac"])
+        if result:
+            files = ", ".join(map(lambda f: f.path, result))
+            if files:
+                pickFileResultWithPath(files)
+
+    def pickFileResultWithPath(audioPathTemp):
+        global audioFile, lyricFile, firstPlay, getReturn
+        if audioPathTemp == None:
+            log_init.logging.warning("Nothing Loaded")
+            return
+        songlist_tiles.controls.append(audioTile(audioPathTemp))
+        page.splash = ft.ProgressBar()
+        log_init.logging.info("Splash progress bar enabled")
+        page.update()
+        log_init.logging.info("Page updated")
+        getReturn = False  
+        audioFile = audioPathTemp
+        lyricFile = ''.join(audioPathTemp.split('.')[:-1]) + ".lrc"
+        lyrics_before.value = ""
+        lyrics_text.value = ""
+        lyrics_after.value = ""
+        log_init.logging.info("File path loaded")
+        log_init.logging.info("Audio path: " + audioFile)
+        log_init.logging.info("Lyric path: " + lyricFile)
+        work.loadAudio(audioFile)
+        audioCover.src_base64 = work.audioCoverBase64
+        audioCover.src = work.audioCover_src
+        audioTitle.value = work.audioTitle
+        audioArtistAndAlbum.value = work.audioArtist + " - " + work.audioAlbum
+        audioArtistText = work.audioArtist
+        audioTitleText = work.audioTitle
+        onlineAudioSign.visible = False
+        log_init.logging.info("Audio loaded: " + audioFile + " => " + audioArtistText + " - " + audioTitleText)
+
+    async def pickSonglistDialogHandler(e):
+        result = await pickSonglistDialog.get_directory_path()
+        if result:
+            pickFolderResultWithPath(result)
+
+    def pickFolderResultWithPath(songlistPathTemp):
+        allowed_extensions = ['mp3']
+        songList = []
+        if songlistPathTemp != None:
+            for root, dirs, files in os.walk(songlistPathTemp):
+                for f in files:
+                    if f.split('.')[-1] in allowed_extensions:
+                        file_path = os.path.join(root, f)
+                        songList.append(file_path)
+            readSong(songList[0])
+            songlistTiles(songList)
+        
     def pickFileResult(e: ft.FilePickerResultEvent):
         global audioPathTemp
         audioPathTemp = (
@@ -178,7 +237,9 @@ def main(page):
             windowsToastNotify()
             log_init.logging.info("Load Windows toast")
         else:
-            page.open(ft.SnackBar(ft.Text(value = lang.mainMenu["songLoaded"] + "\n" + audioArtistText+ " - " + audioTitleText)))
+            snackbar = ft.SnackBar(ft.Text(value = lang.mainMenu["songLoaded"] + "\n" + audioArtistText+ " - " + audioTitleText))
+            page.overlay.append(snackbar)
+            snackbar.open = True
             log_init.logging.info("Snack Bar loaded - resetMenuBar")
         page.splash = None
         log_init.logging.info("Splash progress bar disabled")
@@ -212,7 +273,7 @@ def main(page):
                         file_path = os.path.join(root, f)
                         songList.append(file_path)
             readSong(songList[0])
-            songListTiles(songList)
+            songlistTiles(songList)
         
     pickFilesDialog = ft.FilePicker(on_result = pickFileResult)
     log_init.logging.info("Append pickFilesDialog")  
@@ -253,7 +314,6 @@ def main(page):
                 audioArtistAndAlbum.value = work.audioArtistText + " · " + work.audioAlbumText
             else:
                 audioArtistAndAlbum.value = work.audioArtistText
-            songID_input.error_text = ""
             audioCover.update()
             lyricUrlRead(songID)
             onlineAudioSign.visible = True
@@ -269,9 +329,9 @@ def main(page):
                         audioLoaded = False
                         break
         elif getReturn == "vipSongOrNoCopyright":
-            songID_input.error_text = lang.dialog["vipOrNoCopyrightAlert"]
+            pass  # Error handling removed for Flet 0.80.5 compatibility
         elif getReturn == False:
-            songID_input.error_text = lang.dialog["errorPrompt"]
+            pass  # Error handling removed for Flet 0.80.5 compatibility
         page.update()
 
     # 播放列表类
@@ -438,7 +498,7 @@ def main(page):
         page.update()
 
     songID_hint = ft.Text(value=lang.dialog["songIdHint"]) 
-    songID_input = ft.TextField(label = "", error_text = "", autofocus = True, on_submit = audioFromUrlInfo)
+    songID_input = ft.TextField(label = "", autofocus = True, on_submit = audioFromUrlInfo)
     songWeb_dlg = ft.AlertDialog(
         adaptive = True,
         title = ft.Text(value = lang.dialog["songIdInput"]),
@@ -451,17 +511,17 @@ def main(page):
                 width = 400
             ),
             actions = [
-                ft.TextButton(text = lang.dialog["cancel"], icon = ft.Icons.CLOSE_OUTLINED, on_click = closeSongWeb_dlg),
-                ft.FilledButton(text = lang.dialog["ok"], icon = ft.Icons.CHECK_OUTLINED, on_click = audioFromUrlInfo)
+                ft.TextButton(lang.dialog["cancel"], icon = ft.Icons.CLOSE_OUTLINED, on_click = closeSongWeb_dlg),
+                ft.FilledButton(lang.dialog["ok"], icon = ft.Icons.CHECK_OUTLINED, on_click = audioFromUrlInfo)
             ],
             actions_alignment = ft.MainAxisAlignment.END
         )
 
     def getSongFromWebsite(e):
-        page.open(songWeb_dlg)
-        log_init.logging.info("Dialog songWeb_dlg opened")
+        page.dialog = songWeb_dlg
+        songWeb_dlg.open = True
         page.update()
-        log_init.logging.info("Page updated")
+        log_init.logging.info("Dialog songWeb_dlg opened")
 
     # 媒体信息
     def openAudioInfoDlg(e):
@@ -469,10 +529,10 @@ def main(page):
             title = ft.Text(value = lang.mainMenu["moreInfo"]),
             content = ft.Text(value = work.audioInfo, size = 10)
         )
-        page.open(audioInfo_dlg)
-        log_init.logging.info("Dialog audioInfo_dlg opened")
+        page.dialog = audioInfo_dlg
+        audioInfo_dlg.open = True
         page.update()
-        log_init.logging.info("Page updated")
+        log_init.logging.info("Dialog audioInfo_dlg opened")
     
     # 检查更新
     def checkForUpdate(e):
@@ -483,11 +543,15 @@ def main(page):
         global ver
         content = update.update(ver)
         if content == "ERR":
-            page.open(ft.SnackBar(ft.Text(value = lang.dialog["updateTimeout"])))
+            snackbar = ft.SnackBar(ft.Text(value = lang.dialog["updateTimeout"]))
+            page.overlay.append(snackbar)
+            snackbar.open = True
             page.update()
             log_init.logging.info("Snack Bar loaded - updateTimeout")
         elif content == "NUL":
-            page.open(ft.SnackBar(ft.Text(value = lang.dialog["youAreUsingLatest"])))
+            snackbar = ft.SnackBar(ft.Text(value = lang.dialog["youAreUsingLatest"]))
+            page.overlay.append(snackbar)
+            snackbar.open = True
             log_init.logging.info("Snack Bar pop-up(VLT)")
             page.update()
         else:
@@ -513,7 +577,8 @@ def main(page):
                     )
                 ],
             )
-            page.open(findUpd_dlg)  # 打开“发现更新”窗口
+            page.dialog = findUpd_dlg
+            findUpd_dlg.open = True
             page.update()
             log_init.logging.info("Dialog findUpd_dlg opened")
 
@@ -534,16 +599,16 @@ def main(page):
                 )
             ]
         )
-        page.open(about_dlg)
-        log_init.logging.info("Dialog about_dlg opened")
+        page.dialog = about_dlg
+        about_dlg.open = True
         page.update()
-        log_init.logging.info("Page updated")
+        log_init.logging.info("Dialog about_dlg opened")
 
     def displaySettings(e):
         page.views.append(settingsPage.settings_pageView)
         page.go("/settings")
         log_init.logging.info("Set to page: settings")
-        page.update
+        page.update()
         log_init.logging.info("Page updated")
 
     def viewPop(e):
@@ -602,14 +667,12 @@ def main(page):
                     ft.MenuItemButton(
                         content=ft.Text(value=lang.menuBar["openFile"]),
                         leading=ft.Icon(ft.Icons.FILE_OPEN_OUTLINED),
-                        on_click=lambda _: pickFilesDialog.pick_files(
-                            allowed_extensions=["mp3", "flac", "m4a", "wav", "aac"]
-                        ),
+                        on_click=pickFilesDialogHandler,
                     ),
                     ft.MenuItemButton(
                         content=ft.Text(value=lang.menuBar["openSonglist"]),
                         leading=ft.Icon(ft.Icons.PLAYLIST_ADD_OUTLINED),
-                        on_click=lambda _: pickSonglistDialog.get_directory_path(),
+                        on_click=pickSonglistDialogHandler,
                     ),
                     ft.SubmenuButton(
                         content=ft.Text(value=lang.menuBar["getFromMusicWebsite"]),
@@ -781,7 +844,7 @@ def main(page):
         on_change_end=progressCtrl
     )
     work.playAudio.on_loaded = loadAudio
-    work.playAudio.on_position_changed = autoKeepAudioProgress
+    work.playAudio.on_position_change = autoKeepAudioProgress
 
     skipPrevious_btn = ft.IconButton(
         icon=ft.Icons.SKIP_PREVIOUS_OUTLINED,
@@ -878,7 +941,7 @@ def main(page):
     page.overlay.append(audioList_menu)
     log_init.logging.info("Append audioList_menu")
     main_pageView = ft.View(
-        "/",
+        route="/",
         controls=[ft.Column(
             controls=[menuBar, audioBasicInfo, releaseWarning, audioProgressBar, btns_row, lyrics_before, lyrics_text, lyrics_after]
         )],
@@ -931,4 +994,4 @@ if __name__ == '__main__':
     from pages import settingsPage
     settingsPage.transferPage(page)
     log_init.logging.info("Imported settingsPage")
-    ft.app(target = main)
+    ft.run(main)

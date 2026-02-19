@@ -97,16 +97,16 @@ def colorModeWrite(e):
     cfg.saveConfig()
 
 colorMode_dropd = ft.Dropdown(
-    label = i18n.lang.sets["pleaseSelect"],
-    value = "sys",
-    options = [
-        ft.dropdown.Option(key = "sys", text = i18n.lang.sets["systemDefault"]),
-        ft.dropdown.Option(key = "light", text = i18n.lang.sets["colorLight"]),
-        ft.dropdown.Option(key = "dark", text = i18n.lang.sets["colorDark"])
-    ],
-    on_change = colorModeWrite,
-    disabled = True
-)
+     label = i18n.lang.sets["pleaseSelect"],
+     value = "sys",
+     options = [
+         ft.dropdown.Option(key = "sys", text = i18n.lang.sets["systemDefault"]),
+         ft.dropdown.Option(key = "light", text = i18n.lang.sets["colorLight"]),
+         ft.dropdown.Option(key = "dark", text = i18n.lang.sets["colorDark"])
+     ],
+     on_select = colorModeWrite,
+     disabled = True
+ )
 
 colorSchemes_radio = ft.RadioGroup(
     value = "blue",
@@ -240,12 +240,12 @@ onlineSetCard = ft.Card(
         content = ft.Column(controls = [
                 ft.Row(controls = [ft.Icon(ft.Icons.MUSIC_NOTE_OUTLINED), ft.Text(value = i18n.lang.sets["online"], size = 18)]),
                 ft.Text(value = i18n.lang.sets["onlineMusic"]),
-                ft.ResponsiveRow(controls = [onlineMusicAPI_tf, ft.FilledTonalButton(text = i18n.lang.sets["setToDefault"], icon = ft.Icons.REFRESH_OUTLINED, on_click = setMusicAPIToDefault, disabled = True)]),
+                ft.ResponsiveRow(controls = [onlineMusicAPI_tf, ft.FilledTonalButton(i18n.lang.sets["setToDefault"], icon = ft.Icons.REFRESH_OUTLINED, on_click = setMusicAPIToDefault, disabled = True)]),
                 ft.Text(value = i18n.lang.sets["webAPIInfo"], selectable = True),
                 ft.Divider(),
                 ft.Text(value = i18n.lang.sets["webUpdate"]),
                 onlineSystemSets_switch,
-                ft.ResponsiveRow(controls = [onlineUpdateAPI_tf, ft.FilledTonalButton(text = i18n.lang.sets["setToDefault"], icon = ft.Icons.REFRESH_OUTLINED, on_click = setMusicAPIToDefault, disabled = True, visible = False)]),
+                ft.ResponsiveRow(controls = [onlineUpdateAPI_tf, ft.FilledTonalButton(i18n.lang.sets["setToDefault"], icon = ft.Icons.REFRESH_OUTLINED, on_click = setMusicAPIToDefault, disabled = True, visible = False)]),
                 ft.Text(value = i18n.lang.sets["webAPIInfo"], selectable = True, visible = False) # need strings
             ]
         ),
@@ -276,8 +276,8 @@ advanceSetCard = ft.Card(
         content = ft.Column(controls = [
                 ft.Row(controls = [ft.Icon(ft.Icons.DANGEROUS_OUTLINED), ft.Text(value = i18n.lang.sets["advance"], size = 18)]),
                 ft.Row(controls = [
-                    ft.ElevatedButton(text = i18n.lang.sets["delConfigAndClose"], icon = ft.Icons.DELETE_FOREVER_OUTLINED, bgcolor = ft.Colors.RED, color = ft.Colors.WHITE, elevation = 0, disabled = True),
-                    ft.ElevatedButton(text = i18n.lang.sets["delLogFile"], icon = ft.Icons.DELETE_OUTLINE, bgcolor = ft.Colors.RED, color = ft.Colors.WHITE, elevation = 0, disabled = True)
+                    ft.ElevatedButton(i18n.lang.sets["delConfigAndClose"], icon = ft.Icons.DELETE_FOREVER_OUTLINED, bgcolor = ft.Colors.RED, color = ft.Colors.WHITE, elevation = 0, disabled = True),
+                    ft.ElevatedButton(i18n.lang.sets["delLogFile"], icon = ft.Icons.DELETE_OUTLINE, bgcolor = ft.Colors.RED, color = ft.Colors.WHITE, elevation = 0, disabled = True)
                 ],
                 wrap = True
                 )
@@ -294,9 +294,9 @@ feedbackSetCard = ft.Card(
         content = ft.Column(controls = [
                 ft.Row(controls = [ft.Icon(ft.Icons.FEEDBACK_OUTLINED), ft.Text(value = i18n.lang.sets["feedback"], size = 18)]),
                 ft.Row(controls = [
-                    ft.FilledTonalButton(text = i18n.lang.sets["bugReport"], icon = ft.Icons.BUG_REPORT_OUTLINED, url = "https://github.com/WhatDamon/Simplay-Player/issues"),
-                    ft.FilledTonalButton(text = i18n.lang.sets["shareIdeas"], icon = ft.Icons.STAR_OUTLINE, url = r"https://github.com/WhatDamon/Simplay-Player/discussions/categories/%E6%83%B3%E6%B3%95"),
-                    ft.FilledTonalButton(text = i18n.lang.sets["discussion"], icon = ft.Icons.CHAT_OUTLINED, url = "https://github.com/WhatDamon/Simplay-Player/discussions"),
+                    ft.FilledTonalButton(i18n.lang.sets["bugReport"], icon = ft.Icons.BUG_REPORT_OUTLINED, url = "https://github.com/WhatDamon/Simplay-Player/issues"),
+                    ft.FilledTonalButton(i18n.lang.sets["shareIdeas"], icon = ft.Icons.STAR_OUTLINE, url = r"https://github.com/WhatDamon/Simplay-Player/discussions/categories/%E6%83%B3%E6%B3%95"),
+                    ft.FilledTonalButton(i18n.lang.sets["discussion"], icon = ft.Icons.CHAT_OUTLINED, url = "https://github.com/WhatDamon/Simplay-Player/discussions"),
                 ],
                 wrap = True
                 )
@@ -307,4 +307,4 @@ feedbackSetCard = ft.Card(
     elevation = 0.5
 )
 
-settings_pageView = ft.View("/settings", controls = [appBar, constructionNotice, settingsNotice, languageSetCard, appearancesSetCard, playSetCard, lyricsSetCard, onlineSetCard, systemSetCard, advanceSetCard, feedbackSetCard], scroll = ft.ScrollMode.AUTO)
+settings_pageView = ft.View(route = "/settings", controls = [appBar, constructionNotice, settingsNotice, languageSetCard, appearancesSetCard, playSetCard, lyricsSetCard, onlineSetCard, systemSetCard, advanceSetCard, feedbackSetCard], scroll = ft.ScrollMode.AUTO)
